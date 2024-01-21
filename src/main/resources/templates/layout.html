@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Traveler</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- 부트스트랩 CSS 링크 -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!--  jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
+    <!-- CSS 스타일 -->
+    <style>
+        .footer {
+            padding: 20px;
+            position: fixed;
+            bottom: 0; /* 페이지 하단에 고정 */
+            width: 100%;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<!-- Navigation-->
+<nav th:replace="~{navbar :: navbarFragment}"></nav>
+<!-- 기본 템플릿 안에 삽입될 내용 -->
+<th:block layout:fragment="content"></th:block>
+
+<!-- Footer-->
+<footer class="footer">
+    <div class="container">
+        <span>© 2024 techit back-end school</span>
+    </div>
+</footer>
+<!-- Core theme JS-->
+<!--<th:block layout:fragment="script"></th:block>-->
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+
