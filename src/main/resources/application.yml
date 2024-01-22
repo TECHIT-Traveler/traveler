@@ -32,7 +32,7 @@ logging:
     org.springframework.transaction.interceptor: TRACE
 custom:
   site:
-    name: medium
+    name: Traveler
     baseUrl: "http://localhost:${server.port}"
   tempDirPath: c:/temp/traveler_dev/temp
   genFile:
