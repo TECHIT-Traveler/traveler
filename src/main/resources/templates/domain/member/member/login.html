@@ -1,0 +1,54 @@
+<html layout:decorate="~{global/usrLayout}">
+
+<head>
+    <title>로그인</title>
+</head>
+
+<body>
+
+<div layout:fragment="content">
+    <h1>로그인</h1>
+
+    <script>
+        function submitLoginForm(form) {
+            form.email.value = form.email.value.trim();
+
+            if (form.email.value.length == 0) {
+                toastWarning('사용자 Email을 입력해주세요.');
+                form.email.focus();
+                return;
+            }
+
+            form.password.value = form.password.value.trim();
+
+            if (form.password.value.length == 0) {
+                toastWarning('비밀번호를 입력해주세요.');
+                form.password.focus();
+                return;
+            }
+
+            form.submit();
+        }
+    </script>
+
+    <form th:action method="POST" onsubmit="submitLoginForm(this); return false;">
+        <div>
+            <label>사용자 Email</label>
+            <input type="email" name="email">
+        </div>
+
+        <div>
+            <label>비밀번호</label>
+            <input type="password" name="password">
+        </div>
+
+        <button type="submit">로그인</button>
+        <a href="/oauth2/authorization/kakao">
+            카카오 로그인
+        </a>
+    </form>
+</div>
+
+</body>
+
+</html>

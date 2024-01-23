@@ -37,4 +37,12 @@ public class MemberService {
     public Optional<Member> findByEmail(String email){
         return memberRepository.findByEmail(email);
     }
+    @Transactional
+    public RsData<Member> whenSocialLogin(String providerTypeCode, String email, String nickname, String profileImgUrl) {
+        Optional<Member> opMember = findByEmail(email);
+
+        if (opMember.isPresent()) return RsData.of("200", "이미 존재합니다.", opMember.get());
+
+        return join(email, "", nickname);
+    }
 }

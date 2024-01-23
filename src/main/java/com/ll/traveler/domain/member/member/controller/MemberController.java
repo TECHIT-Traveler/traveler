@@ -2,6 +2,7 @@ package com.ll.traveler.domain.member.member.controller;
 
 import com.ll.traveler.domain.member.member.entity.Member;
 import com.ll.traveler.domain.member.member.service.MemberService;
+import com.ll.traveler.global.rq.Rq;
 import com.ll.traveler.global.rsData.RsData;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
+    private final Rq rq;
 
     @PreAuthorize("isAnonymous()")
     @GetMapping("/join")
@@ -42,7 +44,7 @@ public class MemberController {
     public String join(@Valid JoinForm joinForm) {
         RsData<Member> joinRs = memberService.join(joinForm.getEmail(), joinForm.getPassword(), joinForm.getNickname());
 
-        return "domain/member/member/login";
+        return rq.redirectOrBack(joinRs, "/member/login");
     }
 
     @GetMapping("/login")
