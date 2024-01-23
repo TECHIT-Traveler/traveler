@@ -32,9 +32,11 @@ public class MemberController {
     @Getter
     public static class JoinForm {
         @NotBlank
-        private String email;
+        private String username;
         @NotBlank
         private String password;
+        @NotBlank
+        private String email;
         @NotBlank
         private String nickname;
     }
@@ -42,7 +44,7 @@ public class MemberController {
     @PreAuthorize("isAnonymous()")
     @PostMapping("/join")
     public String join(@Valid JoinForm joinForm) {
-        RsData<Member> joinRs = memberService.join(joinForm.getEmail(), joinForm.getPassword(), joinForm.getNickname());
+        RsData<Member> joinRs = memberService.join(joinForm.getUsername(), joinForm.getPassword(),joinForm.getEmail(), joinForm.getNickname());
 
         return rq.redirectOrBack(joinRs, "/member/login");
     }

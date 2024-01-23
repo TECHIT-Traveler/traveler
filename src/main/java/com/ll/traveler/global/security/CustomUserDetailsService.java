@@ -18,8 +18,8 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final MemberRepository memberRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<Member> opMember = memberRepository.findByEmail(email);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<Member> opMember = memberRepository.findByUsername(username);
 
         if (opMember.isEmpty()) {
             throw new UsernameNotFoundException("사용자를 찾을 수 없습니다.");
@@ -27,7 +27,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         Member member = opMember.get();
         return new SecurityUser(
                 member.getId(),
-                member.getEmail(),
+                member.getUsername(),
                 member.getPassword(),
                 member.getAuthorities()
         );

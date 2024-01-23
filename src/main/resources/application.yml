@@ -47,9 +47,11 @@ logging:
     org.hibernate.orm.jdbc.extract: TRACE
     org.springframework.transaction.interceptor: TRACE
 custom:
+  temp:
+    dirPath: c:/temp/tv/temp
+  genFile:
+    dirPath: c:/temp/tv
   site:
     name: Traveler
     baseUrl: "http://localhost:${server.port}"
   tempDirPath: c:/temp/traveler_dev/temp
-  genFile:
-    dirPath: c:/temp/traveler_dev

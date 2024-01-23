@@ -23,4 +23,15 @@ public class AppConfig {
     public void setEntityManager(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
+    @Getter
+    private static String tempDirPath;
+
+    @Value("${custom.temp.dirPath}")
+    public void setTempDirPath(String tempDirPath) { this.tempDirPath = tempDirPath; }
+
+    @Getter
+    private static String genFileDirPath;
+
+    @Value("${custom.genFile.dirPath}")
+    public void setGenFileDirPath(String genFileDirPath) { this.genFileDirPath = genFileDirPath; }
 }
