@@ -18,7 +18,9 @@ public class RsData<T> {
 
         return new RsData<>(resultCode, msg, data, statusCode);
     }
-
+    public static <T> RsData<T> of(String resultCode, String msg) {
+        return of(resultCode, msg, null);
+    }
     public boolean isSuccess() {
         return statusCode >=200 && statusCode < 400;
     }
@@ -26,7 +28,5 @@ public class RsData<T> {
     public boolean isFail() {
         return !isSuccess();
     }
-    public <T> RsData<T> of(T data) {
-        return RsData.of(resultCode, msg, data);
-    }
+
 }
