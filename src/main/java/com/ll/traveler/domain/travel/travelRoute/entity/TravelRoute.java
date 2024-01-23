@@ -26,6 +26,7 @@ public class TravelRoute extends BaseEntity {
     private String body;
     private LocalDate startDate;
     private LocalDate endDate;
+    private String area;
 
     @OneToMany(mappedBy = "route" ,cascade = ALL, orphanRemoval = true)
     @Builder.Default

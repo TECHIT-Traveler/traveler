@@ -4,10 +4,7 @@ import com.ll.traveler.global.jpa.IdEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
-import org.hibernate.collection.spi.BagSemantics;
 
-import static jakarta.persistence.CascadeType.ALL;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
