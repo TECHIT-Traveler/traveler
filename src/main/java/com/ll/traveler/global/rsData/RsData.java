@@ -14,13 +14,11 @@ public class RsData<T> {
     private final int statusCode;
 
     public static <T> RsData<T> of(String resultCode, String msg, T data) {
-        int statusCode = Integer.parseInt(resultCode.split("-")[0]);
+        int statusCode = Integer.parseInt(resultCode);
 
         return new RsData<>(resultCode, msg, data, statusCode);
     }
-    public static <T> RsData<T> of(String resultCode, String msg) {
-        return of(resultCode, msg, null);
-    }
+
     public boolean isSuccess() {
         return statusCode >=200 && statusCode < 400;
     }
@@ -28,5 +26,4 @@ public class RsData<T> {
     public boolean isFail() {
         return !isSuccess();
     }
-
 }

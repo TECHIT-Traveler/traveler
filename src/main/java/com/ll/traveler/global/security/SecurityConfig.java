@@ -12,9 +12,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
@@ -39,17 +36,9 @@ public class SecurityConfig {
                                         "/h2-console/**"
                                 )
                 )
-                .formLogin(
-                        formLogin ->
-                                formLogin
-                                        .loginPage("/member/login")
-                                        .defaultSuccessUrl("/?msg=" + URLEncoder.encode("환영합니다.", StandardCharsets.UTF_8))
-                                        .failureUrl("/member/login?failMsg=" + URLEncoder.encode("아이디 또는 비밀번호가 틀렸습니다.", StandardCharsets.UTF_8))
-                )
-                .oauth2Login(
-                        oauth2Login -> oauth2Login
-                                .loginPage("/member/login")
-                )
+                .formLogin((formLogin) -> formLogin
+                        .loginPage("/member/login")
+                        .defaultSuccessUrl("/"))
                 .logout(logout -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
                         .logoutSuccessUrl("/")

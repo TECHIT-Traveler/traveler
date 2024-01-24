@@ -23,22 +23,6 @@ spring:
         format_sql: true
         highlight_sql: true
         use_sql_comments: true
-  security:
-    oauth2:
-      client:
-        registration:
-          kakao:
-            clientId: NEED_TO_INPUT_ON_SECRET
-            scope: profile_nickname, profile_image
-            client-name: Kakao
-            authorization-grant-type: authorization_code
-            redirect-uri: '${custom.site.baseUrl}/{action}/oauth2/code/{registrationId}'
-        provider:
-          kakao:
-            authorization-uri: https://kauth.kakao.com/oauth/authorize
-            token-uri: https://kauth.kakao.com/oauth/token
-            user-info-uri: https://kapi.kakao.com/v2/user/me
-            user-name-attribute: id
 logging:
   level:
     com.ll.medium: DEBUG
@@ -47,11 +31,9 @@ logging:
     org.hibernate.orm.jdbc.extract: TRACE
     org.springframework.transaction.interceptor: TRACE
 custom:
-  temp:
-    dirPath: c:/temp/tv/temp
-  genFile:
-    dirPath: c:/temp/tv
   site:
-    name: Traveler
+    name: medium
     baseUrl: "http://localhost:${server.port}"
   tempDirPath: c:/temp/traveler_dev/temp
+  genFile:
+    dirPath: c:/temp/traveler_dev
