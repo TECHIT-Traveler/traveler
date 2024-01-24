@@ -2,6 +2,7 @@ package com.ll.traveler.domain.base.genFile.entity;
 
 import com.ll.traveler.global.app.AppConfig;
 import com.ll.traveler.global.jpa.BaseEntity;
+import com.ll.traveler.standard.utill.Ut;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
@@ -40,6 +41,9 @@ public class GenFile extends BaseEntity {
     private String fileDir;
     private String originFileName;
 
+    public String getModelName() {
+        return Ut.str.lcfirst(this.getClass().getSimpleName());
+    }
     public String getFileName() {
         return getId() + "." + getFileExt();
     }
