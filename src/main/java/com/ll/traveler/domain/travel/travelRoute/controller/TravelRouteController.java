@@ -62,7 +62,6 @@ public class TravelRouteController {
         private String endDate;
         @NotBlank
         private String body;
-        @NotEmpty
         private String[] places;
     }
     @PostMapping("/write")
