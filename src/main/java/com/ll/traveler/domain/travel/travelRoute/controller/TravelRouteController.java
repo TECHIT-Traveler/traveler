@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import java.time.*;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -62,15 +63,16 @@ public class TravelRouteController {
         private String endDate;
         @NotBlank
         private String body;
-        private String[] places;
+        @NotEmpty
+        private List<String> places;
     }
     @PostMapping("/write")
     public String write(@Valid WriteForm form) {
         TravelRoute travelRoute = travelRouteService.write(form.getTitle(), form.getBody(), form.getArea(), form.getStartDate(), form.getEndDate()).getData();
 
-        String[] places = form.getPlaces();
-        for(int i = 0; i < places.length; i++) {
-            String[] placeInfo = places[i].split(",");
+        List<String> places = form.getPlaces();
+        for(String place : places) {
+            String[] placeInfo = place.split("/");
             int day = Integer.parseInt(placeInfo[0]);
             int order = Integer.parseInt(placeInfo[1]);
             String name = placeInfo[2];
