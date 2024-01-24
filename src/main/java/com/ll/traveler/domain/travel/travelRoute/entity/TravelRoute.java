@@ -1,8 +1,10 @@
 package com.ll.traveler.domain.travel.travelRoute.entity;
 
+import com.ll.traveler.domain.member.member.entity.Member;
 import com.ll.traveler.domain.travel.travelPlace.entity.TravelPlace;
 import com.ll.traveler.global.jpa.BaseEntity;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -28,7 +30,24 @@ public class TravelRoute extends BaseEntity {
     private LocalDate endDate;
     private String area;
 
-    @OneToMany(mappedBy = "route" ,cascade = ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "travelRoute" ,cascade = ALL, orphanRemoval = true)
     @Builder.Default
     private List<TravelPlace> places = new ArrayList<>();
+
+    @ManyToOne
+    private Member author;
+
+    public TravelPlace addPlace(String name, String address, int day, int order) {
+        TravelPlace travelPlace = TravelPlace.builder()
+                .travelRoute(this)
+                .name(name)
+                .address(address)
+                .travelDay(day)
+                .travelOrder(order)
+                .build();
+
+        places.add(travelPlace);
+
+        return travelPlace;
+    }
 }

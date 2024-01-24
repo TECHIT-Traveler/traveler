@@ -13,11 +13,11 @@ import static lombok.AccessLevel.PROTECTED;
 @AllArgsConstructor(access = PROTECTED)
 @Getter
 public class TravelPlace extends IdEntity {
-    private int order;
+    private int travelOrder;
     private String name;
     private String address;
-    private int day;
+    private int travelDay;
 
     @ManyToOne
-    private TravelRoute route;
+    private TravelRoute travelRoute;
 }
