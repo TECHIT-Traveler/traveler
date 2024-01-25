@@ -39,6 +39,21 @@ public class Post extends BaseEntity {
     private List<PostComment> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "post", cascade = ALL, orphanRemoval = true)
+    @Builder.Default
     private List<PostLike> likes = new ArrayList<>();
 
+    public void addLike(Member member) {
+        if(hasLike(member)) {
+            return;
+        }
+        likes.add(PostLike.builder()
+                .post(this)
+                .member(member)
+                .build());
+    }
+
+    public boolean hasLike(Member member) {
+        return likes.stream()
+                .anyMatch(postLike -> postLike.getMember().equals(member));
+    }
 }
