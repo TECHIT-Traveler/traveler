@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping("/member")
@@ -39,12 +40,13 @@ public class MemberController {
         private String email;
         @NotBlank
         private String nickname;
+        private MultipartFile profileImg;
     }
 
     @PreAuthorize("isAnonymous()")
     @PostMapping("/join")
     public String join(@Valid JoinForm joinForm) {
-        RsData<Member> joinRs = memberService.join(joinForm.getUsername(), joinForm.getPassword(),joinForm.getEmail(), joinForm.getNickname());
+        RsData<Member> joinRs = memberService.join(joinForm.getUsername(), joinForm.getPassword(),joinForm.getEmail(), joinForm.getNickname(), joinForm.getProfileImg());
 
         return rq.redirectOrBack(joinRs, "/member/login");
     }

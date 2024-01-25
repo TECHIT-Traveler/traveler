@@ -50,7 +50,7 @@
                     <i class="fa-solid fa-arrow-right-to-bracket"></i>
                     로그인
                 </h3>
-                <form th:action method="POST" onsubmit="submitJoinForm(this); return false;" class="flex flex-col gap-6">
+                <form th:action method="POST" enctype="multipart/form-data" onsubmit="submitJoinForm(this); return false;" class="flex flex-col gap-6">
                     <div class="form-group">
                         <label for="username">아이디</label>
                         <input type="text" class="form-control" id="username" placeholder="아이디">
@@ -70,6 +70,10 @@
                     <div class="form-group">
                         <label for="nickname">닉네임</label>
                         <input type="text" class="form-control" id="nickname" placeholder="닉네임">
+                    </div>
+                    <div>
+                        <label>프로필 이미지</label>
+                        <input type="file" name="profileImg" class="file-input file-input-bordered" accept="image/jpeg, image/png, image/gif">
                     </div>
                     <button type="submit" class="btn btn-primary btn-block">
                         <i class="fa-regular fa-user"></i>
