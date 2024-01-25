@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -38,5 +39,16 @@ public class TravelRouteService {
     @Transactional
     public TravelPlace addPlace(TravelRoute travelRoute, String name, String address, int day, int order) {
         return travelRoute.addPlace(name, address, day, order);
+    }
+
+    public Optional<TravelRoute> findById(long id) {
+        return travelRouteRepository.findById(id);
+    }
+
+    public boolean canModify(Member actor, TravelRoute travelRoute) {
+        if(actor == null) {
+            return false;
+        }
+        return actor.equals(travelRoute.getAuthor());
     }
 }
