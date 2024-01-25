@@ -1,5 +1,6 @@
 package com.ll.traveler.domain.travel.travelRoute.service;
 
+import com.ll.traveler.domain.member.member.entity.Member;
 import com.ll.traveler.domain.travel.travelPlace.entity.TravelPlace;
 import com.ll.traveler.domain.travel.travelRoute.entity.TravelRoute;
 import com.ll.traveler.domain.travel.travelRoute.repository.TravelRouteRepository;
@@ -17,11 +18,12 @@ public class TravelRouteService {
     private final TravelRouteRepository travelRouteRepository;
 
     @Transactional
-    public RsData<TravelRoute> write(String title, String body, String area, String _startDate, String _endDate) {
+    public RsData<TravelRoute> write(Member author, String title, String body, String area, String _startDate, String _endDate) {
         LocalDate startDate = LocalDate.parse(_startDate);
         LocalDate endDate = LocalDate.parse(_endDate);
 
         TravelRoute travelRoute = TravelRoute.builder()
+                .author(author)
                 .title(title)
                 .body(body)
                 .area(area)

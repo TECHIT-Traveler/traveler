@@ -2,6 +2,7 @@ package com.ll.traveler.domain.travel.travelRoute.controller;
 
 import com.ll.traveler.domain.travel.travelRoute.entity.TravelRoute;
 import com.ll.traveler.domain.travel.travelRoute.service.TravelRouteService;
+import com.ll.traveler.global.rq.Rq;
 import com.ll.traveler.global.rsData.RsData;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -9,6 +10,7 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,12 +25,15 @@ import java.util.List;
 @RequestMapping("/travel")
 public class TravelRouteController {
     private final TravelRouteService travelRouteService;
+    private final Rq rq;
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/new")
     public String showPlanSetting() {
         return "domain/travel/travelRoute/new";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/new")
     public String PlanSetting(
             Model model,
@@ -66,9 +71,10 @@ public class TravelRouteController {
         @NotEmpty
         private List<String> places;
     }
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/write")
     public String write(@Valid WriteForm form) {
-        TravelRoute travelRoute = travelRouteService.write(form.getTitle(), form.getBody(), form.getArea(), form.getStartDate(), form.getEndDate()).getData();
+        TravelRoute travelRoute = travelRouteService.write(rq.getMember(), form.getTitle(), form.getBody(), form.getArea(), form.getStartDate(), form.getEndDate()).getData();
 
         List<String> places = form.getPlaces();
         for(String place : places) {
