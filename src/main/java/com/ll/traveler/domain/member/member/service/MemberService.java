@@ -2,10 +2,12 @@ package com.ll.traveler.domain.member.member.service;
 
 import com.ll.traveler.domain.member.member.entity.Member;
 import com.ll.traveler.domain.member.member.repository.MemberRepository;
+
 import com.ll.traveler.global.app.AppConfig;
 import com.ll.traveler.global.rsData.RsData;
 import com.ll.traveler.standard.utill.Ut;
 import jakarta.validation.constraints.NotBlank;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+
 public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
@@ -27,6 +30,7 @@ public class MemberService {
         }
         Member member = Member.builder()
                 .username(username)
+
                 .password(passwordEncoder.encode(password))
                 .email(email)
                 .nickname(nickname)
@@ -66,5 +70,4 @@ public class MemberService {
 
         return join(username,"", nickname);
     }
-
 }
