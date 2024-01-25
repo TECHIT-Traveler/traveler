@@ -90,18 +90,21 @@
     </div>
 </div>
 <script layout:fragment="script" type="text/javascript">
-    var orderPerDay = {};
-
     function addPlaceField(day) {
-        if(!orderPerDay[day]) {
-            orderPerDay[day] = 1;
-        } else {
-            orderPerDay[day]++;
+        var cards = document.querySelectorAll('.place');
+        var count = 0;
+
+        for(var i = 0; i < cards.length; i++) {
+            var cardDay = cards[i].querySelector('[name="places"]').value.split('/')[0];
+            if(cardDay == day) {
+                count++;
+            }
         }
 
         var container = document.getElementById('day' + day);
         var name = document.getElementById('name' + day).value;
         var address = document.getElementById('address' + day).value;
+        var order = count + 1;
 
         if(name.trim().length == 0) {
             toastWarning('장소를 입력해 주세요.');
@@ -113,7 +116,7 @@
         }
 
         var card = document.createElement('div');
-        card.className ='card my-3';
+        card.className ='card my-3 place';
 
         var cardBody = document.createElement('div');
         cardBody.className = 'card-body d-flex justify-content-between align-items-center';
@@ -122,7 +125,7 @@
         var hiddenTag = document.createElement('input');
         hiddenTag.type = 'hidden';
         hiddenTag.name = 'places';
-        hiddenTag.value = day + '/' + orderPerDay[day] + '/' + name + '/' + address;
+        hiddenTag.value = day + '/' + order + '/' + name + '/' + address;
 
         var closeBtn = document.createElement('button');
         closeBtn.className = 'btn btn-outline-dark';
@@ -131,6 +134,7 @@
 
         closeBtn.addEventListener('click', function () {
             card.remove();
+            updateOrder(day);
         })
 
         card.appendChild(cardBody);
@@ -139,6 +143,21 @@
         container.appendChild(card);
 
         $('#placeModal' + day).modal('hide');
+    }
+
+    function updateOrder(day) {
+        var cards = document.querySelectorAll('.place');
+        var order = 1;
+
+        for(var i = 0; i < cards.length; i++) {
+            var cardDay = cards[i].querySelector('[name="places"]').value.split('/')[0];
+            var cardOrder = cards[i].querySelector('[name="places"]').value.split('/')[1];
+
+            if(cardDay == day) {
+                cards[i].querySelector('[name="places"]').value = day + '/' + order + '/' + cards[i].querySelector('[name="places"]').value.split('/').slice(2).join('/');
+                order++;
+            }
+        }
     }
 
     $(document).ready(function() {

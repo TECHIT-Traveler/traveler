@@ -146,6 +146,21 @@
         $('#placeModal' + day).modal('hide');
     }
 
+    function updateOrder(day) {
+        var cards = document.querySelectorAll('.place');
+        var order = 1;
+
+        for(var i = 0; i < cards.length; i++) {
+            var cardDay = cards[i].querySelector('[name="places"]').value.split('/')[0];
+            var cardOrder = cards[i].querySelector('[name="places"]').value.split('/')[1];
+
+            if(cardDay == day) {
+                cards[i].querySelector('[name="places"]').value = day + '/' + order + '/' + cards[i].querySelector('[name="places"]').value.split('/').slice(2).join('/');
+                order++;
+            }
+        }
+    }
+
     $(document).ready(function() {
         $('.modal').on('hidden.bs.modal', function () {
             $(this).find('input[type="text"]').val('');
@@ -182,13 +197,14 @@
     document.addEventListener('click', function (event) {
         var target = event.target;
 
-        // 클릭된 엘리먼트가 closeBtn 클래스를 가진 버튼인지 확인
         if (target.classList.contains('closeBtn')) {
-            // 클릭된 버튼의 부모 엘리먼트가 card 클래스를 가진 카드인지 확인
             var card = target.closest('.card');
 
             if (card) {
+                var place = card.querySelector('[name="places"]');
+                var day = place.value.split('/')[0];
                 card.remove();
+                updateOrder(day);
             }
         }
     });
