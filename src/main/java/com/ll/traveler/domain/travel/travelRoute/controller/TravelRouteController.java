@@ -109,4 +109,44 @@ public class TravelRouteController {
 
         return "domain/travel/travelRoute/modify";
     }
+
+    @Getter
+    @Setter
+    public static class ModifyForm {
+        @NotBlank
+        private String title;
+        @NotBlank
+        private String area;
+        @NotBlank
+        private String startDate;
+        @NotBlank
+        private String endDate;
+        @NotBlank
+        private String body;
+        @NotEmpty
+        private List<String> places;
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("{id}/modify")
+    public String modify(@PathVariable long id, @Valid ModifyForm form) {
+        TravelRoute travelRoute = travelRouteService.findById(id).orElseThrow(() -> new GlobalException("404-1", "해당 글이 존재하지 않습니다."));
+
+        if(!travelRouteService.canModify(rq.getMember(), travelRoute)) {
+            throw new GlobalException("403-1", "권한이 없습니다.");
+        }
+
+        travelRouteService.modify(travelRoute, form.getTitle(), form.getBody(), form.getArea(), form.getStartDate(), form.getEndDate());
+        travelRouteService.deleteAllPlace(travelRoute);
+        for(String place : form.getPlaces()) {
+            String[] placeInfo = place.split("/");
+            int day = Integer.parseInt(placeInfo[0]);
+            int order = Integer.parseInt(placeInfo[1]);
+            String name = placeInfo[2];
+            String address = placeInfo[3];
+            travelRouteService.addPlace(travelRoute, name, address, day, order);
+        }
+
+        return "redirect:/";
+    }
 }

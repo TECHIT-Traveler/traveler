@@ -19,17 +19,14 @@ public class TravelRouteService {
     private final TravelRouteRepository travelRouteRepository;
 
     @Transactional
-    public RsData<TravelRoute> write(Member author, String title, String body, String area, String _startDate, String _endDate) {
-        LocalDate startDate = LocalDate.parse(_startDate);
-        LocalDate endDate = LocalDate.parse(_endDate);
-
+    public RsData<TravelRoute> write(Member author, String title, String body, String area, String startDate, String endDate) {
         TravelRoute travelRoute = TravelRoute.builder()
                 .author(author)
                 .title(title)
                 .body(body)
                 .area(area)
-                .startDate(startDate)
-                .endDate(endDate)
+                .startDate(LocalDate.parse(startDate))
+                .endDate(LocalDate.parse(endDate))
                 .build();
 
         travelRouteRepository.save(travelRoute);
@@ -50,5 +47,19 @@ public class TravelRouteService {
             return false;
         }
         return actor.equals(travelRoute.getAuthor());
+    }
+
+    @Transactional
+    public void deleteAllPlace(TravelRoute travelRoute) {
+        travelRoute.deleteAllPlace();
+    }
+
+    @Transactional
+    public void modify(TravelRoute travelRoute, String title, String body, String area, String startDate, String endDate) {
+        travelRoute.setTitle(title);
+        travelRoute.setBody(body);
+        travelRoute.setArea(area);
+        travelRoute.setStartDate(LocalDate.parse(startDate));
+        travelRoute.setEndDate(LocalDate.parse(endDate));
     }
 }
