@@ -10,7 +10,7 @@
                 <h3 class="ml-3">여행 계획</h3>
                 <span class="ml-3">방문 예정 도시와 방문 기간을 설정해 주세요</span>
             </div>
-            <form th:action="@{/travel/new}" method="post" style="width: 510px">
+            <form th:action="@{/travel/new}" method="post" onsubmit="submitForm(this); return false;" style="width: 510px">
                 <div class="form-group">
                     <div class="d-flex">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
@@ -48,4 +48,33 @@
         </div>
     </div>
 </div>
+<script layout:fragment="script" type="text/javascript">
+    function submitForm(form) {
+        form.area.value = form.area.value.trim();
+
+        if(form.area.value.length == 0) {
+            toastWarning('방문 도시를 입력해 주세요.');
+            form.area.focus();
+            return;
+        }
+
+        form.startDate.value = form.startDate.value.trim();
+
+        if(form.startDate.value.length == 0) {
+            toastWarning('여행 시작 날짜를 선택해 주세요.');
+            form.startDate.focus();
+            return;
+        }
+
+        form.endDate.value = form.endDate.value.trim();
+
+        if(form.endDate.value.length == 0) {
+            toastWarning('여행 마지막 날짜를 선택해 주세요.');
+            form.endDate.focus();
+            return;
+        }
+
+        form.submit();
+    }
+</script>
 </html>
