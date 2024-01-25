@@ -36,7 +36,7 @@ public class Member extends BaseEntity {
 
         authorities.add(new SimpleGrantedAuthority("ROLE_MEMBER"));
 
-        if (List.of("system", "admin").contains(email)) {
+        if (List.of("system", "admin").contains(username)) {
             authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         }
 

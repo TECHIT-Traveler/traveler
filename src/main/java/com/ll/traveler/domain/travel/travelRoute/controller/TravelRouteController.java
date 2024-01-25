@@ -1,5 +1,6 @@
 package com.ll.traveler.domain.travel.travelRoute.controller;
 
+import com.ll.traveler.domain.travel.travelPlace.entity.TravelPlace;
 import com.ll.traveler.domain.travel.travelRoute.entity.TravelRoute;
 import com.ll.traveler.domain.travel.travelRoute.service.TravelRouteService;
 import com.ll.traveler.global.rq.Rq;
@@ -13,10 +14,8 @@ import lombok.Setter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
 import java.time.*;
 import java.util.List;
 
@@ -89,4 +88,5 @@ public class TravelRouteController {
 
         return "redirect:/";
     }
+
 }
