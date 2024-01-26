@@ -49,7 +49,7 @@ public class NotProd {
         Member user4 = memberService.join("user4", "1234", "user4@test.com").getData();
 
         for(int i = 1; i <= 10; i++) {
-            Post post = postService.write(user1, "제목 " + i, "내용" + i, "광주").getData();
+            Post post = postService.write(user1, "제목 " + i, "내용" + i, "광주");
             PostCategory category = PostCategory.builder().content("숙소").author(user1).post(post).build();
             post.getCategories().add(category);
             postService.like(user2, post);
@@ -57,19 +57,19 @@ public class NotProd {
         }
 
         for(int i = 1; i <= 10; i++) {
-            Post post = postService.write(user2, "제목 " + i, "내용 " + i, "부산").getData();
+            Post post = postService.write(user2, "제목 " + i, "내용 " + i, "부산");
             PostCategory category = PostCategory.builder().content("산책길").author(user2).post(post).build();
             post.getCategories().add(category);
         }
 
         for(int i = 1; i <= 10; i++) {
-            Post post = postService.write(user3, "제목 " + i, "내용 " + i, "대구").getData();
+            Post post = postService.write(user3, "제목 " + i, "내용 " + i, "대구");
             PostCategory category = PostCategory.builder().content("식당").author(user3).post(post).build();
             post.getCategories().add(category);
         }
 
         for(int i = 1; i <= 10; i++) {
-            Post post = postService.write(user4, "제목 " + i, "이 글은 광주에서 유명한 애견 동반 카페를 공유드리기 위해 작성한 글입니다." + i, "서울").getData();
+            Post post = postService.write(user4, "제목 " + i, "이 글은 광주에서 유명한 애견 동반 카페를 공유드리기 위해 작성한 글입니다." + i, "서울");
             PostCategory category1 = PostCategory.builder().content("식당").author(user3).post(post).build();
             PostCategory category2 = PostCategory.builder().content("카페").author(user3).post(post).build();
 

@@ -32,7 +32,7 @@ public class PostService {
     }
 
     @Transactional
-    public RsData<Post> write(Member author, String title, String body, String area) {
+    public Post write(Member author, String title, String body, String area) {
         Post post = Post.builder()
                 .modifyDate(LocalDateTime.now())
                 .author(author)
@@ -41,13 +41,15 @@ public class PostService {
                 .area(area)
                 .build();
 
-        postRepository.save(post);
-
-        return RsData.of("200", "%d번 게시글이 작성되었습니다.".formatted(post.getId()), post);
+        return postRepository.save(post);
     }
 
     @Transactional
     public void like(Member member, Post post) {
         post.addLike(member);
+    }
+
+    public Post findById(Long postId) {
+        return postRepository.findById(postId).get();
     }
 }

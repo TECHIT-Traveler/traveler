@@ -15,6 +15,10 @@
             </select>
             <input class="form-control mr-sm-2" type="text" name="kw" placeholder="Search" th:value="${kw}">
             <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
+
+            <div style="display: inline-block; margin-left: 10px;">
+                <a href="/post/write" class="btn btn-outline-primary my-2 my-sm-0" role="button">글작성</a>
+            </div>
         </form>
         <div class="row mt-2">
             <div class="col-lg-3" th:each="post : ${postPage}">
