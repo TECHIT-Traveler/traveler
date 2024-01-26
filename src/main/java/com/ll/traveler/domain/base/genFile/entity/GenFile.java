@@ -43,9 +43,6 @@ public class GenFile extends BaseEntity {
     private String fileDir;
     private String originFileName;
 
-    public String getModelName() {
-        return Ut.str.lcfirst(this.getClass().getSimpleName());
-    }
     public String getFileName() {
         return getId() + "." + getFileExt();
     }

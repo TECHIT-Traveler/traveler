@@ -24,16 +24,6 @@ import java.util.stream.Collectors;
 public class GenFileService {
     private final GenFileRepository genFileRepository;
 
-    // genFile <-
-    // 1. 파일을 저장한다
-        // 1-1. 어디에 저장할지?
-    // 2. 저장한 파일의 데이터를 데이터베이스에 저장한다.
-
-    // 2-1. 저장한 파일의 데이터는?
-        // 2-1-1. 파일의 이름
-        // 2-1-2. 파일의 확장자
-        // 2-1-3. 언제 저장했는지
-
     // 조회
     public Optional<GenFile> findBy(String relTypeCode, Long relId, String typeCode, String type2Code, long fileNo) {
         return genFileRepository.findByRelTypeCodeAndRelIdAndTypeCodeAndType2CodeAndFileNo(relTypeCode, relId, typeCode, type2Code, fileNo);
@@ -143,7 +133,7 @@ public class GenFileService {
 
     @Transactional
     public GenFile saveTempFile(Member actor, MultipartFile file) {
-        return save("temp_" + actor.getUsername(), actor.getId(), "common", "editorUpload", 0, file);
+        return save("temp_" + actor.getModelName(), actor.getId(), "common", "editorUpload", 0, file);
     }
 
     @Transactional
@@ -154,7 +144,7 @@ public class GenFileService {
         long genFileId = Long.parseLong(fileName.replace("." + fileExt, ""));
         GenFile tempGenFile = findById(genFileId).get();
 
-        GenFile newGenFile = save("", entity.getId(), typeCode, type2Code, fileNo, tempGenFile.getFilePath());
+        GenFile newGenFile = save(entity.getModelName(), entity.getId(), typeCode, type2Code, fileNo, tempGenFile.getFilePath());
 
         remove(tempGenFile);
 
