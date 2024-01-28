@@ -24,4 +24,14 @@ public class MyPageController {
 
         return "domain/member/myPage/main";
     }
+
+    @GetMapping("/{id}/update")
+    public String memberInfoUpdateMain(@PathVariable("id") Long id, Model model) {
+        Member member = myPageService.getMemberInfo(id);
+
+        // 회원정보
+        model.addAttribute("member", member);
+
+        return "domain/member/myPage/update";
+    }
 }
