@@ -1,0 +1,21 @@
+<html layout:decorate="~{global/usrLayout}">
+
+<head>
+    <title>마이페이지</title>
+</head>
+
+<body>
+<div layout:fragment="content">
+    <h2>이메일</h2>
+    <a th:text="${member.getEmail()}"></a>
+    <h2>아이디</h2>
+    <a th:text="${member.getUsername()}"></a>
+    <h2>회원 번호</h2>
+    <a th:text="${member.getId()}"></a>
+    <h2>닉네임</h2>
+    <a th:text="${member.getNickname()}"></a>
+
+</div>
+</body>
+
+</html>
