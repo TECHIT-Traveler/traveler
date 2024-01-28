@@ -16,7 +16,7 @@ public class MyPageController {
     private final MyPageService myPageService;
 
     @GetMapping("/{id}")
-    public String myPageMain(@PathVariable("id") String id, Model model) {
+    public String myPageMain(@PathVariable("id") Long id, Model model) {
         Member member = myPageService.getMemberInfo(id);
 
         // 회원정보

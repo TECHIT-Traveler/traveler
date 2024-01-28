@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 public class MyPageService {
     private final MemberRepository memberRepository;
 
-    public Member getMemberInfo(String id) {
-        return memberRepository.findByUsername(id).orElseThrow(() -> new RuntimeException("존재하지 않는 회원입니다"));
+    public Member getMemberInfo(Long id) {
+        return memberRepository.findById(id).orElseThrow(() -> new RuntimeException("존재하지 않는 회원입니다"));
     }
 
 }
