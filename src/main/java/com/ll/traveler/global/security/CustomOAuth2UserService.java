@@ -39,4 +39,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         return new SecurityUser(member.getId(), member.getUsername(), member.getPassword(), member.getAuthorities());
     }
+    // 네이버 로그인이 성공할 때 마다 이 함수가 실행된다.
+
 }
