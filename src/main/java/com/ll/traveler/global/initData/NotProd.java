@@ -43,10 +43,10 @@ public class NotProd {
     public  void work1() {
         if(postRepository.count() > 0) return;
 
-        Member user1 = memberService.join("user1", "1234", "user1@test.com").getData();
-        Member user2 = memberService.join("user2", "1234", "user2@test.com").getData();
-        Member user3 = memberService.join("user3", "1234", "user3@test.com").getData();
-        Member user4 = memberService.join("user4", "1234", "user4@test.com").getData();
+        Member user1 = memberService.join("user1", "1234", "user1@test.com","","").getData();
+        Member user2 = memberService.join("user2", "1234", "user2@test.com","","").getData();
+        Member user3 = memberService.join("user3", "1234", "user3@test.com","","").getData();
+        Member user4 = memberService.join("user4", "1234", "user4@test.com","","").getData();
 
         for(int i = 1; i <= 10; i++) {
             Post post = postService.write(user1, "제목 " + i, "내용" + i, "광주").getData();

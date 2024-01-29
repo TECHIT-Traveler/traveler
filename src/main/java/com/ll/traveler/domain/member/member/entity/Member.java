@@ -26,8 +26,8 @@ import static lombok.AccessLevel.PROTECTED;
 @ToString(callSuper = true)
 public class Member extends BaseEntity {
     private String username;
-    private String email;
     private String password;
+    private String email;
     private String nickname;
 
     @Transient
@@ -36,7 +36,7 @@ public class Member extends BaseEntity {
 
         authorities.add(new SimpleGrantedAuthority("ROLE_MEMBER"));
 
-        if (List.of("system", "admin").contains(email)) {
+        if (List.of("system", "admin").contains(username)) {
             authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         }
 
