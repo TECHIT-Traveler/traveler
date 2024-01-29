@@ -49,6 +49,8 @@ public class TravelRouteService {
         return actor.equals(travelRoute.getAuthor());
     }
 
+
+
     @Transactional
     public void deleteAllPlace(TravelRoute travelRoute) {
         travelRoute.deleteAllPlace();
@@ -61,5 +63,17 @@ public class TravelRouteService {
         travelRoute.setArea(area);
         travelRoute.setStartDate(LocalDate.parse(startDate));
         travelRoute.setEndDate(LocalDate.parse(endDate));
+    }
+
+    public boolean canDelete(Member actor, TravelRoute travelRoute) {
+        if(actor == null) return false;
+        if(actor.isAdmin()) return true;
+
+        return actor.equals(travelRoute.getAuthor());
+    }
+
+    @Transactional
+    public void delete(TravelRoute travelRoute) {
+        travelRouteRepository.delete(travelRoute);
     }
 }
