@@ -24,6 +24,9 @@
 
             form.submit();
         }
+        function redirectToMain() {
+            window.location.href = '/home/main';
+        }
     </script>
 
     <div class="container mt-5">
@@ -45,17 +48,16 @@
                     <input type="password"  class="form-control" id="password" name="password" placeholder="비밀번호"/>
                 </div>
 
-                <button type="submit" class="btn btn-primary btn-block">
+                <button onclick="redirectToMain()" type="submit" class="btn btn-primary btn-block">
                     <i class="fa-solid fa-arrow-right-to-bracket"></i>
                     <span>로그인</span>
                 </button>
-
-                <a href="/oauth2/authorization/kakao" class="btn btn-outline-warning btn-block">
+                <a href="/oauth2/authorization/kakao" class="btn btn-outline-warning btn-block" onclick="redirectToMain()">
                     <i class="fa-solid fa-comment text-[color:#ffe812]"></i>
                     <span>카카오 로그인</span>
                 </a>
 
-                <a href="#" class="btn btn-outline-success btn-block">
+                <a href="#" class="btn btn-outline-success btn-block" >
                     <i class="fa-solid fa-n text-[color:#2DB400]"></i>
                     <span>네이버 로그인</span>
                 </a>
