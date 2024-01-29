@@ -50,4 +50,8 @@ public class TravelRoute extends BaseEntity {
 
         return travelPlace;
     }
+
+    public void deleteAllPlace() {
+        places.clear();
+    }
 }
