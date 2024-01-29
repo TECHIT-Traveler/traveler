@@ -8,28 +8,28 @@
             <h3 class="ml-3">여행 계획</h3>
             <span class="ml-3">여행 일정동안 방문할 장소들을 기록해 보세요</span>
         </div>
-        <form th:action="@{/travel/write}" method="post" onsubmit="submitForm(this); return false;">
+        <form th:action="@{|/travel/${travelRoute.id}/modify|}" method="post" onsubmit="submitForm(this); return false;">
             <div class="form-group">
                 <label for="title">제목</label>
-                <input type="text" class="form-control" id="title" name="title" placeholder="제목을 입력하세요">
+                <input type="text" class="form-control" id="title" name="title" placeholder="제목을 입력하세요" th:value="${travelRoute.title}">
             </div>
             <div class="form-group">
                 <label for="area">방문 도시</label>
-                <input type="text" class="form-control" id="area" name="area" th:value="${area}">
+                <input type="text" class="form-control" id="area" name="area" th:value="${travelRoute.area}">
             </div>
             <div class="d-flex">
                 <div class="form-group">
                     <label for="startDate">여행 시작 날짜</label>
-                    <input type="date" class="form-control" id="startDate" name="startDate"  th:value="${startDate}" style="width: 200px">
+                    <input type="date" class="form-control" id="startDate" name="startDate"  th:value="${travelRoute.startDate}" style="width: 200px">
                 </div>
                 <div class="form-group ml-3">
                     <label for="endDate">여행 마지막 날짜</label>
-                    <input type="date" class="form-control" id="endDate" name="endDate"  th:value="${endDate}" style="width: 200px">
+                    <input type="date" class="form-control" id="endDate" name="endDate"  th:value="${travelRoute.endDate}" style="width: 200px">
                 </div>
             </div>
             <div class="form-group">
                 <label for="body">내용</label>
-                <textarea class="form-control" id="body"  name="body" rows="3" placeholder="내용을 입력하세요"></textarea>
+                <textarea class="form-control" id="body"  name="body" rows="3" placeholder="내용을 입력하세요" th:text="${travelRoute.body}"></textarea>
             </div>
             <div th:each="day : ${#numbers.sequence(1, days + 1)}" class="mb-3">
                 <div th:id="'day' + ${day}">
@@ -40,6 +40,13 @@
                                 <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
                             </svg>
                         </button>
+                    </div>
+                    <div class="card my-3 place" th:each="place : ${places}" th:if="${place.travelDay} == ${day}">
+                        <div class="card-body d-flex justify-content-between align-items-center">
+                            <span th:text="${place.name} + '(' + ${place.address} + ')'"></span>
+                            <button type="button" class="btn btn-outline-dark closeBtn">X</button>
+                        </div>
+                        <input type="hidden" name="places" th:value="${day} + '/' + ${place.travelOrder} + '/' + ${place.name} + '/' + ${place.address}">
                     </div>
                     <div class="modal fade" th:id="'placeModal' + ${day}" role="dialog" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
@@ -100,7 +107,6 @@
                 count++;
             }
         }
-
         var container = document.getElementById('day' + day);
         var name = document.getElementById('name' + day).value;
         var address = document.getElementById('address' + day).value;
@@ -128,14 +134,9 @@
         hiddenTag.value = day + '/' + order + '/' + name + '/' + address;
 
         var closeBtn = document.createElement('button');
-        closeBtn.className = 'btn btn-outline-dark';
+        closeBtn.className = 'btn btn-outline-dark closeBtn';
         closeBtn.type = 'button';
         closeBtn.innerHTML = 'X';
-
-        closeBtn.addEventListener('click', function () {
-            card.remove();
-            updateOrder(day);
-        })
 
         card.appendChild(cardBody);
         card.appendChild(hiddenTag);
@@ -193,5 +194,22 @@
 
         form.submit();
     }
+    document.addEventListener('click', function (event) {
+        var target = event.target;
+
+        if (target.classList.contains('closeBtn')) {
+            var card = target.closest('.card');
+
+            if (card) {
+                var place = card.querySelector('[name="places"]');
+                var day = place.value.split('/')[0];
+                card.remove();
+                updateOrder(day);
+            }
+        }
+    });
 </script>
 </html>
+
+
+
