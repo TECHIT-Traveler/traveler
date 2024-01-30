@@ -18,7 +18,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.*;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -147,6 +149,61 @@ public class TravelRouteController {
             travelRouteService.addPlace(travelRoute, name, address, day, order);
         }
 
+        return "redirect:/travel/%d".formatted(id);
+    }
+
+    @GetMapping("/{id}")
+    public String detail(@PathVariable long id, Model model) {
+        TravelRoute travelRoute = travelRouteService.findById(id).orElseThrow(() -> new GlobalException("404-1", "해당 글이 존재하지 않습니다."));
+
+        List<TravelPlace> places = travelRoute.getPlaces()
+                .stream()
+                .sorted(Comparator.comparingInt(TravelPlace::getTravelOrder))
+                .collect(Collectors.toList());
+
+        Period period = Period.between(travelRoute.getStartDate(), travelRoute.getEndDate());
+        int days = period.getDays();
+
+        model.addAttribute("days", days);
+        model.addAttribute("travelRoute", travelRoute);
+        model.addAttribute("places", places);
+
+        return "/domain/travel/travelRoute/detail";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/{id}/delete")
+    public String delete(@PathVariable long id) {
+        TravelRoute travelRoute = travelRouteService.findById(id).orElseThrow(() -> new GlobalException("404-1", "해당 글이 존재하지 않습니다."));
+
+        if(!travelRouteService.canDelete(rq.getMember(), travelRoute)) throw new GlobalException("403-1", "권한이 없습니다.");
+
+        travelRouteService.delete(travelRoute);
+
         return "redirect:/";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/{id}/like")
+    public String like(@PathVariable long id) {
+        TravelRoute travelRoute = travelRouteService.findById(id).orElseThrow(() -> new GlobalException("404-1", "해당 글이 존재하지 않습니다."));
+
+        if (!travelRouteService.canLike(rq.getMember(), travelRoute)) throw new GlobalException("403-1", "권한이 없습니다.");
+
+        travelRouteService.like(rq.getMember(), travelRoute);
+
+        return "redirect:/travel/%d".formatted(id);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/{id}/cancelLike")
+    public String cancelLike(@PathVariable long id) {
+        TravelRoute travelRoute = travelRouteService.findById(id).orElseThrow(() -> new GlobalException("404-1", "해당 글이 존재하지 않습니다."));
+
+        if (!travelRouteService.canCancelLike(rq.getMember(), travelRoute)) throw new GlobalException("403-1", "권한이 없습니다.");
+
+        travelRouteService.cancelLike(rq.getMember(), travelRoute);
+
+        return "redirect:/travel/%d".formatted(id);
     }
 }
