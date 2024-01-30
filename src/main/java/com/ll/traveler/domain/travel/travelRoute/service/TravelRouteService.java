@@ -76,4 +76,26 @@ public class TravelRouteService {
     public void delete(TravelRoute travelRoute) {
         travelRouteRepository.delete(travelRoute);
     }
+
+    public boolean canLike(Member actor, TravelRoute travelRoute) {
+        if(actor == null) return false;
+
+        return !travelRoute.hasLike(actor);
+    }
+
+    public boolean canCancelLike(Member actor, TravelRoute travelRoute) {
+        if(actor == null) return false;
+
+        return travelRoute.hasLike(actor);
+    }
+
+    @Transactional
+    public void like(Member actor, TravelRoute travelRoute) {
+        travelRoute.addLike(actor);
+    }
+
+    @Transactional
+    public void cancelLike(Member actor, TravelRoute travelRoute) {
+        travelRoute.deleteLike(actor);
+    }
 }
