@@ -23,8 +23,11 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests(authorizeRequests ->
-                        authorizeRequests.requestMatchers("/**")
-                                .permitAll()
+                        authorizeRequests
+                                .requestMatchers("/**")
+                                    .permitAll()
+                                .anyRequest()
+                                    .permitAll()
                 )
                 .headers(
                         headers ->
@@ -33,12 +36,14 @@ public class SecurityConfig {
                                                 frameOptions.sameOrigin()
                                 )
                 )
+                //.csrf(AbstractHttpConfigurer::disable)
                 .csrf(
                         csrf ->
                                 csrf.ignoringRequestMatchers(
                                         "/h2-console/**"
                                 )
                 )
+
                 .formLogin(
                         formLogin ->
                                 formLogin

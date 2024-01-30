@@ -3,7 +3,7 @@ package com.ll.traveler.global.rq;
 import com.ll.traveler.domain.member.member.entity.Member;
 import com.ll.traveler.global.rsData.RsData;
 import com.ll.traveler.global.security.SecurityUser;
-import com.ll.traveler.standard.utill.Ut;
+import com.ll.traveler.standard.util.Ut;
 import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

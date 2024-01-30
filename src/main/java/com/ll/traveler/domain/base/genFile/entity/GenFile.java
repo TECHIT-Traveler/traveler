@@ -2,7 +2,7 @@ package com.ll.traveler.domain.base.genFile.entity;
 
 import com.ll.traveler.global.app.AppConfig;
 import com.ll.traveler.global.jpa.BaseEntity;
-import com.ll.traveler.standard.utill.Ut;
+import com.ll.traveler.standard.util.Ut;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
