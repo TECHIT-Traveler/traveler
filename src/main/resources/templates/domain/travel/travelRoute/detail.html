@@ -1,8 +1,20 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="container my-3">
+    <style>
+        .card:not(.first-card)::before {
+            content: "";
+            position: absolute;
+            top: -25%;
+            left: 50%;
+            width: 2px;
+            height: 25px;
+            background-color: darkgrey;
+        }
+    </style>
     <div class="container">
         <div class="mb-3">
-            <h2 th:text="${travelRoute.title}" class="my-5"></h2>
+            <h2 th:text="${travelRoute.title}" class="mt-4"></h2>
+            <hr class="mb-4">
             <p class="d-flex">
                 <small th:text="${travelRoute.author.nickname} + '  ·  '"></small>
                 <small class="text-muted" th:text="${travelRoute.startDate} + ' ~ ' + ${travelRoute.endDate}"></small>
@@ -20,12 +32,12 @@
             <small class="mb-2 text-muted badge badge-light m-1" th:text="'#' + ${travelRoute.area}"></small>
             <div th:text="${travelRoute.body}" class="py-2"></div>
         </div>
-        <div th:each="day : ${#numbers.sequence(1, days + 1)}" class="mb-3">
+        <div th:each="day : ${#numbers.sequence(1, days + 1)}" class="day-container mb-3">
             <div>
                 <h5 th:text="'day ' + ${day}"></h5>
             </div>
             <div>
-                <div th:each="place : ${places}" th:if="${place.travelDay} == ${day}" class="card d-flex align-items-center my-3 connected">
+                <div th:each="place : ${places}" th:if="${place.travelDay} == ${day}" class="card d-flex align-items-center my-4">
                     <div class="card-body">
                         <h5 class="card-title text-center" th:text="${place.name}"></h5>
                         <h6 class="card-subtitle mb-2 text-muted text-center" th:text="${place.address}"></h6>
@@ -44,5 +56,13 @@
             };
         });
     });
+
+    window.onload = function () {
+        const days = document.querySelectorAll('.day-container');
+        for(var i = 0; i < days.length; i++) {
+            var firstCard = days[i].querySelector('.card');
+            firstCard.classList.add('first-card');
+        }
+    };
 </script>
 </html>
