@@ -36,14 +36,14 @@ public class SecurityConfig {
                                                 frameOptions.sameOrigin()
                                 )
                 )
-                //.csrf(AbstractHttpConfigurer::disable)
                 .csrf(
                         csrf ->
                                 csrf.ignoringRequestMatchers(
-                                        "/h2-console/**"
+                                        "/h2-console/**",
+                                        "/sign-in/emailCheck",
+                                        "/mail"
                                 )
                 )
-
                 .formLogin(
                         formLogin ->
                                 formLogin
