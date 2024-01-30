@@ -3,11 +3,10 @@ package com.ll.traveler.domain.post.postComment.entity;
 import com.ll.traveler.domain.member.member.entity.Member;
 import com.ll.traveler.domain.post.post.entity.Post;
 import com.ll.traveler.global.jpa.BaseEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-
-import java.time.LocalDateTime;
 
 import static lombok.AccessLevel.PROTECTED;
 
@@ -19,11 +18,9 @@ import static lombok.AccessLevel.PROTECTED;
 @Setter
 @ToString(callSuper = true)
 public class PostComment extends BaseEntity {
-    private String body;
-
-    @ManyToOne
-    private Post post;
-
     @ManyToOne
     private Member author;
+    @ManyToOne
+    private Post post;
+    private String body;
 }

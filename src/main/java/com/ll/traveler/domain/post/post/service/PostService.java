@@ -3,6 +3,7 @@ package com.ll.traveler.domain.post.post.service;
 import com.ll.traveler.domain.member.member.entity.Member;
 import com.ll.traveler.domain.post.post.entity.Post;
 import com.ll.traveler.domain.post.post.repository.PostRepository;
+import com.ll.traveler.domain.post.postComment.entity.PostComment;
 import com.ll.traveler.global.rsData.RsData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -54,5 +55,10 @@ public class PostService {
 
     public Optional<Post> findById(long id) {
         return postRepository.findById(id);
+    }
+
+    @Transactional
+    public PostComment writeComment(Member actor, Post post, String body) {
+        return post.writeComment(actor, body);
     }
 }

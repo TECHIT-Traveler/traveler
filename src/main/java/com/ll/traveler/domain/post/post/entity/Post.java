@@ -56,4 +56,16 @@ public class Post extends BaseEntity {
         return likes.stream()
                 .anyMatch(postLike -> postLike.getMember().equals(member));
     }
+
+    public PostComment writeComment(Member actor, String body) {
+        PostComment postComment = PostComment.builder()
+                .post(this)
+                .author(actor)
+                .body(body)
+                .build();
+
+        comments.add(postComment);
+
+        return postComment;
+    }
 }
