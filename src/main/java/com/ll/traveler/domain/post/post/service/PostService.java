@@ -49,8 +49,8 @@ public class PostService {
     }
 
     @Transactional
-    public void like(Member member, Post post) {
-        post.addLike(member);
+    public void like(Member actor, Post post) {
+        post.addLike(actor);
     }
 
     public Optional<Post> findById(long id) {

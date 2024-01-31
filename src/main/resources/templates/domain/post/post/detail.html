@@ -3,6 +3,10 @@
 <head>
     <!-- 부트스트랩 CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- jQuery and Bootstrap Bundle (includes Popper) -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
 <div class="container mt-5">
@@ -16,29 +20,54 @@
             <p id="post-content" class="card-text">게시글 내용</p>
         </div>
     </div>
-</div>
-</body>
-</html>
 
-<!-- 댓글 섹션 -->
-<div class="card mt-4">
-    <div class="card-header">
-        <h4 class="card-title">댓글 작성</h4>
+    <!-- 댓글 섹션 -->
+    <div class="card mt-4">
+        <div class="card-header">
+            <h4 class="card-title">댓글 작성</h4>
+        </div>
+        <div class="card-body">
+            <form id="comment-form">
+                <div class="form-group">
+                    <label for="comment-author">이름</label>
+                    <input type="text" id="comment-author" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="comment-content">댓글</label>
+                    <textarea id="comment-content" class="form-control" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">작성</button>
+            </form>
+        </div>
     </div>
-    <div class="card-body">
-        <form>
-            <div class="form-group">
-                <label for="comment-author">이름</label>
-                <input type="text" id="comment-author" class="form-control">
-            </div>
-            <div class="form-group">
-                <label for="comment-content">댓글</label>
-                <textarea id="comment-content" class="form-control" rows="3"></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary">작성</button>
-        </form>
+
+    <!-- 댓글 표시 -->
+    <div class="card mt-4">
+        <div class="card-header">
+            <h4 class="card-title">댓글 목록</h4>
+        </div>
+        <div class="card-body" id="comment-list">
+            <!-- 여기에 댓글이 표시됩니다 -->
+        </div>
     </div>
 </div>
-</div>
+
+<script>
+    // 댓글 제출 시 실행할 함수
+    $('#comment-form').on('submit', function(e) {
+        e.preventDefault();
+
+        var author = $('#comment-author').val();
+        var content = $('#comment-content').val();
+
+        // 댓글 목록에 새로운 댓글 추가
+        $('#comment-list').prepend('<div class="card mt-2"><div class="card-body"><h5 class="card-title">' + author + '</h5><p class="card-text">' + content + '</p></div></div>');
+
+        // 폼 초기화
+        $('#comment-author').val('');
+        $('#comment-content').val('');
+    });
+</script>
+
 </body>
 </html>
