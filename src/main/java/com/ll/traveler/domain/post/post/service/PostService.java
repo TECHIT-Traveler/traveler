@@ -44,6 +44,7 @@ public class PostService {
         return postRepository.save(post);
     }
 
+
     @Transactional
     public void like(Member member, Post post) {
         post.addLike(member);

@@ -64,6 +64,7 @@
     </script>
 
     <form th:action method="POST" onsubmit="submitWriteForm(this); return false;" class="needs-validation">
+        <input type="hidden" name="body">
 
         <div class="form-group">
             <label for="title">제목</label>
@@ -77,7 +78,7 @@
                     height="calc(100vh - 400px)"
                     placeholder="내용"
             >
-<!--                <script type="text/x-template" th:utext="${post.detailBody?.val}"></script>-->
+               <script type="text/x-template"></script>
             </div>
         </div>
 
