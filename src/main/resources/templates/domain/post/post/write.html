@@ -2,11 +2,32 @@
 
 <head>
     <title>글 작성</title>
+    <style>
+        .title-section {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+    </style>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/marked/3.0.4/marked.min.css">
+    <style>
+        .button-center {
+            text-align: center;
+        }
+    </style>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/3.0.4/marked.min.js"></script>
 </head>
 
 <body>
-<div layout:fragment="content">
-    <h1>글 작성</h1>
+<div layout:fragment="content" class="container">
+
+    <th:block th:replace="global/fragments/toastUiEditorLib :: toastUiEditorLib"></th:block>
+
+    <div class="title-section">
+        <h1>글 작성</h1>
+    </div>
 
     <script>
         function submitWriteForm(form) {
@@ -18,11 +39,15 @@
                 return;
             }
 
-            form.body.value = form.body.value.trim();
+            const editor = $(form).find(".toast-ui-editor").data("data-toast-editor");
+
+            const markdown = editor.getMarkdown().trim();
+
+            form.body.value = markdown;
 
             if (form.body.value.length == 0) {
-                toastWarning('내용을 입력해주세요.');
-                form.body.focus();
+                toastWarning("내용을 입력해주세요");
+                editor.focus();
                 return;
             }
 
@@ -38,24 +63,33 @@
         }
     </script>
 
-    <form th:action method="POST" onsubmit="submitWriteForm(this); return false;">
+    <form th:action method="POST" onsubmit="submitWriteForm(this); return false;" class="needs-validation">
 
-        <div>
-            <label>제목</label>
-            <input type="text" name="title">
+        <div class="form-group">
+            <label for="title">제목</label>
+            <input type="text" name="title" id="title" class="form-control" required>
         </div>
 
         <div>
             <label>내용</label>
-            <textarea name="body"></textarea>
+            <div
+                    class="toast-ui-editor"
+                    height="calc(100vh - 400px)"
+                    placeholder="내용"
+            >
+<!--                <script type="text/x-template" th:utext="${post.detailBody?.val}"></script>-->
+            </div>
         </div>
 
-        <div>
-            <label>지역</label>
-            <input type="text" name="area">
+        <div class="form-group">
+            <label for="area">지역</label>
+            <input type="text" name="area" id="area" class="form-control" required>
         </div>
 
-        <button type="submit">작성완료</button>
+        <div class="form-group button-center">
+            <button type="submit" class="btn btn-primary">작성완료</button>
+        </div>
+
     </form>
 </div>
 </body>
