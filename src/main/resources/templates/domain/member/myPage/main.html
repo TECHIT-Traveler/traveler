@@ -1,0 +1,23 @@
+<html layout:decorate="~{global/usrLayout}">
+
+<head>
+    <title>마이페이지</title>
+</head>
+
+<body>
+<div layout:fragment="content">
+    <h1>마이페이지</h1>
+    <h2>아이디</h2>
+    <a th:text="${member.getUsername()}"></a>
+    <h2>이메일</h2>
+    <a th:text="${member.getEmail()}"></a>
+    <h2>닉네임</h2>
+    <a th:text="${member.getNickname()}"></a>
+    <h2>가입 날짜</h2>
+    <a th:text="${#temporals.format(member.getCreateDate(), 'yyyy-MM-dd')}"></a>
+    <br>
+    <a th:href="@{/my-page/{id}/update(id=${member.getId()})}">회원 정보 수정</a>
+</div>
+</body>
+
+</html>

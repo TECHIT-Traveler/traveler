@@ -8,6 +8,7 @@ import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import static lombok.AccessLevel.PROTECTED;
 
@@ -16,6 +17,7 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 @Setter
 @Getter
+@SuperBuilder
 @ToString(callSuper = true)
 @Table(
         uniqueConstraints = @UniqueConstraint(
@@ -41,9 +43,6 @@ public class GenFile extends BaseEntity {
     private String fileDir;
     private String originFileName;
 
-    public String getModelName() {
-        return Ut.str.lcfirst(this.getClass().getSimpleName());
-    }
     public String getFileName() {
         return getId() + "." + getFileExt();
     }
