@@ -71,6 +71,7 @@ public class TravelRouteController {
         @NotBlank
         private String body;
         @NotEmpty
+
         private List<String> places;
     }
     @PreAuthorize("isAuthenticated()")
@@ -89,7 +90,7 @@ public class TravelRouteController {
             travelRouteService.addPlace(travelRoute, name, address, day, order);
         }
 
-        return "redirect:/";
+        return "redirect:/travel/%d".formatted(travelRoute.getId());
     }
 
     @PreAuthorize("isAuthenticated()")

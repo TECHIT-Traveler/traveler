@@ -180,6 +180,11 @@
             return;
         }
 
+        if(document.querySelectorAll(".place").length == 0) {
+            toastWarning('여행 장소를 추가해 주세요.');
+            return;
+        }
+
         form.submit();
     }
 </script>
