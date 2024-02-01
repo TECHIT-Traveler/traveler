@@ -3,9 +3,9 @@ package com.ll.traveler.global.rsData;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import static lombok.AccessLevel.PROTECTED;
+import static lombok.AccessLevel.PRIVATE;
 
-@AllArgsConstructor(access = PROTECTED)
+@AllArgsConstructor(access = PRIVATE)
 @Getter
 public class RsData<T> {
     private final String resultCode;

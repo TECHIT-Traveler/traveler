@@ -1,0 +1,99 @@
+<html layout:decorate="~{layout}">
+
+<head>
+    <title>글 수정</title>
+    <style>
+        .title-section {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+    </style>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/marked/3.0.4/marked.min.css">
+    <style>
+        .button-center {
+            text-align: center;
+        }
+    </style>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/3.0.4/marked.min.js"></script>
+</head>
+
+<body>
+<div layout:fragment="content" class="container">
+
+    <th:block th:replace="global/fragments/toastUiEditorLib :: toastUiEditorLib"></th:block>
+
+    <div class="title-section">
+        <h1>글 수정</h1>
+    </div>
+
+    <script>
+        function submitModifyForm(form) {
+            form.title.value = form.title.value.trim();
+
+            if (form.title.value.length == 0) {
+                toastWarning('제목을 입력해주세요.');
+                form.title.focus();
+                return;
+            }
+
+            const editor = $(form).find(".toast-ui-editor").data("data-toast-editor");
+
+            const markdown = editor.getMarkdown().trim();
+
+            form.body.value = markdown;
+
+            if (form.body.value.length == 0) {
+                toastWarning("내용을 입력해주세요");
+                editor.focus();
+                return;
+            }
+
+            form.area.value = form.area.value.trim();
+
+            if (form.area.value.length == 0) {
+                toastWarning('지역을 입력해주세요.');
+                form.area.focus();
+                return;
+            }
+
+            form.submit();
+        }
+    </script>
+
+    <form th:action method="POST" onsubmit="submitModifyForm(this); return false;" class="needs-validation">
+        <input type="hidden" name="_method" value="PUT">
+        <input type="hidden" name="body">
+
+        <div class="form-group">
+            <label for="title">제목</label>
+            <input type="text" name="title" id="title" th:value="${post.title}" class="form-control" required>
+        </div>
+
+        <div>
+            <label>내용</label>
+            <div
+                    class="toast-ui-editor"
+                    height="calc(100vh - 400px)"
+                    placeholder="내용"
+            >
+               <script type="text/x-template" th:text="${post.body}"></script>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="area">지역</label>
+            <input type="text" name="area" id="area" class="form-control" required>
+        </div>
+
+        <div class="form-group button-center">
+            <button type="submit" class="btn btn-primary">수정완료</button>
+        </div>
+
+    </form>
+</div>
+</body>
+
+</html>

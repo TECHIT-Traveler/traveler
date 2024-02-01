@@ -3,7 +3,6 @@ package com.ll.traveler.domain.post.post.service;
 import com.ll.traveler.domain.member.member.entity.Member;
 import com.ll.traveler.domain.post.post.entity.Post;
 import com.ll.traveler.domain.post.post.repository.PostRepository;
-import com.ll.traveler.global.rsData.RsData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -50,7 +50,18 @@ public class PostService {
         post.addLike(member);
     }
 
-    public Post findById(Long postId) {
-        return postRepository.findById(postId).get();
+    public Optional<Post> findById(Long postId) {
+        return postRepository.findById(postId);
+    }
+
+    public boolean canModify(Member actor, Post post) {
+        return  actor.equals(post.getAuthor());
+    }
+
+    @Transactional
+    public void modify(Post post, String title, String body, String area) {
+        post.setTitle(title);
+        post.setBody(body);
+        post.setArea(area);
     }
 }

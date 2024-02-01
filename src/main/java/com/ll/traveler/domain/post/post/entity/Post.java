@@ -56,4 +56,5 @@ public class Post extends BaseEntity {
         return likes.stream()
                 .anyMatch(postLike -> postLike.getMember().equals(member));
     }
+
 }

@@ -9,6 +9,7 @@
 <div layout:fragment="content">
     <div>
         <button onclick="window.location.href='/post/list';">목록으로</button>
+        <button class="button" th:if="${@postService.canModify(@rq.member, post)}" onclick="window.location.href='/post/' + ${post.id} + '/modify'">글 수정</button>
     </div>
 
     <h1>글 내용</h1>
@@ -21,6 +22,11 @@
     <div>
         <h3>내용</h3>
         <div style="white-space: pre-wrap;" th:text="${post.body}"></div>
+    </div>
+
+    <div>
+        <h3>지역</h3>
+        <div th:text="${post.area}"></div>
     </div>
 
     <div>
