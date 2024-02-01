@@ -129,6 +129,7 @@ public class TravelRouteController {
         private String body;
         @NotEmpty
         private List<String> places;
+        MultipartFile coverImg;
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -140,7 +141,7 @@ public class TravelRouteController {
             throw new GlobalException("403-1", "권한이 없습니다.");
         }
 
-        travelRouteService.modify(travelRoute, form.getTitle(), form.getBody(), form.getArea(), form.getStartDate(), form.getEndDate());
+        travelRouteService.modify(travelRoute, form.getTitle(), form.getBody(), form.getArea(), form.getStartDate(), form.getEndDate(), form.getCoverImg());
         travelRouteService.deleteAllPlace(travelRoute);
         for(String place : form.getPlaces()) {
             String[] placeInfo = place.split("/");

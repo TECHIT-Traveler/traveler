@@ -72,7 +72,13 @@ public class TravelRouteService {
     }
 
     @Transactional
-    public void modify(TravelRoute travelRoute, String title, String body, String area, String startDate, String endDate) {
+    public void modify(TravelRoute travelRoute, String title, String body, String area, String startDate, String endDate, MultipartFile coverImg) {
+        String coverImgFilePath = Ut.file.toFile(coverImg, AppConfig.getTempDirPath());
+
+        if (Ut.str.hasLength(coverImgFilePath)) {
+            saveCoverImg(travelRoute, coverImgFilePath);
+        }
+
         travelRoute.setTitle(title);
         travelRoute.setBody(body);
         travelRoute.setArea(area);
