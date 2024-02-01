@@ -16,6 +16,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.*;
 import java.util.Comparator;
@@ -71,13 +72,13 @@ public class TravelRouteController {
         @NotBlank
         private String body;
         @NotEmpty
-
         private List<String> places;
+        private MultipartFile coverImg;
     }
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/write")
     public String write(@Valid WriteForm form) {
-        TravelRoute travelRoute = travelRouteService.write(rq.getMember(), form.getTitle(), form.getBody(), form.getArea(), form.getStartDate(), form.getEndDate()).getData();
+        TravelRoute travelRoute = travelRouteService.write(rq.getMember(), form.getTitle(), form.getBody(), form.getArea(), form.getStartDate(), form.getEndDate(), form.getCoverImg()).getData();
 
         List<String> places = form.getPlaces();
         for(String place : places) {
