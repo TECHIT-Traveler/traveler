@@ -3,6 +3,8 @@ package com.ll.traveler.domain.member.member.service;
 import com.ll.traveler.domain.base.genFile.entity.GenFile;
 import com.ll.traveler.domain.base.genFile.service.GenFileService;
 import com.ll.traveler.domain.member.member.entity.Member;
+import com.ll.traveler.domain.member.member.entity.Role;
+import com.ll.traveler.domain.member.member.entity.SocialProvider;
 import com.ll.traveler.domain.member.member.repository.MemberRepository;
 
 import com.ll.traveler.global.app.AppConfig;
@@ -13,9 +15,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
+
+import static com.ll.traveler.domain.member.member.entity.SocialProvider.KAKAO;
 
 @Service
 @RequiredArgsConstructor
@@ -31,14 +36,33 @@ public class MemberService {
         return join(username,"","", nickname,filePath);
     }
     @Transactional
-    public RsData<Member> join(String username, String password,String email, String nickname, MultipartFile profileImg) {
+    public RsData<Member> join(String username, String password, String email, String nickname, MultipartFile profileImg) {
         String profileImgFilePath = Ut.file.toFile(profileImg, AppConfig.getTempDirPath());
-        return join(username, password,email, nickname, profileImgFilePath);
+
+        // 기본 역할 설정
+        Role defaultRole = Role.MEMBER;
+
+        Member member = Member.builder()
+                .username(username)
+                .password(passwordEncoder.encode(password))
+                .email(email)
+                .nickname(nickname)
+                .role(defaultRole)  // 기본 역할 설정
+                .build();
+
+        memberRepository.save(member);
+
+        if (Ut.str.hasLength(profileImgFilePath)) {
+            saveProfileImg(member, profileImgFilePath);
+        }
+
+        return RsData.of("200", "%s님 환영합니다. 회원가입이 완료되었습니다. 로그인 후 이용해주세요.".formatted(member.getUsername()), member);
     }
 
     public Optional<Member> findByUsername(String username){
         return memberRepository.findByUsername(username);
     }
+
     @Transactional
     public RsData<Member> join(String username, String password,String email ,String nickname, String profileImgFilePath) {
         if (findByUsername(username).isPresent()){
@@ -64,14 +88,28 @@ public class MemberService {
     }
 
     @Transactional
-    public RsData<Member> whenSocialLogin(String providerTypeCode, String username, String nickname, String profileImgUrl) {
+    public RsData<Member> whenKakaoSocialLogin(Long id, String nickname, String profileImgUrl) {
+        String username = KAKAO.name() + "_" + id;
         Optional<Member> opMember = findByUsername(username);
 
         if (opMember.isPresent()) return RsData.of("200", "이미 존재합니다.", opMember.get());
 
         String filePath = Ut.str.hasLength(profileImgUrl) ? Ut.file.downloadFileByHttp(profileImgUrl, AppConfig.getTempDirPath()) : "";
 
-        return join(username, nickname, filePath);
+        Member member = Member.builder()
+                .username(username)
+                .provider(KAKAO)
+                .providerId(id.toString())
+                .nickname(nickname)
+                .build();
+
+        memberRepository.save(member);
+
+        if (Ut.str.hasLength(filePath)) {
+            saveProfileImg(member, filePath);
+        }
+
+        return RsData.of("200", "%s님 환영합니다. 회원가입이 완료되었습니다. 로그인 후 이용해주세요.".formatted(member.getUsername()), member);
     }
 
     public String getProfileImgUrl(Member member) {
