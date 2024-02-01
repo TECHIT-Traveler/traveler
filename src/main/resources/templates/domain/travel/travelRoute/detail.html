@@ -12,13 +12,13 @@
         }
     </style>
     <div class="container">
-        <div class="mb-3" style="color:white; height: 300px">
+        <div class="mb-3" style="color:black; height: 300px">
             <div class="d-flex pb-4" style="position: relative;">
                 <img th:src="${@travelRouteService.getCoverImgUrl(travelRoute)}"
-                     th:onerror="'this.onerror=null;this.src=\'/images/defaultCoverImg.jpg\';'"
-                     style="position: absolute; z-index: -1; opacity: 0.75; height: 300px; width: 100%; object-fit: cover">
+                     th:onerror="'this.onerror=null;this.src=\'/images/defaultCoverImg.png\';'"
+                     style="position: absolute; z-index: -1; opacity: 0.6; height: 300px; width: 100%; object-fit: cover">
                 <div class="pt-5 pl-5">
-                    <small class="mb-2 text-muted badge badge-light m-1" th:text="'#' + ${travelRoute.area}"></small>
+                    <small class="mb-2 badge badge-light" th:text="'#' + ${travelRoute.area}"></small>
                     <h1 th:text="${travelRoute.title}"></h1>
                 </div>
                 <div class="ml-auto p-5">
