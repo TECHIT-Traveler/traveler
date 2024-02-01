@@ -2,6 +2,7 @@ package com.ll.traveler.domain.post.post.service;
 
 import com.ll.traveler.domain.member.member.entity.Member;
 import com.ll.traveler.domain.post.post.entity.Post;
+import com.ll.traveler.domain.post.post.repository.PostCommentRepository;
 import com.ll.traveler.domain.post.post.repository.PostRepository;
 import com.ll.traveler.domain.post.postComment.entity.PostComment;
 import com.ll.traveler.global.rsData.RsData;
@@ -19,6 +20,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PostService {
     private final PostRepository postRepository;
+    private final PostCommentRepository postCommentRepository;
 
     public Page<Post> search(String kw, String criteria, Pageable pageable) {
         switch (criteria) {
@@ -60,5 +62,33 @@ public class PostService {
     @Transactional
     public PostComment writeComment(Member actor, Post post, String body) {
         return post.writeComment(actor, body);
+    }
+
+    public boolean canModifyComment(Member actor, PostComment comment) {
+        if (actor == null) return false;
+
+        return actor.equals(comment.getAuthor());
+    }
+
+    public boolean canDeleteComment(Member actor, PostComment comment) {
+        if (actor == null) return false;
+
+        if (actor.isAdmin()) return true;
+
+        return actor.equals(comment.getAuthor());
+    }
+
+    public Optional<PostComment> findCommentById(long id) {
+        return postCommentRepository.findCommentById(id);
+    }
+
+    @Transactional
+    public void modifyComment(PostComment postComment, String body) {
+        postComment.setBody(body);
+    }
+
+    @Transactional
+    public void deleteComment(PostComment postComment) {
+        postCommentRepository.delete(postComment);
     }
 }

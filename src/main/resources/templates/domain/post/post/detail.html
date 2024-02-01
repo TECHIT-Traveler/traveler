@@ -61,13 +61,42 @@
         var content = $('#comment-content').val();
 
         // 댓글 목록에 새로운 댓글 추가
-        $('#comment-list').prepend('<div class="card mt-2"><div class="card-body"><h5 class="card-title">' + author + '</h5><p class="card-text">' + content + '</p></div></div>');
+        $('#comment-list').prepend('<div class="card mt-2"><div class="card-body"><h5 class="card-title">' + author + '</h5><p class="card-text">' + content + '</p><button class="btn btn-secondary btn-sm edit-comment">수정</button><button class="btn btn-danger btn-sm delete-comment">삭제</button></div></div>');
 
         // 폼 초기화
         $('#comment-author').val('');
         $('#comment-content').val('');
     });
+
+    // 댓글 수정 버튼 클릭 시 실행할 함수
+    $(document).on('click', '.edit-comment', function() {
+        var commentCard = $(this).closest('.card');
+        var commentText = commentCard.find('.card-text');
+
+        // 댓글 내용을 수정 가능한 상태로 변경
+        var currentText = commentText.text();
+        commentText.html('<textarea class="edit-comment-textarea form-control mb-2">' + currentText + '</textarea><button class="btn btn-primary btn-sm save-edit">저장</button>');
+    });
+
+    // 댓글 수정 저장 버튼 클릭 시 실행할 함수
+    $(document).on('click', '.save-edit', function() {
+        var commentCard = $(this).closest('.card');
+        var commentText = commentCard.find('.card-text');
+        var editedText = $('.edit-comment-textarea').val();
+
+        // 수정한 내용으로 댓글 내용 변경
+        commentText.text(editedText);
+    });
+
+    // 댓글 삭제 버튼 클릭 시 실행할 함수
+    $(document).on('click', '.delete-comment', function() {
+        var commentCard = $(this).closest('.card');
+
+        // 댓글 삭제
+        commentCard.remove();
+    });
 </script>
 
 </body>
 </html>
+

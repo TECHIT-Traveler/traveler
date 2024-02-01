@@ -24,6 +24,7 @@ import static lombok.AccessLevel.PROTECTED;
 @ToString(callSuper = true)
 public class Post extends BaseEntity {
     private String title;
+    @Column(columnDefinition = "TEXT")
     private String body;
     private String area;
 
@@ -36,6 +37,7 @@ public class Post extends BaseEntity {
 
     @OneToMany(mappedBy = "post", cascade = ALL, orphanRemoval = true)
     @Builder.Default
+    @OrderBy("id DESC")
     private List<PostComment> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "post", cascade = ALL, orphanRemoval = true)
