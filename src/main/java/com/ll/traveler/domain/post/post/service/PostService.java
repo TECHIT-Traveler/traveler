@@ -64,4 +64,5 @@ public class PostService {
         post.setBody(body);
         post.setArea(area);
     }
+
 }

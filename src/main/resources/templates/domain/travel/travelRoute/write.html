@@ -2,9 +2,7 @@
 <div layout:fragment="content" class="container my-3">
     <div class="container">
         <div class="d-flex mb-3">
-            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-airplane" viewBox="0 0 16 16">
-                <path d="M6.428 1.151C6.708.591 7.213 0 8 0s1.292.592 1.572 1.151C9.861 1.73 10 2.431 10 3v3.691l5.17 2.585a1.5 1.5 0 0 1 .83 1.342V12a.5.5 0 0 1-.582.493l-5.507-.918-.375 2.253 1.318 1.318A.5.5 0 0 1 10.5 16h-5a.5.5 0 0 1-.354-.854l1.319-1.318-.376-2.253-5.507.918A.5.5 0 0 1 0 12v-1.382a1.5 1.5 0 0 1 .83-1.342L6 6.691V3c0-.568.14-1.271.428-1.849Zm.894.448C7.111 2.02 7 2.569 7 3v4a.5.5 0 0 1-.276.447l-5.448 2.724a.5.5 0 0 0-.276.447v.792l5.418-.903a.5.5 0 0 1 .575.41l.5 3a.5.5 0 0 1-.14.437L6.708 15h2.586l-.647-.646a.5.5 0 0 1-.14-.436l.5-3a.5.5 0 0 1 .576-.411L15 11.41v-.792a.5.5 0 0 0-.276-.447L9.276 7.447A.5.5 0 0 1 9 7V3c0-.432-.11-.979-.322-1.401C8.458 1.159 8.213 1 8 1c-.213 0-.458.158-.678.599Z"/>
-            </svg>
+            <i class="fa-solid fa-plane"></i>
             <h3 class="ml-3">여행 계획</h3>
             <span class="ml-3">여행 일정동안 방문할 장소들을 기록해 보세요</span>
         </div>
@@ -36,9 +34,7 @@
                     <div class="d-flex">
                         <h4>day <span th:text="${day}"></span></h4>
                         <button type="button" class="btn pt-0" data-bs-toggle="modal" th:attr="data-bs-target='#placeModal' + ${day}" title="버튼을 눌러서 여행 장소를 추가 하세요">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#00BFFF" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
-                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
-                            </svg>
+                            <i class="fa-solid fa-circle-plus"></i>
                         </button>
                     </div>
                     <div class="modal fade" th:id="'placeModal' + ${day}" role="dialog" tabindex="-1" aria-hidden="true">
@@ -46,9 +42,7 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <div class="d-flex mr-auto">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
-                                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-                                        </svg>
+                                        <i class="fa-solid fa-plus"></i>
                                         <h5 class="modal-title ml-2">장소 추가하기</h5>
                                     </div>
                                     <button type="button" class="btn-close btn-outline-dark" data-bs-dismiss="modal" aria-label="close">&times;</button>
@@ -56,19 +50,14 @@
                                 <div class="modal-body">
                                     <div>
                                         <div class="d-flex">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-house-add" viewBox="0 0 16 16">
-                                                <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h4a.5.5 0 1 0 0-1h-4a.5.5 0 0 1-.5-.5V7.207l5-5 6.646 6.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5Z"/>
-                                                <path d="M16 12.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Zm-3.5-2a.5.5 0 0 0-.5.5v1h-1a.5.5 0 0 0 0 1h1v1a.5.5 0 1 0 1 0v-1h1a.5.5 0 1 0 0-1h-1v-1a.5.5 0 0 0-.5-.5Z"/>
-                                            </svg>
+                                            <i class="fa-solid fa-location-dot"></i>
                                             <h6 class="ml-2">장소</h6>
                                         </div>
                                         <input type="text" th:id="'name' + ${day}" placeholder="장소 이름을 입력하세요">
                                     </div>
                                     <div class="mt-3">
                                         <div class="d-flex">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-map" viewBox="0 0 16 16">
-                                                <path fill-rule="evenodd" d="M15.817.113A.5.5 0 0 1 16 .5v14a.5.5 0 0 1-.402.49l-5 1a.502.502 0 0 1-.196 0L5.5 15.01l-4.902.98A.5.5 0 0 1 0 15.5v-14a.5.5 0 0 1 .402-.49l5-1a.5.5 0 0 1 .196 0L10.5.99l4.902-.98a.5.5 0 0 1 .415.103zM10 1.91l-4-.8v12.98l4 .8V1.91zm1 12.98 4-.8V1.11l-4 .8v12.98zm-6-.8V1.11l-4 .8v12.98l4-.8z"/>
-                                            </svg>
+                                            <i class="fa-solid fa-map-location-dot"></i>
                                             <h6 class="ml-2">주소</h6>
                                         </div>
                                         <input type="text" th:id="'address' + ${day}" placeholder="주소를 입력하세요">
@@ -188,6 +177,11 @@
         if(form.body.value.length == 0) {
             toastWarning('내용을 입력해 주세요.');
             form.body.focus();
+            return;
+        }
+
+        if(document.querySelectorAll(".place").length == 0) {
+            toastWarning('여행 장소를 추가해 주세요.');
             return;
         }
 

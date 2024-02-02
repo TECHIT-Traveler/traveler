@@ -1,6 +1,7 @@
 package com.ll.traveler.domain.travel.travelRoute.entity;
 
 import com.ll.traveler.domain.member.member.entity.Member;
+import com.ll.traveler.domain.travel.routeLike.entity.RouteLike;
 import com.ll.traveler.domain.travel.travelPlace.entity.TravelPlace;
 import com.ll.traveler.global.jpa.BaseEntity;
 import jakarta.persistence.Entity;
@@ -34,6 +35,10 @@ public class TravelRoute extends BaseEntity {
     @Builder.Default
     private List<TravelPlace> places = new ArrayList<>();
 
+    @OneToMany(mappedBy = "travelRoute", cascade = ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<RouteLike> likes = new ArrayList<>();
+
     @ManyToOne
     private Member author;
 
@@ -53,5 +58,24 @@ public class TravelRoute extends BaseEntity {
 
     public void deleteAllPlace() {
         places.clear();
+    }
+
+    public void addLike(Member member) {
+        if(hasLike(member)) {
+            return;
+        }
+        likes.add(RouteLike.builder()
+                .travelRoute(this)
+                .member(member)
+                .build());
+    }
+
+    public boolean hasLike(Member member) {
+        return likes.stream()
+                .anyMatch(like -> like.getMember().equals(member));
+    }
+
+    public void deleteLike(Member member) {
+        likes.removeIf(like -> like.getMember().equals(member));
     }
 }
