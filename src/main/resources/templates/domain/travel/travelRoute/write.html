@@ -6,7 +6,13 @@
             <h3 class="ml-3">여행 계획</h3>
             <span class="ml-3">여행 일정동안 방문할 장소들을 기록해 보세요</span>
         </div>
-        <form th:action="@{/travel/write}" method="post" onsubmit="submitForm(this); return false;">
+        <form th:action="@{/travel/write}" method="post" onsubmit="submitForm(this); return false;" enctype="multipart/form-data">
+            <div class="form-group">
+                <div class="mb-3">
+                    <label for="coverImg" class="form-label">대표 이미지 업로드</label>
+                    <input class="form-control" type="file" id="coverImg" name="coverImg" accept="image/*">
+                </div>
+            </div>
             <div class="form-group">
                 <label for="title">제목</label>
                 <input type="text" class="form-control" id="title" name="title" placeholder="제목을 입력하세요">
@@ -18,26 +24,30 @@
             <div class="d-flex">
                 <div class="form-group">
                     <label for="startDate">여행 시작 날짜</label>
-                    <input type="date" class="form-control" id="startDate" name="startDate"  th:value="${startDate}" style="width: 200px">
+                    <input type="date" class="form-control" id="startDate" name="startDate" th:value="${startDate}"
+                           style="width: 200px">
                 </div>
                 <div class="form-group ml-3">
                     <label for="endDate">여행 마지막 날짜</label>
-                    <input type="date" class="form-control" id="endDate" name="endDate"  th:value="${endDate}" style="width: 200px">
+                    <input type="date" class="form-control" id="endDate" name="endDate" th:value="${endDate}"
+                           style="width: 200px">
                 </div>
             </div>
             <div class="form-group">
-                <label for="body">내용</label>
-                <textarea class="form-control" id="body"  name="body" rows="3" placeholder="내용을 입력하세요"></textarea>
+                <label for="body">여행 설명</label>
+                <textarea class="form-control" id="body" name="body" rows="3" placeholder="내용을 입력하세요"></textarea>
             </div>
             <div th:each="day : ${#numbers.sequence(1, days + 1)}" class="mb-3">
                 <div th:id="'day' + ${day}">
                     <div class="d-flex">
                         <h4>day <span th:text="${day}"></span></h4>
-                        <button type="button" class="btn pt-0" data-bs-toggle="modal" th:attr="data-bs-target='#placeModal' + ${day}" title="버튼을 눌러서 여행 장소를 추가 하세요">
+                        <button type="button" class="btn pt-0" data-bs-toggle="modal"
+                                th:attr="data-bs-target='#placeModal' + ${day}" title="버튼을 눌러서 여행 장소를 추가 하세요">
                             <i class="fa-solid fa-circle-plus"></i>
                         </button>
                     </div>
-                    <div class="modal fade" th:id="'placeModal' + ${day}" role="dialog" tabindex="-1" aria-hidden="true">
+                    <div class="modal fade" th:id="'placeModal' + ${day}" role="dialog" tabindex="-1"
+                         aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -45,7 +55,9 @@
                                         <i class="fa-solid fa-plus"></i>
                                         <h5 class="modal-title ml-2">장소 추가하기</h5>
                                     </div>
-                                    <button type="button" class="btn-close btn-outline-dark" data-bs-dismiss="modal" aria-label="close">&times;</button>
+                                    <button type="button" class="btn-close btn-outline-dark" data-bs-dismiss="modal"
+                                            aria-label="close">&times;
+                                    </button>
                                 </div>
                                 <div class="modal-body">
                                     <div>
@@ -64,7 +76,9 @@
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-outline-info btn-close" data-dismiss="modal" th:onclick="addPlaceField([[${day}]]); return false;">추가</button>
+                                    <button type="button" class="btn btn-outline-info btn-close" data-dismiss="modal"
+                                            th:onclick="addPlaceField([[${day}]]); return false;">추가
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -83,9 +97,9 @@
         var cards = document.querySelectorAll('.place');
         var count = 0;
 
-        for(var i = 0; i < cards.length; i++) {
+        for (var i = 0; i < cards.length; i++) {
             var cardDay = cards[i].querySelector('[name="places"]').value.split('/')[0];
-            if(cardDay == day) {
+            if (cardDay == day) {
                 count++;
             }
         }
@@ -95,21 +109,21 @@
         var address = document.getElementById('address' + day).value;
         var order = count + 1;
 
-        if(name.trim().length == 0) {
+        if (name.trim().length == 0) {
             toastWarning('장소를 입력해 주세요.');
             return;
         }
-        if(address.trim().length == 0) {
+        if (address.trim().length == 0) {
             toastWarning('주소를 입력해 주세요.');
             return;
         }
 
         var card = document.createElement('div');
-        card.className ='card my-3 place';
+        card.className = 'card my-3 place';
 
         var cardBody = document.createElement('div');
         cardBody.className = 'card-body d-flex justify-content-between align-items-center';
-        cardBody.innerHTML = name + '(' + address +')';
+        cardBody.innerHTML = name + '(' + address + ')';
 
         var hiddenTag = document.createElement('input');
         hiddenTag.type = 'hidden';
@@ -138,18 +152,18 @@
         var cards = document.querySelectorAll('.place');
         var order = 1;
 
-        for(var i = 0; i < cards.length; i++) {
+        for (var i = 0; i < cards.length; i++) {
             var cardDay = cards[i].querySelector('[name="places"]').value.split('/')[0];
             var cardOrder = cards[i].querySelector('[name="places"]').value.split('/')[1];
 
-            if(cardDay == day) {
+            if (cardDay == day) {
                 cards[i].querySelector('[name="places"]').value = day + '/' + order + '/' + cards[i].querySelector('[name="places"]').value.split('/').slice(2).join('/');
                 order++;
             }
         }
     }
 
-    $(document).ready(function() {
+    $(document).ready(function () {
         $('.modal').on('hidden.bs.modal', function () {
             $(this).find('input[type="text"]').val('');
         });
@@ -158,7 +172,7 @@
     function submitForm(form) {
         form.title.value = form.title.value.trim();
 
-        if(form.title.value.length == 0) {
+        if (form.title.value.length == 0) {
             toastWarning('제목을 입력해 주세요.');
             form.title.focus();
             return;
@@ -166,7 +180,7 @@
 
         form.area.value = form.area.value.trim();
 
-        if(form.area.value.length == 0) {
+        if (form.area.value.length == 0) {
             toastWarning('지역을 입력해 주세요.');
             form.area.focus();
             return;
@@ -174,13 +188,13 @@
 
         form.body.value = form.body.value.trim();
 
-        if(form.body.value.length == 0) {
+        if (form.body.value.length == 0) {
             toastWarning('내용을 입력해 주세요.');
             form.body.focus();
             return;
         }
 
-        if(document.querySelectorAll(".place").length == 0) {
+        if (document.querySelectorAll(".place").length == 0) {
             toastWarning('여행 장소를 추가해 주세요.');
             return;
         }

@@ -6,7 +6,13 @@
             <h3 class="ml-3">여행 계획</h3>
             <span class="ml-3">여행 일정동안 방문할 장소들을 기록해 보세요</span>
         </div>
-        <form th:action="@{|/travel/${travelRoute.id}/modify|}" method="post" onsubmit="submitForm(this); return false;">
+        <form th:action="@{|/travel/${travelRoute.id}/modify|}" method="post" onsubmit="submitForm(this); return false;" enctype="multipart/form-data">
+            <div class="form-group">
+                <div class="mb-3">
+                    <label for="coverImg" class="form-label">대표 이미지 업로드</label>
+                    <input class="form-control" type="file" id="coverImg" name="coverImg" accept="image/*">
+                </div>
+            </div>
             <div class="form-group">
                 <label for="title">제목</label>
                 <input type="text" class="form-control" id="title" name="title" placeholder="제목을 입력하세요" th:value="${travelRoute.title}">
