@@ -31,17 +31,17 @@ public class OAuthAttributes {
         return ofGoogle(userNameAttributeName, attributes);
     }
 
-    private static OAuthAttributes ofGoogle(String id, Map<String, Object> attributes) {
+    private static OAuthAttributes ofGoogle(String nameAttributeKey, Map<String, Object> attributes) {
         return OAuthAttributes.builder()
                 .nickname((String) attributes.get("name"))
                 .email((String) attributes.get("email"))
                 .provider("Google")
                 .attributes(attributes)
-                .name(id)
+                .nameAttributeKey(nameAttributeKey)
                 .build();
     }
 
-    private static OAuthAttributes ofNaver(String id, Map<String, Object> attributes) {
+    private static OAuthAttributes ofNaver(String nameAttributeKey, Map<String, Object> attributes) {
         Map<String, Object> response = (Map<String, Object>) attributes.get("response");
 
         return OAuthAttributes.builder()
@@ -49,21 +49,21 @@ public class OAuthAttributes {
                 .email((String) response.get("email"))
                 .provider("Naver")
                 .attributes(response)
-                .name(id)
+                .nameAttributeKey(nameAttributeKey)
                 .build();
     }
 
-    private static OAuthAttributes ofKakao(String id, Map<String, Object> attributes) {
+    private static OAuthAttributes ofKakao(String nameAttributeKey, Map<String, Object> attributes) {
         Map<String, Object> response = (Map<String, Object>) attributes.get("kakao_account");
         Map<String, Object> account = (Map<String, Object>) response.get("profile");
 
-       return OAuthAttributes.builder()
-               .name((String) account.get("nickname"))
-               .email((String) response.get("email"))
-               .provider("Kakao")
-               .attributes(attributes)
-               .name(id)
-               .build();
+        return OAuthAttributes.builder()
+                .name((String) account.get("nickname"))
+                .email((String) response.get("email"))
+                .provider("Kakao")
+                .attributes(attributes)
+                .nameAttributeKey(nameAttributeKey)
+                .build();
     }
 
     public Member toEntity() {

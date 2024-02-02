@@ -1,6 +1,7 @@
 package com.ll.traveler.global.security;
 
 import com.ll.traveler.domain.member.member.entity.Member;
+import com.ll.traveler.domain.member.member.entity.Role;
 import com.ll.traveler.domain.member.member.entity.SocialProvider;
 import com.ll.traveler.domain.member.member.repository.MemberRepository;
 import com.ll.traveler.domain.member.member.service.MemberService;
@@ -32,12 +33,14 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         // 카카오 로그인 처리
         if ("KAKAO".equals(providerTypeCode)) {
-            return processKakaoLogin(oAuth2User, SocialProvider.KAKAO);
+            return processKakaoUser(oAuth2User);
         }
 
         // 다른 OAuth2 제공자에 대한 처리
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
         String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName();
+        String oauthId = oAuth2User.getName();
+        String username = providerTypeCode + "__%s".formatted(oauthId);
 
         OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
 
@@ -50,22 +53,25 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         );
     }
 
-    private OAuth2User processKakaoLogin(OAuth2User oAuth2User, SocialProvider socialProvider) {
-        Map<String, Object> attributes = oAuth2User.getAttributes();
-        String nickname = (String) attributes.get("nickname");
-        String profileImgUrl = (String) attributes.get("profile_image");
-        Long id = (Long) attributes.get("id");
-
-        Member member = memberService.whenKakaoSocialLogin(id, nickname, profileImgUrl).getData();
-
-        return new SecurityUser(member.getId(), member.getUsername(), "", member.getAuthorities());
-    }
-
     private Member saveOrUpdate(OAuthAttributes attributes) {
         Member member = memberRepository.findByEmail(attributes.getEmail())
-                .map(entity -> entity.update(attributes.getName(), SocialProvider.fromString(attributes.getProvider())))
+                .map(entity -> entity.update(attributes.getName(),SocialProvider.fromString(attributes.getProvider())))
                 .orElse(attributes.toEntity());
 
         return memberRepository.save(member);
+    }
+
+    private OAuth2User processKakaoUser(OAuth2User oAuth2User) {
+        Map<String, Object> attributes = oAuth2User.getAttributes();
+        Map<String, Object> properties = (Map<String, Object>) attributes.get("properties");
+        String nickname = (String) properties.get("nickname");
+        String profileImgUrl = (String) properties.get("profile_image");
+        String oauthId = oAuth2User.getName();
+        String username = "KAKAO__%s".formatted(oauthId);
+        Role role = (Role) attributes.get("ROLE_MEMBER");
+
+        Member member = memberService.whenSocialLogin("KAKAO", username, nickname,role ,profileImgUrl).getData();
+
+        return new SecurityUser(member.getId(), member.getUsername(), member.getPassword(), member.getAuthorities());
     }
 }

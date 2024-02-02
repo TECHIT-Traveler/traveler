@@ -4,7 +4,6 @@ import com.ll.traveler.domain.base.genFile.entity.GenFile;
 import com.ll.traveler.domain.base.genFile.service.GenFileService;
 import com.ll.traveler.domain.member.member.entity.Member;
 import com.ll.traveler.domain.member.member.entity.Role;
-import com.ll.traveler.domain.member.member.entity.SocialProvider;
 import com.ll.traveler.domain.member.member.repository.MemberRepository;
 
 import com.ll.traveler.global.app.AppConfig;
@@ -15,12 +14,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 
-import static com.ll.traveler.domain.member.member.entity.SocialProvider.KAKAO;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +32,7 @@ public class MemberService {
     public RsData<Member> join(String username, String nickname, String filePath) {
         return join(username,"","", nickname,filePath);
     }
+
     @Transactional
     public RsData<Member> join(String username, String password, String email, String nickname, MultipartFile profileImg) {
         String profileImgFilePath = Ut.file.toFile(profileImg, AppConfig.getTempDirPath());
@@ -84,32 +82,18 @@ public class MemberService {
         return RsData.of("200", "%s님 환영합니다. 회원가입이 완료되었습니다. 로그인 후 이용해주세요.".formatted(member.getUsername()), member);
     }
     private void saveProfileImg(Member member, String profileImgFilePath) {
-        genFileService.save(member.getModelName(), member.getId(), "common", "profileImg", 1, profileImgFilePath);
+        genFileService.save(member.getModelName(), member.getId(), "kakao", "profileImg", 1, profileImgFilePath);
     }
 
     @Transactional
-    public RsData<Member> whenKakaoSocialLogin(Long id, String nickname, String profileImgUrl) {
-        String username = KAKAO.name() + "_" + id;
+    public RsData<Member> whenSocialLogin(String providerTypeCode , String username, String nickname,Role role ,String profileImgUrl) {
         Optional<Member> opMember = findByUsername(username);
 
         if (opMember.isPresent()) return RsData.of("200", "이미 존재합니다.", opMember.get());
 
         String filePath = Ut.str.hasLength(profileImgUrl) ? Ut.file.downloadFileByHttp(profileImgUrl, AppConfig.getTempDirPath()) : "";
 
-        Member member = Member.builder()
-                .username(username)
-                .provider(KAKAO)
-                .providerId(id.toString())
-                .nickname(nickname)
-                .build();
-
-        memberRepository.save(member);
-
-        if (Ut.str.hasLength(filePath)) {
-            saveProfileImg(member, filePath);
-        }
-
-        return RsData.of("200", "%s님 환영합니다. 회원가입이 완료되었습니다. 로그인 후 이용해주세요.".formatted(member.getUsername()), member);
+        return join(username, nickname,filePath);
     }
 
     public String getProfileImgUrl(Member member) {

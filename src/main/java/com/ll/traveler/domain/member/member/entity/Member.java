@@ -32,8 +32,6 @@ public class Member extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private SocialProvider provider;
-    private String providerId;
-
 
     @Transient
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -52,7 +50,6 @@ public class Member extends BaseEntity {
         return getAuthorities().stream()
                 .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
     }
-
     public Member update(String name, SocialProvider provider) {
         this.username = name;
         this.provider = provider;
