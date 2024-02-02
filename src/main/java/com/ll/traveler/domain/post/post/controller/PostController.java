@@ -113,6 +113,6 @@ public class PostController {
 
         postService.modify(post, form.getTitle(), form.getBody(), form.getArea());
 
-        return rq.redirect("/post/" + post.getId(), post.getId() + "번 글이 수정되었습니다.");
+        return rq.redirect("/post/detail/" + post.getId(), post.getId() + "번 글이 수정되었습니다.");
     }
 }
