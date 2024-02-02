@@ -1,4 +1,4 @@
-<html layout:decorate="~{global/usrLayout}">
+<html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{global/layout}">
 
 <head>
     <title>마이페이지</title>
@@ -8,15 +8,15 @@
 <div layout:fragment="content">
     <h1>마이페이지</h1>
     <h2>아이디</h2>
-    <a th:text="${member.getUsername()}"></a>
+    <span th:text="${member.username}"></span>
     <h2>이메일</h2>
-    <a th:text="${member.getEmail()}"></a>
+    <span th:text="${member.email}"></span>
     <h2>닉네임</h2>
-    <a th:text="${member.getNickname()}"></a>
+    <span th:text="${member.nickname}"></span>
     <h2>가입 날짜</h2>
-    <a th:text="${#temporals.format(member.getCreateDate(), 'yyyy-MM-dd')}"></a>
+    <span th:text="${#temporals.format(member.createDate, 'yyyy-MM-dd')}"></span>
     <br>
-    <a th:href="@{/my-page/{id}/update(id=${member.getId()})}">회원 정보 수정</a>
+    <a th:href="@{/my-page/{id}/update(id=${member.id})}">회원 정보 수정</a>
 </div>
 </body>
 

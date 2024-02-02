@@ -21,6 +21,9 @@
                 <li class="nav-item active">
                     <a th:if="${@rq.admin}" href="/adm">관리자 홈</a>
                 </li>
+                <li class="nav-item">
+                    <a th:if="${@rq.login}" th:href="@{/my-page/{id}(id=${id})}">마이페이지</a>
+                </li>
                 <li class="nav-item active mr-5" th:if="${@rq.login}">
                     <img class="img-thumbnail rounded-circle" style="width: 30px; height: 30px;" th:src="${@rq.profileImgUrl}">
                     <span th:text="${@rq.member.nickname}"></span>님 환영합니다.
