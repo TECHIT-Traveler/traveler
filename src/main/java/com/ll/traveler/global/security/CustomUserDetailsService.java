@@ -31,5 +31,6 @@ public class CustomUserDetailsService implements UserDetailsService {
                 member.getPassword(),
                 member.getAuthorities()
         );
+
     }
 }

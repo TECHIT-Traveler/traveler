@@ -27,6 +27,7 @@ public class Rq {
     private final HttpServletResponse response;
     private final EntityManager entityManager;
     private final MemberService memberService;
+
     private Member member;
 
     public String redirect(String url, String msg) {
