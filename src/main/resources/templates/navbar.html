@@ -18,19 +18,22 @@
                 </li>
             </ul>
             <!-- 오른쪽 정렬을 위한 div -->
-            <ul class="navbar-nav ml-auto" >
-                <li class="nav-item active mr-5" sec:authorize="hasRole('ROLE_MEMBER')">
-                    <img class="img-thumbnail rounded-circle" style="width: 30px; height: 30px;"> <!-- th:src="${@rq.profileImgUrl}" -->
-                    <span sec:authentication="name"></span>님 환영합니다.
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a th:if="${@rq.admin}" href="/adm">관리자 홈</a>
+                </li>
+                <li class="nav-item active mr-5" th:if="${@rq.login}">
+                    <img class="img-thumbnail rounded-circle" style="width: 30px; height: 30px;" th:src="${@rq.profileImgUrl}">
+                    <span th:text="${@rq.member.nickname}"></span>님 환영합니다.
                 </li>
                 <li class="nav-item active">
-                    <a sec:authorize="isAuthenticated()" th:href="@{/member/logout}">로그아웃</a>
+                    <a th:if="${@rq.login}" href="/member/logout">로그아웃</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="mr-5" sec:authorize="isAnonymous()" th:href="@{/member/login}">로그인</a>
+                    <a class="mr-5" th:if="${@rq.logout}" href="/member/login">로그인</a>
                 </li>
                 <li class="nav-item active">
-                    <a sec:authorize="isAnonymous()" th:href="@{/member/join}">회원가입</a>
+                    <a th:if="${@rq.logout}" href="/member/join">회원가입</a>
                 </li>
             </ul>
         </div>

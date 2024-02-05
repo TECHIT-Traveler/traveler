@@ -1,77 +1,69 @@
 package com.ll.traveler.global.security;
 
 import com.ll.traveler.domain.member.member.entity.Member;
-import com.ll.traveler.domain.member.member.entity.Role;
 import com.ll.traveler.domain.member.member.entity.SocialProvider;
-import com.ll.traveler.domain.member.member.repository.MemberRepository;
 import com.ll.traveler.domain.member.member.service.MemberService;
+import com.nimbusds.jwt.JWT;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.Map;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
+@Slf4j
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
-    private final MemberRepository memberRepository;
     private final MemberService memberService;
 
     @Override
     @Transactional
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        OAuth2User oAuth2User = super.loadUser(userRequest);
         String providerTypeCode = userRequest.getClientRegistration().getRegistrationId().toUpperCase();
+        OAuth2User oAuth2User = super.loadUser(userRequest);
+
+        Member member = null;
+        // Factory pattern
 
         // 카카오 로그인 처리
-        if ("KAKAO".equals(providerTypeCode)) {
-            return processKakaoUser(oAuth2User);
+        if (providerTypeCode.equals("KAKAO")) {
+            Map<String, Object> attributes = oAuth2User.getAttributes();
+            Map attributesProperties = (Map) attributes.get("properties");
+            String nickname = (String) attributesProperties.get("nickname");
+            String profileImgUrl = (String) attributesProperties.get("profile_image");
+
+            String oauthId = oAuth2User.getName();
+            String username = "KAKAO" + "__%s".formatted(oauthId);
+
+            member = memberService.whenSocialLogin("KAKAO",username, nickname, "",profileImgUrl).getData();
+
+        } else if ( providerTypeCode.equals("NAVER")) {
+
+            Map<String, Object> attributes = oAuth2User.getAttributes();
+            Map<String, Object> loginValue = (Map<String, Object>) attributes.get("response");
+
+            member = memberService.whenSocialLogin("NAVER", loginValue.get("id").toString(),
+                    loginValue.get("name").toString(), loginValue.get("email").toString(),"").getData();
+
+
+        } else if (providerTypeCode.equals("GOOGLE")){
+
+            Map<String, Object> attributes = oAuth2User.getAttributes();
+
+            for (String s : attributes.keySet()) {
+                System.out.println("s = " + s);
+            }
+                    member = memberService.whenSocialLogin("GOOGLE", attributes.get("sub").toString(),
+                    attributes.get("name").toString(), "",attributes.get("picture").toString()).getData();
+
         }
 
-        // 다른 OAuth2 제공자에 대한 처리
-        String registrationId = userRequest.getClientRegistration().getRegistrationId();
-        String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName();
-        String oauthId = oAuth2User.getName();
-        String username = providerTypeCode + "__%s".formatted(oauthId);
-
-        OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
-
-        Member member = saveOrUpdate(attributes);
-
-        return new DefaultOAuth2User(
-                Collections.singleton(new SimpleGrantedAuthority(member.getRoleKey())),
-                attributes.getAttributes(),
-                attributes.getNameAttributeKey()
-        );
-    }
-
-    private Member saveOrUpdate(OAuthAttributes attributes) {
-        Member member = memberRepository.findByEmail(attributes.getEmail())
-                .map(entity -> entity.update(attributes.getName(),SocialProvider.fromString(attributes.getProvider())))
-                .orElse(attributes.toEntity());
-
-        return memberRepository.save(member);
-    }
-
-    private OAuth2User processKakaoUser(OAuth2User oAuth2User) {
-        Map<String, Object> attributes = oAuth2User.getAttributes();
-        Map<String, Object> properties = (Map<String, Object>) attributes.get("properties");
-        String nickname = (String) properties.get("nickname");
-        String profileImgUrl = (String) properties.get("profile_image");
-        String oauthId = oAuth2User.getName();
-        String username = "KAKAO__%s".formatted(oauthId);
-        Role role = (Role) attributes.get("ROLE_MEMBER");
-
-        Member member = memberService.whenSocialLogin("KAKAO", username, nickname,role ,profileImgUrl).getData();
-
-        return new SecurityUser(member.getId(), member.getUsername(), member.getPassword(), member.getAuthorities());
+        return new SecurityUser(member.getId(), member.getUsername(), "", member.getAuthorities());
     }
 }
