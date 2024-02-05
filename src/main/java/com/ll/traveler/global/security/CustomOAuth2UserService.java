@@ -56,11 +56,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
             Map<String, Object> attributes = oAuth2User.getAttributes();
 
-            for (String s : attributes.keySet()) {
-                System.out.println("s = " + s);
-            }
-                    member = memberService.whenSocialLogin("GOOGLE", attributes.get("sub").toString(),
-                    attributes.get("name").toString(), "",attributes.get("picture").toString()).getData();
+            member = memberService.whenSocialLogin("GOOGLE", attributes.get("sub").toString(),
+            attributes.get("name").toString(), "",attributes.get("picture").toString()).getData();
 
         }
 
