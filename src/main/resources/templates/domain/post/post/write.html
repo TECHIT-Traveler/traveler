@@ -59,7 +59,7 @@
                 return;
             }
 
-                const selects = form.querySelectorAll("select[name='district']");
+            const selects = form.querySelectorAll("select[name='district']");
 
                 // 가져온 각 select 엘리먼트에 대한 반복문을 실행합니다.
                 selects.forEach((select) => {
@@ -69,6 +69,7 @@
                         select.disabled = true;
                     }
                 });
+                alert("처리됨")
 
             form.submit();
         }
@@ -184,6 +185,13 @@
                 <option value="수성구">수성구</option>
                 <option value="달서구">달서구</option>
                 <option value="달성군">달성군</option>
+            </select>
+        </div>
+
+        <div class="form-group" id="sejong-districts" style="display:none;visibility: hidden">
+            <label for="sejong-district"></label>
+            <select name="district" id="sejong-district" class="form-control">
+                <option value="세종">세종</option>
             </select>
         </div>
 
@@ -461,6 +469,7 @@
                 var jeonbukDistricts = document.getElementById('jeonbuk-districts');
                 var jeonnamDistricts = document.getElementById('jeonnam-districts');
                 var jejuDistricts = document.getElementById('jeju-districts');
+                var sejongDistricts = document.getElementById('sejong-districts')
 
                 // 모든 "구" select 요소를 기본적으로 숨깁니다.
                 seoulDistricts.style.display = 'none';
@@ -479,6 +488,7 @@
                 jeonbukDistricts.style.display = 'none';
                 jeonnamDistricts.style.display = 'none';
                 jejuDistricts.style.display = 'none';
+                sejongDistricts.style.display = 'none';
 
                 switch (area) {
                     case '서울':
@@ -530,6 +540,7 @@
                         jejuDistricts.style.display = 'block';
                         break;
                     case '세종':
+                        sejongDistricts.style.display = 'block';
                         break;
 
                     default:
