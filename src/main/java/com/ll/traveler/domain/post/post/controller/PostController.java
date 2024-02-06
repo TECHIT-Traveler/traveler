@@ -3,6 +3,7 @@ package com.ll.traveler.domain.post.post.controller;
 import com.ll.traveler.domain.post.post.entity.Post;
 import com.ll.traveler.domain.post.post.service.PostService;
 import com.ll.traveler.global.rq.Rq;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -46,8 +47,9 @@ public class PostController {
     }
 
     @GetMapping("detail/{id}")
-    public String showPost(@PathVariable long id) {
-        rq.setAttribute("post", postService.findById(id).get());
+    public String showPost(@PathVariable long id, Model model) {
+//        rq.setAttribute("post", postService.findById(id).get());
+        model.addAttribute("post", postService.findById(id).get());
 
         return "domain/post/post/detail";
     }

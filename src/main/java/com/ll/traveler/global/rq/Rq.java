@@ -1,6 +1,7 @@
 package com.ll.traveler.global.rq;
 
 import com.ll.traveler.domain.member.member.entity.Member;
+import com.ll.traveler.domain.member.member.service.MemberService;
 import com.ll.traveler.global.rsData.RsData;
 import com.ll.traveler.global.security.SecurityUser;
 import com.ll.traveler.standard.utill.Ut;
@@ -25,6 +26,8 @@ public class Rq {
     private final HttpServletRequest request;
     private final HttpServletResponse response;
     private final EntityManager entityManager;
+    private final MemberService memberService;
+
     private Member member;
 
     public String redirect(String url, String msg) {
@@ -112,5 +115,8 @@ public class Rq {
         }
 
         return member;
+    }
+    public String getProfileImgUrl() {
+        return memberService.getProfileImgUrl(getMember());
     }
 }

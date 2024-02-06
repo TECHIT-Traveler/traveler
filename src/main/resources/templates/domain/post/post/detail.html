@@ -1,102 +1,111 @@
-<!DOCTYPE html>
-<html lang="ko">
+<html layout:decorate="~{global/usrLayout}">
+
 <head>
-    <!-- 부트스트랩 CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- jQuery and Bootstrap Bundle (includes Popper) -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <title th:text="|글 ${post.id}번|"></title>
 </head>
+
 <body>
-<div class="container mt-5">
-    <div class="card">
-        <div class="card-header">
-            <h3 id="post-title" class="card-title">게시글 제목</h3>
-            <h6 id="post-author" class="card-subtitle mb-2 text-muted">작성자 이름</h6>
-            <p id="post-date" class="card-text">게시 날짜</p>
-        </div>
-        <div class="card-body">
-            <p id="post-content" class="card-text">게시글 내용</p>
-        </div>
+
+<div layout:fragment="content">
+    <h1>글 내용</h1>
+
+    <div>
+        <h3>조회수</h3>
+        <div th:text="${#numbers.formatInteger(post.hit, 3, 'COMMA')}"></div>
     </div>
 
-    <!-- 댓글 섹션 -->
-    <div class="card mt-4">
-        <div class="card-header">
-            <h4 class="card-title">댓글 작성</h4>
-        </div>
-        <div class="card-body">
-            <form id="comment-form">
-                <div class="form-group">
-                    <label for="comment-author">이름</label>
-                    <input type="text" id="comment-author" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label for="comment-content">댓글</label>
-                    <textarea id="comment-content" class="form-control" rows="3"></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">작성</button>
-            </form>
-        </div>
+    <div>
+        <h3>추천수</h3>
+        <div th:text="${#numbers.formatInteger(post.likes.size, 3, 'COMMA')}"></div>
     </div>
 
-    <!-- 댓글 표시 -->
-    <div class="card mt-4">
-        <div class="card-header">
-            <h4 class="card-title">댓글 목록</h4>
-        </div>
-        <div class="card-body" id="comment-list">
-            <!-- 여기에 댓글이 표시됩니다 -->
-        </div>
+    <div>
+        <h3>공개여부</h3>
+        <div th:text="${post.published ? '공개' : '비공개'}"></div>
     </div>
+
+    <div>
+        <h3>제목</h3>
+        <div th:text="${post.title}"></div>
+    </div>
+
+    <div>
+        <h3>내용</h3>
+        <div style="white-space: pre-wrap;" th:text="${post.body}"></div>
+    </div>
+
+    <hr>
+
+    <div>
+        <button onclick="history.back();">뒤로가기</button>
+        <a th:if="${@postService.canModify(@rq.member, post)}" th:href="|/post/${post.id}/modify|">글 수정</a>
+
+        <a th:if="${@postService.canLike(@rq.member, post)}"
+           th:href="|/post/${post.id}/like|" method="POST">
+            추천
+        </a>
+
+        <a th:if="${@postService.canCancelLike(@rq.member, post)}"
+           th:href="|/post/${post.id}/cancelLike|" method="DELETE">
+            추천취소
+        </a>
+
+        <form style="display: contents"
+              th:if="${@postService.canDelete(@rq.member, post)}"
+              th:action="|/post/${post.id}/delete|"
+              method="POST"
+        >
+            <input type="hidden" name="_method" value="DELETE">
+            <button onclick="return confirm('정말로 삭제하시겠습니까?');">글 삭제</button>
+        </form>
+
+        <a
+                th:if="${@postService.canDelete(@rq.member, post)}"
+                th:href="|/post/${post.id}/delete|"
+                method="DELETE"
+                onclick="return confirm('정말로 삭제하시겠습니까?');"
+        >
+            글 삭제
+        </a>
+    </div>
+
+    <th:block th:if="${@rq.login}">
+        <h3>댓글 작성</h3>
+        <form th:action="|/post/${post.id}/comment/write|" method="POST">
+            <textarea name="body" cols="30" rows="10" required maxlength="10000" placeholder="댓글"></textarea>
+            <button>댓글 작성</button>
+        </form>
+    </th:block>
+
+    <h3>댓글 목록</h3>
+
+    <ul>
+        <li style="scroll-margin-top: 50px;" th:each="postComment : ${post.comments}"
+            th:id="|postComment-${postComment.id}|">
+            <div>
+                <div th:text="${postComment.id}"></div>
+                <div th:text="${postComment.body}"></div>
+                <div th:text="${postComment.author.username}"></div>
+                <div th:text="${postComment.createDate}"></div>
+            </div>
+
+            <div>
+                <a th:if="${@postService.canModifyComment(@rq.member, postComment)}"
+                   th:href="|/post/${post.id}/comment/${postComment.id}/modify|">
+                    댓글 수정
+                </a>
+                <a th:if="${@postService.canDeleteComment(@rq.member, postComment)}"
+                   th:href="|/post/${post.id}/comment/${postComment.id}/delete|" method="DELETE"
+                   onclick="return confirm('정말로 삭제하시겠습니까?');"
+                >
+                    댓글 삭제
+                </a>
+
+            </div>
+        </li>
+    </ul>
 </div>
 
-<script>
-    // 댓글 제출 시 실행할 함수
-    $('#comment-form').on('submit', function(e) {
-        e.preventDefault();
-
-        var author = $('#comment-author').val();
-        var content = $('#comment-content').val();
-
-        // 댓글 목록에 새로운 댓글 추가
-        $('#comment-list').prepend('<div class="card mt-2"><div class="card-body"><h5 class="card-title">' + author + '</h5><p class="card-text">' + content + '</p><button class="btn btn-secondary btn-sm edit-comment">수정</button><button class="btn btn-danger btn-sm delete-comment">삭제</button></div></div>');
-
-        // 폼 초기화
-        $('#comment-author').val('');
-        $('#comment-content').val('');
-    });
-
-    // 댓글 수정 버튼 클릭 시 실행할 함수
-    $(document).on('click', '.edit-comment', function() {
-        var commentCard = $(this).closest('.card');
-        var commentText = commentCard.find('.card-text');
-
-        // 댓글 내용을 수정 가능한 상태로 변경
-        var currentText = commentText.text();
-        commentText.html('<textarea class="edit-comment-textarea form-control mb-2">' + currentText + '</textarea><button class="btn btn-primary btn-sm save-edit">저장</button>');
-    });
-
-    // 댓글 수정 저장 버튼 클릭 시 실행할 함수
-    $(document).on('click', '.save-edit', function() {
-        var commentCard = $(this).closest('.card');
-        var commentText = commentCard.find('.card-text');
-        var editedText = $('.edit-comment-textarea').val();
-
-        // 수정한 내용으로 댓글 내용 변경
-        commentText.text(editedText);
-    });
-
-    // 댓글 삭제 버튼 클릭 시 실행할 함수
-    $(document).on('click', '.delete-comment', function() {
-        var commentCard = $(this).closest('.card');
-
-        // 댓글 삭제
-        commentCard.remove();
-    });
-</script>
-
 </body>
-</html>
 
+</html>

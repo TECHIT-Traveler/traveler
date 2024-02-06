@@ -1,8 +1,5 @@
 package com.ll.traveler.domain.member.member.entity;
 
-import com.ll.traveler.domain.post.post.entity.Post;
-import com.ll.traveler.domain.post.postComment.entity.PostComment;
-import com.ll.traveler.domain.post.postLike.entity.PostLike;
 import com.ll.traveler.global.jpa.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,7 +7,6 @@ import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -25,9 +21,11 @@ import static lombok.AccessLevel.PROTECTED;
 @Setter
 @ToString(callSuper = true)
 public class Member extends BaseEntity {
+    private String providerTypeCode;
+    @Column(unique = true)
     private String username;
-    private String email;
     private String password;
+    private String email;
     private String nickname;
 
     @Transient
@@ -36,7 +34,7 @@ public class Member extends BaseEntity {
 
         authorities.add(new SimpleGrantedAuthority("ROLE_MEMBER"));
 
-        if (List.of("system", "admin").contains(email)) {
+        if (List.of("system", "admin").contains(username)) {
             authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         }
 
