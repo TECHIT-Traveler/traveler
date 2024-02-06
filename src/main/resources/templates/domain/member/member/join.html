@@ -9,12 +9,24 @@
     <h1>회원가입</h1>
 
     <script>
+
         function submitJoinForm(form) {
             form.username.value = form.username.value.trim();
 
             if (form.username.value.length == 0) {
                 toastWarning('사용자 ID를 입력해주세요.');
                 form.username.focus();
+                return;
+            }
+
+            if (form.email.value.length === 0) {
+                toastWarning('이메일을 입력해주세요.');
+                form.email.focus();
+                return;
+            }
+            if (form.email.value.indexOf('@') === -1) {
+                toastWarning('올바른 이메일 형식이 아닙니다.');
+                form.email.focus();
                 return;
             }
 
@@ -49,29 +61,100 @@
             }
             form.submit();
         }
-        function sendNumber(){
-            $("#mail_number").css("display","block");
+
+        // 전역 변수로 클릭 여부를 저장하는 변수 선언
+        var isClicked = false;
+
+        $(document).ready(function () {
+            // 페이지가 로드될 때 버튼 비활성화
+            $("#sendBtn").prop("disabled", true);
+            $("button[type='submit']").prop("disabled", true);
+        });
+
+
+        $(document).ready(function () {
+            // 이메일 입력란의 값이 변경될 때마다 호출되는 함수
+            $("#email").on("input", function () {
+                // 이메일 형식이 올바르지 않으면 버튼 비활성화
+                if (!isValidEmail($(this).val())) {
+                    $("#sendBtn").prop("disabled", true);
+                    // 인증번호 입력 칸 숨기기
+                    $("#mail_number").css("display", "none");
+                } else {
+                    $("#sendBtn").prop("disabled", false);
+                }
+            });
+        });
+
+        // 이메일 형식이 올바른지 확인하는 함수
+        function isValidEmail(email) {
+            // 간단한 이메일 형식 검증
+            var emailPattern = /\S+@\S+\.\S+/;
+            return emailPattern.test(email);
+        }
+
+        function sendNumber() {
+            // 버튼을 클릭하지 않았으면 함수 실행하지 않음
+            if (!isClicked) {
+                return;
+            }
+
+            // 이메일 입력란이 비어 있는지 확인
+            if ($("#email").val() === "") {
+                toastWarning('이메일을 입력해주세요.');
+                return;
+            }
+            $("#mail_number").css("display", "block");
             $.ajax({
-                url:"/mail",
-                type:"post",
-                dataType:"json",
-                data:{"mail" : $("#mail").val()},
-                success: function(data){
-                    alert("인증번호 발송");
-                    $("#Confirm").attr("value",data);
+                url: "/mail",
+                type: "post",
+                dataType: "json",
+                data: {"email": $("#email").val()},
+                success: function (data) {
+                    toastNotice('인증번호 발송');
+                    $("#Confirm").attr("value", data);
                 }
             });
         }
 
-        function confirmNumber(){
+        // '인증번호보내기' 버튼 클릭 시 실행되는 함수
+        function onSendButtonClick() {
+
+            // 버튼이 클릭되었음을 표시
+            isClicked = true;
+            // sendNumber 함수 호출
+            sendNumber();
+            // 버튼 비활성화
+            $("#sendBtn").prop("disabled", true);
+        }
+
+
+        function confirmNumber() {
             var number1 = $("#number").val();
             var number2 = $("#Confirm").val();
 
-            if(number1 == number2){
-                alert("인증되었습니다.");
-            }else{
-                alert("번호가 다릅니다.");
+            if (number1 == number2) {
+                toastNotice('인증되었습니다.');
+                // 인증번호가 일치하면 회원가입 버튼 활성화
+                $("button[type='submit']").prop("disabled", false);
+
+            } else {
+                toastWarning('인증번호가 다릅니다.');
+                // 인증번호가 일치하지 않으면 회원가입 버튼 비활성화
+                $("button[type='submit']").prop("disabled", true);
+
             }
+        }
+
+        function isEmailSend(form) {
+            //이메일이 인증되었는지 여부를 확인
+            // 이메일 인증을 받지 않은 경우 회원가입을 막음
+            if ($("#Confirm").val() === "") {
+                toastWarning('이메일 인증을 받아야 회원가입이 가능합니다.');
+                return;
+            }
+            // 이메일 인증을 받은 경우 회원가입 진행
+            form.submit();
         }
 
 
@@ -85,21 +168,15 @@
         <div style="width: 100%; display: flex">
             <label>이메일</label>
             <div id="mail_input" name="mail_input">
-                <input type="text" name="mail" id="mail" placeholder="Enter email">
-                <button type="button" id="sendBtn" name="sendBtn" onclick="sendNumber()">인증번호보내기</button>
+                <input type="text" name="email" id="email" placeholder="Enter email">
+                <button type="button" id="sendBtn" name="sendBtn" onclick="onSendButtonClick()">인증번호보내기</button>
             </div>
-            <br>
             <div id="mail_number" name="mail_number" style="display: none">
                 <input type="text" name="number" id="number" placeholder="인증번호 입력">
                 <button type="button" name="confirmBtn" id="confirmBtn" onclick="confirmNumber()">이메일 인증</button>
             </div>
-            <br>
             <input type="text" id="Confirm" name="Confirm" style="display: none" value="">
         </div>
-
-
-
-
         <div>
             <label>비밀번호</label>
             <input type="password" name="password" placeholder="Enter Password">

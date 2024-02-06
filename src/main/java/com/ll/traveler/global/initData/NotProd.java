@@ -6,8 +6,6 @@ import com.ll.traveler.domain.post.PostCategory.entity.PostCategory;
 import com.ll.traveler.domain.post.post.entity.Post;
 import com.ll.traveler.domain.post.post.repository.PostRepository;
 import com.ll.traveler.domain.post.post.service.PostService;
-import com.ll.traveler.domain.post.postComment.entity.PostComment;
-import com.ll.traveler.domain.post.postLike.entity.PostLike;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;

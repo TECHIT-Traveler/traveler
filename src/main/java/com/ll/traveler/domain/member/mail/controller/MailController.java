@@ -19,9 +19,9 @@ public class MailController {
 
     @ResponseBody
     @PostMapping("/mail")
-    public String MailSend(String mail) {
+    public String MailSend(String email) {
 
-        int number = mailService.sendMail(mail);
+        int number = mailService.sendMail(email);
         String num = "" + number;
         return num;
     }
