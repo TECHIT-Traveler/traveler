@@ -10,6 +10,15 @@
     <div>
         <button onclick="window.location.href='/post/list';">목록으로</button>
         <button class="button" th:if="${@postService.canModify(@rq.member, post)}" th:onclick="'window.location.href = \'/post/' + ${post.id} + '/modify\''">글 수정</button>
+
+        <form style="display: contents"
+              th:if="${@postService.canDelete(@rq.member, post)}"
+              th:action="|/post/${post.id}/delete|"
+              method="POST"
+        >
+            <input type="hidden" name="_method" value="DELETE">
+            <button onclick="return confirm('정말로 삭제하시겠습니까?');">글 삭제</button>
+        </form>
     </div>
 
     <h1>글 내용</h1>
@@ -26,7 +35,8 @@
 
     <div>
         <h3>지역</h3>
-        <div th:text="${post.area}"></div>
+        <span th:text="${post.area}"></span>,
+        <span th:if="${post.area != '세종'}" th:text="${post.district}"></span>
     </div>
 
     <div>

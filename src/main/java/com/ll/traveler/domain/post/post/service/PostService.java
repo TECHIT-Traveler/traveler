@@ -22,6 +22,8 @@ public class PostService {
         switch (criteria) {
             case "area":
                 return postRepository.findByAreaContaining(kw, pageable);
+            case "subarea" :
+                return postRepository.findByDistrictContaining(kw, pageable);
             case "category":
                 return postRepository.findByCategoriesContentContaining(kw, pageable);
             case "author":
@@ -32,13 +34,14 @@ public class PostService {
     }
 
     @Transactional
-    public Post write(Member author, String title, String body, String area) {
+    public Post write(Member author, String title, String body, String area, String district) {
         Post post = Post.builder()
                 .modifyDate(LocalDateTime.now())
                 .author(author)
                 .title(title)
                 .body(body)
                 .area(area)
+                .district(district)
                 .build();
 
         return postRepository.save(post);
@@ -59,10 +62,21 @@ public class PostService {
     }
 
     @Transactional
-    public void modify(Post post, String title, String body, String area) {
+    public void modify(Post post, String title, String body, String area, String district) {
         post.setTitle(title);
         post.setBody(body);
         post.setArea(area);
+        post.setDistrict(district);
     }
 
+    public boolean canDelete(Member actor, Post post) {
+        if ( actor.isAdmin() ) return true;
+
+        return actor.equals(post.getAuthor());
+    }
+
+    @Transactional
+    public void delete(Post post) {
+        postRepository.delete(post);
+    }
 }

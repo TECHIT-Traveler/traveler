@@ -26,6 +26,7 @@ public class Post extends BaseEntity {
     private String title;
     private String body;
     private String area;
+    private String district;
 
     @ManyToOne
     private Member author;
