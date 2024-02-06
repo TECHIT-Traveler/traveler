@@ -36,7 +36,7 @@ public class PostService {
     }
 
     @Transactional
-    public RsData<Post> write(Member author, String title, String body, String area) {
+    public Post write(Member author, String title, String body, String area) {
         Post post = Post.builder()
                 .modifyDate(LocalDateTime.now())
                 .author(author)
@@ -45,18 +45,17 @@ public class PostService {
                 .area(area)
                 .build();
 
-        postRepository.save(post);
-
-        return RsData.of("200", "%d번 게시글이 작성되었습니다.".formatted(post.getId()), post);
+        return postRepository.save(post);
     }
+
 
     @Transactional
     public void like(Member actor, Post post) {
         post.addLike(actor);
     }
 
-    public Optional<Post> findById(long id) {
-        return postRepository.findById(id);
+    public Optional<Post> findById(Long postId) {
+        return postRepository.findById(postId);
     }
 
     @Transactional
@@ -90,5 +89,16 @@ public class PostService {
     @Transactional
     public void deleteComment(PostComment postComment) {
         postCommentRepository.delete(postComment);
+    }
+
+    public boolean canModify(Member actor, Post post) {
+        return actor.equals(post.getAuthor());
+    }
+
+    @Transactional
+    public void modify(Post post, String title, String body, String area) {
+        post.setTitle(title);
+        post.setBody(body);
+        post.setArea(area);
     }
 }
