@@ -1,21 +1,36 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <!-- 부트스트랩 CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-<div class="container mt-5">
-    <div class="card">
-        <div class="card-header">
-            <h3 id="post-title" class="card-title">게시글 제목</h3>
-            <h6 id="post-author" class="card-subtitle mb-2 text-muted">작성자 이름</h6>
-            <p id="post-date" class="card-text">게시 날짜</p>
-        </div>
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">
+    <!-- 질문 -->
+    <h2 class="border-bottom py-2" th:text="${post.title}"></h2>
+    <div class="card my-3">
         <div class="card-body">
-            <p id="post-content" class="card-text">게시글 내용</p>
+            <div class="card-text" style="white-space: pre-line;" th:text="${post.body}"></div>
+            <div class="d-flex justify-content-end">
+                <div class="badge bg-light text-dark p-2 text-start">
+                    <div th:text="${#temporals.format(post.createDate, 'yyyy-MM-dd HH:mm')}"></div>
+                </div>
+            </div>
         </div>
     </div>
+    <!-- 댓글의 갯수 표시 -->
+    <h5 class="border-bottom my-3 py-2" th:text="|${#lists.size(post.comments)}개의 댓글이 있습니다.|"></h5>
+    <!-- 댓글 반복 시작 -->
+    <div class="card my-3" th:each="answer : ${post.comments}">
+        <div class="card-body">
+            <div class="card-text" style="white-space: pre-line;" th:text="${post.comments}"></div>
+            <div class="d-flex justify-content-end">
+                <div class="badge bg-light text-dark p-2 text-start">
+                    <div th:text="${#temporals.format(answer.createDate, 'yyyy-MM-dd HH:mm')}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 댓글 반복 끝  -->
+    <!-- 답변 작성 -->
+    <form th:action="@{|/post/create/${post.id}|}" method="post" class="my-3">
+        <textarea name="content" id="content" rows="10" class="form-control"></textarea>
+        <input type="submit" value="댓글등록" class="btn btn-primary my-2">
+    </form>
 </div>
-</body>
+
 </html>
