@@ -10,21 +10,10 @@ spring:
     virtual:
       enabled: true
   datasource:
-<<<<<<< HEAD
       url: jdbc:mysql://127.0.0.1:3306/traveler
       username: root
       password: lldj123414
       driver-class-name: com.mysql.cj.jdbc.Driver
-=======
-    url: jdbc:h2:./traveler_dev;MODE=MYSQL
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
-    url: jdbc:mysql://172.17.0.1:3306/traveler
-    username: root
-    password: lldj123414
-    driver-class-name: com.mysql.cj.jdbc.Driver
->>>>>>> 766657dc1926ea06c0f8eceeddcd2b63fa6cfebd
   jpa:
     hibernate:
       ddl-auto: update
