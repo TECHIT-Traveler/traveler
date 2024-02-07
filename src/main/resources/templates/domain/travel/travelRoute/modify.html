@@ -6,43 +6,54 @@
             <h3 class="ml-3">여행 계획</h3>
             <span class="ml-3">여행 일정동안 방문할 장소들을 기록해 보세요</span>
         </div>
-        <form th:action="@{/travel/write}" method="post" onsubmit="submitForm(this); return false;">
+        <form th:action="@{|/travel/${travelRoute.id}/modify|}" method="post" onsubmit="submitForm(this); return false;">
             <div class="form-group">
                 <label for="title">제목</label>
-                <input type="text" class="form-control" id="title" name="title" placeholder="제목을 입력하세요">
+                <input type="text" class="form-control" id="title" name="title" placeholder="제목을 입력하세요" th:value="${travelRoute.title}">
             </div>
             <div class="form-group">
                 <label for="area">방문 도시</label>
-                <input type="text" class="form-control" id="area" name="area" th:value="${area}">
+                <input type="text" class="form-control" id="area" name="area" th:value="${travelRoute.area}">
             </div>
             <div class="d-flex">
                 <div class="form-group">
                     <label for="startDate">여행 시작 날짜</label>
-                    <input type="date" class="form-control" id="startDate" name="startDate"  th:value="${startDate}" style="width: 200px">
+                    <input type="date" class="form-control" id="startDate" name="startDate"  th:value="${travelRoute.startDate}" style="width: 200px">
                 </div>
                 <div class="form-group ml-3">
                     <label for="endDate">여행 마지막 날짜</label>
-                    <input type="date" class="form-control" id="endDate" name="endDate"  th:value="${endDate}" style="width: 200px">
+                    <input type="date" class="form-control" id="endDate" name="endDate"  th:value="${travelRoute.endDate}" style="width: 200px">
                 </div>
             </div>
             <div class="form-group">
                 <label for="body">내용</label>
-                <textarea class="form-control" id="body"  name="body" rows="3" placeholder="내용을 입력하세요"></textarea>
+                <textarea class="form-control" id="body"  name="body" rows="3" placeholder="내용을 입력하세요" th:text="${travelRoute.body}"></textarea>
             </div>
             <div th:each="day : ${#numbers.sequence(1, days + 1)}" class="mb-3">
                 <div th:id="'day' + ${day}">
                     <div class="d-flex">
                         <h4>day <span th:text="${day}"></span></h4>
                         <button type="button" class="btn pt-0" data-bs-toggle="modal" th:attr="data-bs-target='#placeModal' + ${day}" title="버튼을 눌러서 여행 장소를 추가 하세요">
-                            <i class="fa-solid fa-circle-plus"></i>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#00BFFF" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+                            </svg>
                         </button>
+                    </div>
+                    <div class="card my-3 place" th:each="place : ${places}" th:if="${place.travelDay} == ${day}">
+                        <div class="card-body d-flex justify-content-between align-items-center">
+                            <span th:text="${place.name} + '(' + ${place.address} + ')'"></span>
+                            <button type="button" class="btn btn-outline-dark closeBtn">X</button>
+                        </div>
+                        <input type="hidden" name="places" th:value="${day} + '/' + ${place.travelOrder} + '/' + ${place.name} + '/' + ${place.address}">
                     </div>
                     <div class="modal fade" th:id="'placeModal' + ${day}" role="dialog" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <div class="d-flex mr-auto">
-                                        <i class="fa-solid fa-plus"></i>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                                        </svg>
                                         <h5 class="modal-title ml-2">장소 추가하기</h5>
                                     </div>
                                     <button type="button" class="btn-close btn-outline-dark" data-bs-dismiss="modal" aria-label="close">&times;</button>
@@ -50,14 +61,19 @@
                                 <div class="modal-body">
                                     <div>
                                         <div class="d-flex">
-                                            <i class="fa-solid fa-location-dot"></i>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-house-add" viewBox="0 0 16 16">
+                                                <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h4a.5.5 0 1 0 0-1h-4a.5.5 0 0 1-.5-.5V7.207l5-5 6.646 6.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5Z"/>
+                                                <path d="M16 12.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Zm-3.5-2a.5.5 0 0 0-.5.5v1h-1a.5.5 0 0 0 0 1h1v1a.5.5 0 1 0 1 0v-1h1a.5.5 0 1 0 0-1h-1v-1a.5.5 0 0 0-.5-.5Z"/>
+                                            </svg>
                                             <h6 class="ml-2">장소</h6>
                                         </div>
                                         <input type="text" th:id="'name' + ${day}" placeholder="장소 이름을 입력하세요">
                                     </div>
                                     <div class="mt-3">
                                         <div class="d-flex">
-                                            <i class="fa-solid fa-map-location-dot"></i>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-map" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd" d="M15.817.113A.5.5 0 0 1 16 .5v14a.5.5 0 0 1-.402.49l-5 1a.502.502 0 0 1-.196 0L5.5 15.01l-4.902.98A.5.5 0 0 1 0 15.5v-14a.5.5 0 0 1 .402-.49l5-1a.5.5 0 0 1 .196 0L10.5.99l4.902-.98a.5.5 0 0 1 .415.103zM10 1.91l-4-.8v12.98l4 .8V1.91zm1 12.98 4-.8V1.11l-4 .8v12.98zm-6-.8V1.11l-4 .8v12.98l4-.8z"/>
+                                            </svg>
                                             <h6 class="ml-2">주소</h6>
                                         </div>
                                         <input type="text" th:id="'address' + ${day}" placeholder="주소를 입력하세요">
@@ -89,7 +105,6 @@
                 count++;
             }
         }
-
         var container = document.getElementById('day' + day);
         var name = document.getElementById('name' + day).value;
         var address = document.getElementById('address' + day).value;
@@ -117,14 +132,9 @@
         hiddenTag.value = day + '/' + order + '/' + name + '/' + address;
 
         var closeBtn = document.createElement('button');
-        closeBtn.className = 'btn btn-outline-dark';
+        closeBtn.className = 'btn btn-outline-dark closeBtn';
         closeBtn.type = 'button';
         closeBtn.innerHTML = 'X';
-
-        closeBtn.addEventListener('click', function () {
-            card.remove();
-            updateOrder(day);
-        })
 
         card.appendChild(cardBody);
         card.appendChild(hiddenTag);
@@ -180,12 +190,24 @@
             return;
         }
 
-        if(document.querySelectorAll(".place").length == 0) {
-            toastWarning('여행 장소를 추가해 주세요.');
-            return;
-        }
-
         form.submit();
     }
+    document.addEventListener('click', function (event) {
+        var target = event.target;
+
+        if (target.classList.contains('closeBtn')) {
+            var card = target.closest('.card');
+
+            if (card) {
+                var place = card.querySelector('[name="places"]');
+                var day = place.value.split('/')[0];
+                card.remove();
+                updateOrder(day);
+            }
+        }
+    });
 </script>
 </html>
+
+
+

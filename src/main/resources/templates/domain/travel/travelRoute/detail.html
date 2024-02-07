@@ -1,0 +1,85 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">
+    <style>
+        .card:not(.first-card)::before {
+            content: "";
+            position: absolute;
+            top: -26%;
+            left: 50%;
+            width: 2px;
+            height: 25px;
+            background-color: darkgrey;
+        }
+    </style>
+    <div class="container">
+        <div class="mb-3">
+            <div class="d-flex pb-4">
+                <h2 th:text="${travelRoute.title}" class="mt-3"></h2>
+                <div class="ml-auto mt-3">
+                    <div>
+                        <form th:if="${@travelRouteService.canLike(@rq.member, travelRoute)}" th:action="|/travel/${travelRoute.id}/like|" method="post">
+                            <button type="submit" style="border: none; background-color: transparent;">
+                                <i class="fa-regular fa-heart fa-xl" style="color: #6f6d6d;"></i>
+                                <small class="text-center text-muted" th:text="${#lists.size(travelRoute.likes)}" style="color:black"></small>
+                            </button>
+                        </form>
+                        <form th:if="${@travelRouteService.canCancelLike(@rq.member, travelRoute)}" th:action="|/travel/${travelRoute.id}/cancelLike|" method="post">
+                            <button type="submit" style="border: none; background-color: transparent;">
+                                <i class="fa-solid fa-heart fa-xl" style="color: #f62804;"></i>
+                                <small class="text-center text-muted" th:text="${#lists.size(travelRoute.likes)}" style="color:white"></small>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <p class="d-flex">
+                <small th:text="${travelRoute.author.nickname} + '  ·  '"></small>
+                <small class="text-muted mx-2" th:text="${travelRoute.startDate} + ' ~ ' + ${travelRoute.endDate}"></small>
+                <a th:if="${@travelRouteService.canModify(@rq.member, travelRoute)}"
+                   th:href="|/travel/${travelRoute.id}/modify|"
+                   class="ml-auto" style="border: none; background-color: transparent; color:black">
+                    수정
+                </a>
+                <a th:if="${@travelRouteService.canDelete(@rq.member, travelRoute)}"
+                   href="javascript:void(0);" th:data-uri="@{|/travel/${travelRoute.id}/delete|}"
+                   class="delete ml-2" style="border: none; background-color: transparent; color:black">
+                    삭제
+                </a>
+            </p>
+            <small class="mb-2 text-muted badge badge-light m-1" th:text="'#' + ${travelRoute.area}"></small>
+            <div th:text="${travelRoute.body}" class="py-2"></div>
+        </div>
+        <div th:each="day : ${#numbers.sequence(1, days + 1)}" class="day-container mb-3">
+            <div>
+                <h5 th:text="'day ' + ${day}"></h5>
+            </div>
+            <div>
+                <div th:each="place : ${places}" th:if="${place.travelDay} == ${day}" class="card d-flex align-items-center my-4">
+                    <div class="card-body">
+                        <h5 class="card-title text-center" th:text="${place.name}"></h5>
+                        <h6 class="card-subtitle mb-2 text-muted text-center" th:text="${place.address}"></h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script layout:fragment="script" type='text/javascript'>
+    const delete_elements = document.getElementsByClassName("delete");
+    Array.from(delete_elements).forEach(function(element) {
+        element.addEventListener('click', function() {
+            if(confirm("정말로 삭제하시겠습니까?")) {
+                location.href = this.dataset.uri;
+            };
+        });
+    });
+
+    window.onload = function () {
+        const days = document.querySelectorAll('.day-container');
+        for(var i = 0; i < days.length; i++) {
+            var firstCard = days[i].querySelector('.card');
+            firstCard.classList.add('first-card');
+        }
+    };
+</script>
+</html>

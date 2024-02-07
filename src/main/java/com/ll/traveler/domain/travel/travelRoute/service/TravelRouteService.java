@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -18,17 +19,14 @@ public class TravelRouteService {
     private final TravelRouteRepository travelRouteRepository;
 
     @Transactional
-    public RsData<TravelRoute> write(Member author, String title, String body, String area, String _startDate, String _endDate) {
-        LocalDate startDate = LocalDate.parse(_startDate);
-        LocalDate endDate = LocalDate.parse(_endDate);
-
+    public RsData<TravelRoute> write(Member author, String title, String body, String area, String startDate, String endDate) {
         TravelRoute travelRoute = TravelRoute.builder()
                 .author(author)
                 .title(title)
                 .body(body)
                 .area(area)
-                .startDate(startDate)
-                .endDate(endDate)
+                .startDate(LocalDate.parse(startDate))
+                .endDate(LocalDate.parse(endDate))
                 .build();
 
         travelRouteRepository.save(travelRoute);
@@ -38,5 +36,66 @@ public class TravelRouteService {
     @Transactional
     public TravelPlace addPlace(TravelRoute travelRoute, String name, String address, int day, int order) {
         return travelRoute.addPlace(name, address, day, order);
+    }
+
+    public Optional<TravelRoute> findById(long id) {
+        return travelRouteRepository.findById(id);
+    }
+
+    public boolean canModify(Member actor, TravelRoute travelRoute) {
+        if(actor == null) {
+            return false;
+        }
+        return actor.equals(travelRoute.getAuthor());
+    }
+
+
+
+    @Transactional
+    public void deleteAllPlace(TravelRoute travelRoute) {
+        travelRoute.deleteAllPlace();
+    }
+
+    @Transactional
+    public void modify(TravelRoute travelRoute, String title, String body, String area, String startDate, String endDate) {
+        travelRoute.setTitle(title);
+        travelRoute.setBody(body);
+        travelRoute.setArea(area);
+        travelRoute.setStartDate(LocalDate.parse(startDate));
+        travelRoute.setEndDate(LocalDate.parse(endDate));
+    }
+
+    public boolean canDelete(Member actor, TravelRoute travelRoute) {
+        if(actor == null) return false;
+        if(actor.isAdmin()) return true;
+
+        return actor.equals(travelRoute.getAuthor());
+    }
+
+    @Transactional
+    public void delete(TravelRoute travelRoute) {
+        travelRouteRepository.delete(travelRoute);
+    }
+
+    public boolean canLike(Member actor, TravelRoute travelRoute) {
+        if(actor == null) return false;
+
+        return !travelRoute.hasLike(actor);
+    }
+
+    public boolean canCancelLike(Member actor, TravelRoute travelRoute) {
+        if(actor == null) return false;
+
+        return travelRoute.hasLike(actor);
+    }
+
+    @Transactional
+    public void like(Member actor, TravelRoute travelRoute) {
+        travelRoute.addLike(actor);
+    }
+
+    @Transactional
+    public void cancelLike(Member actor, TravelRoute travelRoute) {
+        travelRoute.deleteLike(actor);
     }
 }

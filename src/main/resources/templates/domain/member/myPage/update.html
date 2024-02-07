@@ -1,0 +1,29 @@
+<html layout:decorate="~{global/usrLayout}">
+
+<head>
+    <title>마이페이지</title>
+</head>
+
+<body>
+<div layout:fragment="content">
+
+    <script>
+        function submitLoginForm(form) {
+            form.submit();
+        }
+    </script>
+
+    <form method="post" th:action onsubmit="submitLoginForm(this)">
+        <h2>아이디</h2>
+        <input type="text" name="username" id="username" readonly th:value="${member.getUsername()}">
+        <h2>이메일</h2>
+        <input type="text" name="email" id="email" th:value="${member.getEmail()}">
+        <h2>닉네임</h2>
+        <input type="text" name="nickName" id="nickName" th:value="${member.getNickname()}">
+
+        <button type="submit">수정하기</button>
+    </form>
+</div>
+</body>
+
+</html>

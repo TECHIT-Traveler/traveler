@@ -26,6 +26,7 @@ public class Post extends BaseEntity {
     private String title;
     private String body;
     private String area;
+    private String district;
 
     @ManyToOne
     private Member author;
@@ -56,4 +57,5 @@ public class Post extends BaseEntity {
         return likes.stream()
                 .anyMatch(postLike -> postLike.getMember().equals(member));
     }
+
 }
