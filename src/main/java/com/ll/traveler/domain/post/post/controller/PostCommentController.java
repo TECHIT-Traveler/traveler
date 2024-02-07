@@ -1,6 +1,7 @@
 package com.ll.traveler.domain.post.post.controller;
 
 import com.ll.traveler.domain.post.post.entity.Post;
+import com.ll.traveler.domain.post.post.service.PostCommentService;
 import com.ll.traveler.domain.post.post.service.PostService;
 import com.ll.traveler.domain.post.postComment.entity.PostComment;
 import com.ll.traveler.global.exceptions.GlobalException;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class PostCommentController {
     private final PostService postService;
+    private final PostCommentService postCommentService;
     private final Rq rq;
 
     @Getter
@@ -97,5 +100,12 @@ public class PostCommentController {
         postService.deleteComment(postComment);
 
         return rq.redirect("/post/" + id, commentId + "번 댓글이 삭제되었습니다.");
+    }
+
+    @PostMapping("/create/{commentId}")
+    public String createAnswer(Model model, @PathVariable("id") Integer id, @RequestParam(value="body") String body) {
+        Post post = this.postService.getPost(id);
+        this.postCommentService.create(post, body);
+        return String.format("redirect:/post/detail/%s", id);
     }
 }

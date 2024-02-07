@@ -10,11 +10,12 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import static lombok.AccessLevel.PROTECTED;
+import static lombok.AccessLevel.PUBLIC;
 
 @Entity
 @SuperBuilder
 @AllArgsConstructor(access = PROTECTED)
-@NoArgsConstructor(access = PROTECTED)
+@NoArgsConstructor(access = PUBLIC)
 @Getter
 @Setter
 @ToString(callSuper = true)

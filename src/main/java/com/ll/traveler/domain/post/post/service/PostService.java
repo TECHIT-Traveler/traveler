@@ -5,7 +5,6 @@ import com.ll.traveler.domain.post.post.entity.Post;
 import com.ll.traveler.domain.post.post.repository.PostCommentRepository;
 import com.ll.traveler.domain.post.post.repository.PostRepository;
 import com.ll.traveler.domain.post.postComment.entity.PostComment;
-import com.ll.traveler.global.rsData.RsData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -100,5 +99,9 @@ public class PostService {
         post.setTitle(title);
         post.setBody(body);
         post.setArea(area);
+    }
+
+    public Post getPost(Integer id) {
+        return null;
     }
 }

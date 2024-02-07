@@ -1,9 +1,9 @@
 package com.ll.traveler.domain.post.post.entity;
 
+import com.ll.traveler.domain.member.member.entity.Member;
 import com.ll.traveler.domain.post.PostCategory.entity.PostCategory;
 import com.ll.traveler.domain.post.postComment.entity.PostComment;
 import com.ll.traveler.domain.post.postLike.entity.PostLike;
-import com.ll.traveler.domain.member.member.entity.Member;
 import com.ll.traveler.global.jpa.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
