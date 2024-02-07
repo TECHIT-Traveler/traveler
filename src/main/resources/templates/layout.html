@@ -23,22 +23,6 @@
     <script src="/resource/global/global.js"></script>
 
     <!-- CSS 스타일 -->
-    <style>
-        body {
-            position: relative;
-            min-height: 90vh;
-            margin-bottom: 100px;
-        }
-
-        footer {
-            height: 0px;
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            text-align : center;
-        }
-
-    </style>
 </head>
 <body>
 <!-- Navigation-->
@@ -46,12 +30,6 @@
 <!-- 기본 템플릿 안에 삽입될 내용 -->
 <th:block layout:fragment="content"></th:block>
 
-<!-- Footer-->
-<footer class="footer">
-    <div class="container">
-        <span>© 2024 techit back-end school</span>
-    </div>
-</footer>
 <!-- Core theme JS-->
 <th:block layout:fragment="script"></th:block>
 <!-- Bootstrap core JS-->
