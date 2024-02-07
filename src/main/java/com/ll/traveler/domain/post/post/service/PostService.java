@@ -101,7 +101,4 @@ public class PostService {
         post.setArea(area);
     }
 
-    public Post getPost(Integer id) {
-        return null;
-    }
 }

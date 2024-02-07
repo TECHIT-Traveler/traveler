@@ -17,7 +17,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/post/{id}/comment")
 @RequiredArgsConstructor
 public class PostCommentController {
     private final PostService postService;
@@ -102,10 +101,10 @@ public class PostCommentController {
         return rq.redirect("/post/" + id, commentId + "번 댓글이 삭제되었습니다.");
     }
 
-    @PostMapping("/create/{commentId}")
-    public String createAnswer(Model model, @PathVariable("id") Integer id, @RequestParam(value="body") String body) {
-        Post post = this.postService.getPost(id);
-        this.postCommentService.create(post, body);
+    @PostMapping("/postComment/create/{id}")
+    public String createAnswer(Model model, @PathVariable("id") long id, @RequestParam(value="body") String body) {
+        Post post = postService.findById(id).orElseThrow(() -> new GlobalException("404-1", "해당 글이 존재하지 않습니다."));
+        this.postCommentService.create(post, body, rq.getMember());
         return String.format("redirect:/post/detail/%s", id);
     }
 }
