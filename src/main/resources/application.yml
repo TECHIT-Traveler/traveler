@@ -19,7 +19,7 @@ spring:
 #    username: sa
 #    password:
 #    driver-class-name: org.h2.Driver
-    url: jdbc:mysql://172.17.0.1:3306/traveler
+    url: jdbc:mysql://127.0.0.1:3306/traveler
     username: root
     password: lldj123414
     driver-class-name: com.mysql.cj.jdbc.Driver
