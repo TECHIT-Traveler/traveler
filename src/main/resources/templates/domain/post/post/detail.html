@@ -1,50 +1,50 @@
-<html layout:decorate="~{layout}">
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="|글 ${post.id}번|"></title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
-
 <body>
 
-<div layout:fragment="content" class="container my-3">
-    <div>
-        <button onclick="window.location.href='/post/list';">목록으로</button>
-        <button class="button" th:if="${@postService.canModify(@rq.member, post)}" th:onclick="'window.location.href = \'/post/' + ${post.id} + '/modify\''">글 수정</button>
-
-        <form style="display: contents"
-              th:if="${@postService.canDelete(@rq.member, post)}"
-              th:action="|/post/${post.id}/delete|"
-              method="POST"
-        >
-            <input type="hidden" name="_method" value="DELETE">
-            <button onclick="return confirm('정말로 삭제하시겠습니까?');">글 삭제</button>
-        </form>
+<div class="container my-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <button class="btn btn-secondary" onclick="window.location.href='/post/list';">목록으로</button>
+        <div>
+            <button class="btn btn-primary" th:if="${@postService.canModify(@rq.member, post)}" th:onclick="'window.location.href = \'/post/' + ${post.id} + '/modify\''">글 수정</button>
+            <form style="display: inline-block;" th:if="${@postService.canDelete(@rq.member, post)}" th:action="|/post/${post.id}/delete|" method="POST" onsubmit="return confirm('정말로 삭제하시겠습니까?');">
+                <input type="hidden" name="_method" value="DELETE">
+                <button class="btn btn-danger">글 삭제</button>
+            </form>
+        </div>
     </div>
 
     <h1>글 내용</h1>
 
-    <div>
+    <div class="mb-3">
         <h3>제목</h3>
         <h2 class="border-bottom py-2" th:text="${post.title}"></h2>
     </div>
 
-    <div>
+    <div class="mb-3">
         <h3>내용</h3>
-        <div style="white-space: pre-wrap;" class="card-body" th:text="${post.body}"></div>
+        <div class="card" style="white-space: pre-wrap;">
+            <div class="card-body" th:text="${post.body}"></div>
+        </div>
     </div>
 
-    <div>
+    <div class="mb-3">
         <h3>지역</h3>
         <span th:text="${post.area}"></span>
         <span th:if="${post.area != '세종'}" th:text="${post.district}"></span>
     </div>
 
-    <div>
-        <button class="button">좋아요</button>
+    <div class="mb-3">
+        <button class="btn btn-info">좋아요</button>
     </div>
 
-    <!-- 댓글의 갯수 표시 -->
-    <h5 class="border-bottom my-3 py-2" th:text="|${#lists.size(post.comments)}개의 댓글이 있습니다.|"></h5>
+    <h5 class="border-bottom mb-3 pb-2" th:text="|${#lists.size(post.comments)}개의 댓글이 있습니다.|"></h5>
     <!-- 댓글 반복 시작 -->
     <div class="card my-3" th:each="answer : ${post.comments}">
         <div class="card-body">
@@ -59,10 +59,14 @@
     <!-- 댓글 반복 끝  -->
     <!-- 답변 작성 -->
     <form th:action="@{|/post/create/${post.id}|}" method="post" class="my-3">
-        <textarea name="content" id="content" rows="10" class="form-control"></textarea>
-        <input type="submit" value="댓글등록" class="btn btn-primary my-2">
+        <textarea name="content" id="content" rows="10" class="form-control mb-2"></textarea>
+        <input type="submit" value="댓글등록" class="btn btn-primary">
     </form>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 </body>
 </html>
