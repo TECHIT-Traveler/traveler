@@ -1,6 +1,6 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="container my-3">
-    <!-- 게시글 -->
+    <!-- 댓글 -->
     <h2 class="border-bottom py-2" th:text="${post.title}"></h2>
     <div class="card my-3">
         <div class="card-body">
@@ -26,10 +26,12 @@
         </div>
     </div>
 
-    <form th:action="@{|/postComment/create/${post.id}|}" method="post" class="my-3">
-        <textarea name="body" id="body" rows="10" class="form-control"></textarea>
-        <input type="submit" value="댓글 등록" class="btn btn-primary my-2">
-    </form>
+    <!-- 로그인한 사용자만 댓글 작성 폼을 표시합니다. -->
+    <div th:if="${#authorization.expression('isAuthenticated()')}">
+        <form th:action="@{|/postComment/create/${post.id}|}" method="post" class="my-3">
+            <textarea name="body" id="body" rows="10" class="form-control"></textarea>
+            <input type="submit" value="댓글 등록" class="btn btn-primary my-2">
+        </form>
+    </div>
 </div>
-
 </html>
