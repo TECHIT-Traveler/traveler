@@ -1,3 +1,4 @@
+/*
 package com.ll.traveler.domain.member.myPage.dto;
 
 import lombok.Getter;
@@ -11,3 +12,4 @@ public class PasswordForm {
     private String newPassword;
     private String confirmPassword;
 }
+*/
