@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -22,26 +23,6 @@ public class PostCommentController {
     private final PostService postService;
     private final PostCommentService postCommentService;
     private final Rq rq;
-
-    @Getter
-    @Setter
-    public static class WriteForm {
-        @NotBlank
-        private String body;
-    }
-
-    @PreAuthorize("isAuthenticated()")
-    @PostMapping("/write")
-    public String write(
-            @PathVariable long id,
-            @Valid WriteForm form
-    ) {
-        Post post = postService.findById(id).orElseThrow(() -> new GlobalException("404-1", "해당 글이 존재하지 않습니다."));
-
-        PostComment postComment = postCommentService.writeComment(rq.getMember(), post, form.getBody());
-
-        return rq.redirect("/post/" + id + "#postComment-" + postComment.getId(), "댓글이 작성되었습니다.");
-    }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{commentId}/modify")
@@ -73,8 +54,12 @@ public class PostCommentController {
     public String modify(
             @PathVariable long id,
             @PathVariable long commentId,
-            @Valid ModifyForm form
+            @Valid ModifyForm form,
+            BindingResult bindingResult
     ) {
+        if (bindingResult.hasErrors()) {
+            return rq.redirect("/post/" + id, "댓글을 입력해주세요.");
+        }
         PostComment postComment = postCommentService.findCommentById(commentId).orElseThrow(() -> new GlobalException("404-1", "해당 댓글이 존재하지 않습니다."));
 
         if (!postCommentService.canModifyComment(rq.getMember(), postComment))
@@ -102,10 +87,20 @@ public class PostCommentController {
     }
 
     @PostMapping("/create")
-    public String createComment(@PathVariable("id") long id, @RequestParam(value="body") String body) {
+    public String createComment(@PathVariable("id") long id, @Valid CreateCommentForm form, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return rq.redirect("/post/detail/" + id, "댓글을 입력해주세요.");
+        }
         Post post = postService.findById(id).orElseThrow(() -> new GlobalException("404-1", "해당 글이 존재하지 않습니다."));
-        this.postCommentService.create(post, body, rq.getMember());
+        this.postCommentService.create(post, form.body, rq.getMember());
         return String.format("redirect:/post/detail/%s", id);
     }
 
+    @Getter
+    @Setter
+    public static class CreateCommentForm {
+
+        @NotBlank
+        private String body;
+    }
 }

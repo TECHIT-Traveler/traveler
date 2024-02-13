@@ -6,6 +6,7 @@ import com.ll.traveler.global.jpa.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -27,6 +28,7 @@ public class PostComment extends BaseEntity {
     @ManyToOne
     private Post post;
     @Column(columnDefinition = "TEXT")
+    @NotBlank
     private String body;
     private LocalDateTime modifyDate;
 }

@@ -24,7 +24,7 @@ public class PostService {
         switch (criteria) {
             case "area":
                 return postRepository.findByAreaContaining(kw, pageable);
-            case "subarea" :
+            case "subarea":
                 return postRepository.findByDistrictContaining(kw, pageable);
             case "category":
                 return postRepository.findByCategoriesContentContaining(kw, pageable);
@@ -59,8 +59,6 @@ public class PostService {
         return postRepository.findById(postId);
     }
 
-
-
     public boolean canModify(Member actor, Post post) {
         return actor.equals(post.getAuthor());
     }
@@ -74,7 +72,7 @@ public class PostService {
     }
 
     public boolean canDelete(Member actor, Post post) {
-        if ( actor.isAdmin() ) return true;
+        if (actor.isAdmin()) return true;
 
         return actor.equals(post.getAuthor());
     }

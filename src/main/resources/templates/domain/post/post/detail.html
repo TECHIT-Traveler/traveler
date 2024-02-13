@@ -1,5 +1,6 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content" class="container my-3">
+
     <!-- 댓글 -->
     <h2 class="border-bottom py-2" th:text="${post.title}"></h2>
     <div class="card my-3">
@@ -12,8 +13,10 @@
             </div>
         </div>
     </div>
+
     <!-- 댓글의 갯수 표시 -->
     <h5 class="border-bottom my-3 py-2" th:text="|${#lists.size(post.comments)}개의 댓글이 있습니다.|"></h5>
+
     <!-- 댓글 반복 시작 -->
     <div class="card my-3" th:each="comment : ${post.comments}">
         <div class="card-body">
@@ -23,31 +26,51 @@
                     <div th:text="${#temporals.format(comment.createDate, 'yyyy-MM-dd HH:mm')}"></div>
                 </div>
             </div>
-        </div>
-        <!-- 댓글 수정 및 삭제 링크 -->
-        <div class="my-3" sec:authorize="isAuthenticated()"
-             th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.username}">
-            <a th:if="${@postCommentService.canModifyComment(@rq.member, comment)}"
-               th:href="|/post/${post.id}/comment/${comment.id}/modify|">
-                수정
-            </a>
-            <a th:if="${@postCommentService.canDeleteComment(@rq.member, comment)}"
-               th:href="|/post/${post.id}/comment/${comment.id}/delete|" method="GET"
-               onclick="return confirm('정말로 삭제하시겠습니까?');">
-                삭제
-            </a>
+            <!-- 댓글 수정 및 삭제 링크 -->
+            <div class="my-3 d-flex justify-content-end" sec:authorize="isAuthenticated()"
+                 th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.username}">
+                <a th:if="${@postCommentService.canModifyComment(@rq.member, comment)}"
+                   th:href="|/post/${post.id}/comment/${comment.id}/modify|"
+                   class="btn btn-warning btn-sm mr-2">
+                    수정
+                </a>
+                <a th:if="${@postCommentService.canDeleteComment(@rq.member, comment)}"
+                   th:href="|/post/${post.id}/comment/${comment.id}/delete|" method="GET"
+                   onclick="return confirm('정말로 삭제하시겠습니까?');"
+                   class="btn btn-danger btn-sm">
+                    삭제
+                </a>
+            </div>
         </div>
     </div>
+
     <!-- 로그인 폼 -->
     <div th:unless="${#authorization.expression('isAuthenticated()')}">
         <p>댓글을 작성하려면 로그인해주세요.</p>
-        <!-- 로그인 폼 등 추가 -->
     </div>
-<!-- 로그인한 사용자만 댓글 작성 폼을 표시합니다. -->
-<div th:if="${#authorization.expression('isAuthenticated()')}">
-    <form th:action="@{|/post/${post.id}/comment/create|}" method="post" class="my-3">
-        <textarea name="body" id="body" rows="10" class="form-control"></textarea>
-        <input type="submit" value="댓글 등록" class="btn btn-primary my-2">
-    </form>
-</div>
+
+    <!-- 로그인한 사용자만 댓글 작성 폼을 표시합니다. -->
+    <div th:if="${#authorization.expression('isAuthenticated()')}">
+        <form th:action="@{|/post/${post.id}/comment/create|}" method="post" class="my-3"
+              onsubmit="submitCommentForm(this); return false;">
+            <textarea name="body" id="body" rows="10" class="form-control"></textarea>
+            <input type="submit" value="댓글 등록" class="btn btn-primary my-2">
+        </form>
+    </div>
+
+    <script>
+        function submitCommentForm(form) {
+            form.body.value = form.body.value.trim();
+
+            if (form.body.value.length == 0) {
+                alert('내용을 입력해주세요.');
+                form.body.focus();
+                return;
+            }
+
+            form.submit();
+        }
+    </script>
+    </body>
+
 </html>
