@@ -2,6 +2,7 @@ package com.ll.traveler.domain.member.member;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
@@ -29,6 +30,7 @@ public class MemberDto {
     private String nickname;
 
     @NotBlank(message = "인증번호는 필수 입력 값입니다.")
+    @NotNull
     private String verificationCode;
 
     private LocalDateTime verificationCodeExpirationTime;

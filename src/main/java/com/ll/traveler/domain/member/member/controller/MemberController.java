@@ -38,21 +38,21 @@ public class MemberController {
     @PreAuthorize("isAnonymous()")
     @PostMapping("/join")
     public String join(@Valid MemberDto memberDto, Errors errors, Model model) {
-        log.info("VerificationCode :" + memberDto.getVerificationCode());
-        RsData<Member> joinRs = memberService.join(memberDto);
         if (errors.hasErrors()) {
-            // 회원가입 실패시, 입력 데이터를 유지
+            // 유효성 검사에서 오류가 발생한 경우, 바로 실패 처리하고 리다이렉트합니다.
+            // 회원가입은 수행되지 않으므로 joinRs가 필요하지 않습니다.
             model.addAttribute("MemberDto", memberDto);
-
             // 유효성 통과 못한 필드와 메시지를 핸들링
             Map<String, String> validatorResult = memberService.validateHandling(errors);
             for (String key : validatorResult.keySet()) {
                 model.addAttribute(key, validatorResult.get(key));
             }
+            return "redirect:/member/join";
+        } else {
+            // 유효성 검사를 통과한 경우에만 회원가입을 시도합니다.
+            RsData<Member> joinRs = memberService.join(memberDto);
             return rq.redirectOrBack(joinRs, "/member/login");
         }
-        return rq.redirectOrBack(joinRs, "/member/login");
-
     }
 
     @GetMapping("/login")
