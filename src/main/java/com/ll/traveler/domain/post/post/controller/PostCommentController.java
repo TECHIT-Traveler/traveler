@@ -102,7 +102,7 @@ public class PostCommentController {
     }
 
     @PostMapping("/postComment/create/{id}")
-    public String createAnswer(Model model, @PathVariable("id") long id, @RequestParam(value="body") String body) {
+    public String createPost(Model model, @PathVariable("id") long id, @RequestParam(value="body") String body) {
         Post post = postService.findById(id).orElseThrow(() -> new GlobalException("404-1", "해당 글이 존재하지 않습니다."));
         this.postCommentService.create(post, body, rq.getMember());
         return String.format("redirect:/post/detail/%s", id);

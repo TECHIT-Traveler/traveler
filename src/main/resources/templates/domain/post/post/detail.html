@@ -24,6 +24,17 @@
                 </div>
             </div>
         </div>
+        <!-- 로그인한 사용자만 댓글 수정 및 삭제 가능 -->
+        <div class="my-3" th:if="${#authorization.expression('isAuthenticated()')}">
+            <a th:href="@{|/postComment/modify/${comment.id}|}" class="btn btn-sm btn-outline-secondary">수정</a>
+            <a th:href="@{|/postComment/delete/${comment.id}|}" class="btn btn-sm btn-outline-secondary" onclick="return confirm('정말로 삭제하시겠습니까?');">삭제</a>
+        </div>
+    </div>
+
+    <!-- 로그인 폼 -->
+    <div th:unless="${#authorization.expression('isAuthenticated()')}">
+        <p>댓글을 작성하려면 로그인해주세요.</p>
+        <!-- 로그인 폼 등 추가 -->
     </div>
 
     <!-- 로그인한 사용자만 댓글 작성 폼을 표시합니다. -->

@@ -9,6 +9,8 @@ import jakarta.persistence.ManyToOne;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDateTime;
+
 import static lombok.AccessLevel.PROTECTED;
 import static lombok.AccessLevel.PUBLIC;
 
@@ -26,4 +28,5 @@ public class PostComment extends BaseEntity {
     private Post post;
     @Column(columnDefinition = "TEXT")
     private String body;
+    private LocalDateTime modifyDate;
 }
