@@ -1,6 +1,7 @@
 package com.ll.traveler.domain.member.member.controller;
 
-import com.ll.traveler.domain.member.member.JoinForm;
+import com.ll.traveler.domain.member.mail.service.MailService;
+import com.ll.traveler.domain.member.member.MemberDto;
 import com.ll.traveler.domain.member.member.entity.Member;
 import com.ll.traveler.domain.member.member.service.MemberService;
 import com.ll.traveler.global.rq.Rq;
@@ -24,22 +25,24 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
+    private final MailService mailService;
     private final Rq rq;
 
     @PreAuthorize("isAnonymous()")
     @GetMapping("/join")
-    public String showJoin() {
+    public String showJoin(MemberDto memberDto) {
         return "domain/member/member/join";
     }
 
 
     @PreAuthorize("isAnonymous()")
     @PostMapping("/join")
-    public String join(@Valid JoinForm joinForm, Errors errors, Model model) {
-        RsData<Member> joinRs = memberService.join(joinForm.getUsername(), joinForm.getPassword(), joinForm.getEmail(), joinForm.getNickname());
+    public String join(@Valid MemberDto memberDto, Errors errors, Model model) {
+        log.info("VerificationCode :" + memberDto.getVerificationCode());
+        RsData<Member> joinRs = memberService.join(memberDto);
         if (errors.hasErrors()) {
             // 회원가입 실패시, 입력 데이터를 유지
-            model.addAttribute("JoinForm", joinForm);
+            model.addAttribute("MemberDto", memberDto);
 
             // 유효성 통과 못한 필드와 메시지를 핸들링
             Map<String, String> validatorResult = memberService.validateHandling(errors);

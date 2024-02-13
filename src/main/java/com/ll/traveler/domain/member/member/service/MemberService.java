@@ -1,5 +1,6 @@
 package com.ll.traveler.domain.member.member.service;
 
+import com.ll.traveler.domain.member.member.MemberDto;
 import com.ll.traveler.domain.member.member.entity.Member;
 import com.ll.traveler.domain.member.member.repository.MemberRepository;
 import com.ll.traveler.global.app.AppConfig;
@@ -36,15 +37,17 @@ public class MemberService {
     }
 
     @Transactional
-    public RsData<Member> join(String username, String password, String email, String nickname) {
-        if (findByUsername(username).isPresent()) {
+    public RsData<Member> join(MemberDto memberDto) {
+        System.out.println("Verification Code in Service: " + memberDto);
+        if (findByUsername(memberDto.getUsername()).isPresent()) {
             return RsData.of("400-2", "이미 존재하는 회원입니다.");
         }
         Member member = Member.builder()
-                .username(username)
-                .password(passwordEncoder.encode(password))
-                .email(email)
-                .nickname(nickname)
+                .username(memberDto.getUsername())
+                .password(passwordEncoder.encode(memberDto.getPassword()))
+                .email(memberDto.getEmail())
+                .nickname(memberDto.getNickname())
+                .verificationCode(memberDto.getVerificationCode())
                 .build();
 
         memberRepository.save(member);
