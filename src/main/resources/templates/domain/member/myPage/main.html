@@ -1,23 +1,23 @@
 <html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{global/layout}">
-
-<head>
-    <title>마이페이지</title>
-</head>
-
-<body>
-<div layout:fragment="content">
-    <h1>마이페이지</h1>
-    <h2>아이디</h2>
-    <span th:text="${member.username}"></span>
-    <h2>이메일</h2>
-    <span th:text="${member.email}"></span>
-    <h2>닉네임</h2>
-    <span th:text="${member.nickname}"></span>
-    <h2>가입 날짜</h2>
-    <span th:text="${#temporals.format(member.createDate, 'yyyy-MM-dd')}"></span>
-    <br>
-    <a th:href="@{/my-page/{id}/update(id=${member.id})}">회원 정보 수정</a>
+<div layout:fragment="content" class="container my-3">
+    <div class="container my-3">
+        <div class="jumbotron pb-1" style="background-color: aliceblue">
+            <h1 class="display-6">마이페이지</h1>
+            <p class="lead">마이페이지 입니다.</p>
+            <hr class="my-4">
+        </div>
+        <h2>아이디</h2>
+        <span th:text="${member.username}"></span>
+        <h2>이메일</h2>
+        <span th:text="${member.email}"></span>
+        <h2>닉네임</h2>
+        <span th:text="${member.nickname}"></span>
+        <h2>가입 날짜</h2>
+        <span th:text="${#temporals.format(member.createDate, 'yyyy-MM-dd')}"></span>
+        <br>
+        <a th:href="@{/my-page/{id}/update(id=${member.id})}">회원 정보 수정</a>
+        <a th:href="@{/password}">비밀번호 변경</a> <!-- 비밀번호 변경 페이지로의 링크 -->
+    </div>
 </div>
-</body>
-
+</div>
 </html>
