@@ -27,6 +27,7 @@ public class Post extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String body;
     private String area;
+    private String district;
 
     @ManyToOne
     private Member author;

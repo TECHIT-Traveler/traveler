@@ -4,7 +4,6 @@ import com.ll.traveler.domain.member.member.entity.Member;
 import com.ll.traveler.domain.post.post.entity.Post;
 import com.ll.traveler.domain.post.post.repository.PostCommentRepository;
 import com.ll.traveler.domain.post.post.repository.PostRepository;
-import com.ll.traveler.domain.post.postComment.entity.PostComment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +24,8 @@ public class PostService {
         switch (criteria) {
             case "area":
                 return postRepository.findByAreaContaining(kw, pageable);
+            case "subarea" :
+                return postRepository.findByDistrictContaining(kw, pageable);
             case "category":
                 return postRepository.findByCategoriesContentContaining(kw, pageable);
             case "author":
@@ -35,13 +36,14 @@ public class PostService {
     }
 
     @Transactional
-    public Post write(Member author, String title, String body, String area) {
+    public Post write(Member author, String title, String body, String area, String district) {
         Post post = Post.builder()
                 .modifyDate(LocalDateTime.now())
                 .author(author)
                 .title(title)
                 .body(body)
                 .area(area)
+                .district(district)
                 .build();
 
         return postRepository.save(post);
@@ -57,48 +59,28 @@ public class PostService {
         return postRepository.findById(postId);
     }
 
-    @Transactional
-    public PostComment writeComment(Member actor, Post post, String body) {
-        return post.writeComment(actor, body);
-    }
 
-    public boolean canModifyComment(Member actor, PostComment comment) {
-        if (actor == null) return false;
-
-        return actor.equals(comment.getAuthor());
-    }
-
-    public boolean canDeleteComment(Member actor, PostComment comment) {
-        if (actor == null) return false;
-
-        if (actor.isAdmin()) return true;
-
-        return actor.equals(comment.getAuthor());
-    }
-
-    public Optional<PostComment> findCommentById(long id) {
-        return postCommentRepository.findCommentById(id);
-    }
-
-    @Transactional
-    public void modifyComment(PostComment postComment, String body) {
-        postComment.setBody(body);
-    }
-
-    @Transactional
-    public void deleteComment(PostComment postComment) {
-        postCommentRepository.delete(postComment);
-    }
 
     public boolean canModify(Member actor, Post post) {
         return actor.equals(post.getAuthor());
     }
 
     @Transactional
-    public void modify(Post post, String title, String body, String area) {
+    public void modify(Post post, String title, String body, String area, String district) {
         post.setTitle(title);
         post.setBody(body);
         post.setArea(area);
+        post.setDistrict(district);
     }
 
+    public boolean canDelete(Member actor, Post post) {
+        if ( actor.isAdmin() ) return true;
+
+        return actor.equals(post.getAuthor());
+    }
+
+    @Transactional
+    public void delete(Post post) {
+        postRepository.delete(post);
+    }
 }
