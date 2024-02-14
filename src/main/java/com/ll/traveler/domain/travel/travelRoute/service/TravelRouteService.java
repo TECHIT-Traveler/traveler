@@ -10,6 +10,8 @@ import com.ll.traveler.global.app.AppConfig;
 import com.ll.traveler.global.rsData.RsData;
 import com.ll.traveler.standard.utill.Ut;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,6 +25,15 @@ import java.util.Optional;
 public class TravelRouteService {
     private final TravelRouteRepository travelRouteRepository;
     private final GenFileService genFileService;
+
+    public Page<TravelRoute> search(String kw, String criteria, Pageable pageable) {
+        switch(criteria) {
+            case "area" :
+                return travelRouteRepository.findByAreaContaining(kw, pageable);
+            default:
+                return travelRouteRepository.findByTitleContaining(kw, pageable);
+        }
+    }
 
     @Transactional
     public RsData<TravelRoute> write(Member author, String title, String body, String area, String startDate, String endDate, MultipartFile coverImg) {

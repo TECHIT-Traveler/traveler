@@ -8,9 +8,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class MyPageUpdateForm {
-    @NotBlank
+    @NotBlank(message = "닉네임은 필수입니다.")
     @Email
     private String email;
-    @NotBlank
+    @NotBlank(message = "이메일은 필수입니다.")
     private String nickName;
 }
