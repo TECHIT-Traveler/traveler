@@ -23,6 +23,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Setter
 @ToString(callSuper = true)
 public class Member extends BaseEntity {
+    private String providerTypeCode;
     @Column(unique = true)
     private String username;
     @Column(unique = true)

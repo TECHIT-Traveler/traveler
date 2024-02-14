@@ -22,7 +22,7 @@ function parseMsg(msg) {
 
     if ( ttl === undefined ) {
         return [pureMsg, true];
-    };
+    }
 
     const currentJsUnixTimestamp = new Date().getTime();
 

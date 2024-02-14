@@ -1,0 +1,31 @@
+<html layout:decorate="~{global/layout}">
+<div layout:fragment="content" class="container my-3">
+    <div class="jumbotron pb-1" style="background-color: aliceblue">
+        <h1 class="display-6">회원 정보 수정</h1>
+        <p class="lead">회원님의 정보를 수정해주세요.</p>
+        <hr class="my-4">
+
+        <body>
+
+        <script>
+            function submitLoginForm(form) {
+                form.submit();
+            }
+        </script>
+
+        <form method="post" th:action onsubmit="submitLoginForm(this)">
+            <h2>아이디</h2>
+            <input type="text" name="username" id="username" readonly th:value="${member.getUsername()}">
+            <h2>이메일</h2>
+            <input type="text" name="email" id="email" th:value="${member.getEmail()}">
+            <h2>닉네임</h2>
+            <input type="text" name="nickName" id="nickName" th:value="${member.getNickname()}">
+
+            <button type="submit">수정하기</button>
+        </form>
+    </body>
+</div>
+</div>
+</div>
+
+</html>

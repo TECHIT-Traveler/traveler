@@ -1,0 +1,426 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">
+    <div class="container">
+        <div class="d-flex mb-3">
+            <i class="fa-solid fa-plane"></i>
+            <h3 class="ml-3">여행 계획</h3>
+            <span class="ml-3">여행 일정동안 방문할 장소들을 기록해 보세요</span>
+        </div>
+        <form th:action="@{/travel/write}" method="post" onsubmit="submitForm(this); return false;" enctype="multipart/form-data">
+            <div class="form-group">
+                <div class="mb-3">
+                    <label for="coverImg" class="form-label">대표 이미지 업로드</label>
+                    <input class="form-control" type="file" id="coverImg" name="coverImg" accept="image/*">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="title">제목</label>
+                <input type="text" class="form-control" id="title" name="title" placeholder="제목을 입력하세요">
+            </div>
+            <div class="form-group">
+                <label for="area">방문 도시</label>
+                <input type="text" class="form-control" id="area" name="area" th:value="${area}">
+            </div>
+            <div class="d-flex">
+                <div class="form-group">
+                    <label for="startDate">여행 시작 날짜</label>
+                    <input type="date" class="form-control" id="startDate" name="startDate" th:value="${startDate}"
+                           style="width: 200px">
+                </div>
+                <div class="form-group ml-3">
+                    <label for="endDate">여행 마지막 날짜</label>
+                    <input type="date" class="form-control" id="endDate" name="endDate" th:value="${endDate}"
+                           style="width: 200px">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="body">여행 설명</label>
+                <textarea class="form-control" id="body" name="body" rows="3" placeholder="내용을 입력하세요"></textarea>
+            </div>
+            <div th:each="day : ${#numbers.sequence(1, days + 1)}" class="mb-3">
+                <div th:id="'day' + ${day}">
+                    <div class="d-flex">
+                        <h4>day <span th:text="${day}"></span></h4>
+                        <button type="button" class="btn pt-0" data-bs-toggle="modal"
+                                th:attr="data-bs-target='#placeModal' + ${day}" title="버튼을 눌러서 여행 장소를 추가 하세요">
+                            <i class="fa-solid fa-circle-plus"></i>
+                        </button>
+                    </div>
+                    <div class="modal fade" th:id="'placeModal' + ${day}" role="dialog" tabindex="-1"
+                         aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <div class="d-flex mr-auto">
+                                        <i class="fa-solid fa-plus"></i>
+                                        <h5 class="modal-title ml-2">장소 추가하기</h5>
+                                    </div>
+                                    <button type="button" class="btn-close btn-outline-dark" data-bs-dismiss="modal"
+                                            aria-label="close">&times;
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="map_wrap">
+                                        <div th:id="'map' + ${day}" style="width:100%;height:350px;position:relative;overflow:hidden;"></div>
+
+                                        <div class="bg_white mt-3 menu_wrap">
+                                            <div class="option">
+                                                <div>
+                                                    키워드 : <input type="text" value="" th:id="'keyword' + ${day}" size="15">
+                                                    <button th:onclick="searchPlaces([[${day}]]); return false;">검색하기</button>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <ul th:id="'placesList' + ${day}"></ul>
+                                            <div th:id="'pagination' + ${day}"></div>
+                                        </div>
+                                    </div>
+                                    <div type="hidden" class="my-2">
+                                        <div class="d-flex pt-2">
+                                            <i class="fa-solid fa-location-dot mr-1 pt-2"></i>
+                                            <h6 class="mx-2 pt-1">장소</h6>
+                                            <input class="name" type="text" th:id="'name' + ${day}" style="border: none;" readonly>
+                                        </div>
+                                        <div class="d-flex">
+                                            <i class="fa-solid fa-map-location-dot pt-2"></i>
+                                            <h6 class="mx-2 pt-1">주소</h6>
+                                            <input class="address" type="text" th:id="'address' + ${day}" style="border: none;" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-outline-info btn-close" data-dismiss="modal"
+                                            th:onclick="addPlaceField([[${day}]]); return false;">추가
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+            </div>
+            <div class="form-group d-flex justify-content-center">
+                <button type="submit" class="btn" mt-4 style="background-color: #00BFFF; color: white;">등록</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script layout:fragment="script" type="text/javascript">
+    function addPlaceField(day) {
+        var cards = document.querySelectorAll('.place');
+        var count = 0;
+
+        for (var i = 0; i < cards.length; i++) {
+            var cardDay = cards[i].querySelector('[name="places"]').value.split('/')[0];
+            if (cardDay == day) {
+                count++;
+            }
+        }
+
+        var container = document.getElementById('day' + day);
+        var name = document.getElementById('name' + day).value;
+        var address = document.getElementById('address' + day).value;
+        var order = count + 1;
+
+        if (name.trim().length == 0) {
+            toastWarning('장소를 입력해 주세요.');
+            return;
+        }
+        if (address.trim().length == 0) {
+            toastWarning('주소를 입력해 주세요.');
+            return;
+        }
+
+        var card = document.createElement('div');
+        card.className = 'card my-3 place';
+
+        var cardBody = document.createElement('div');
+        cardBody.className = 'card-body d-flex justify-content-between align-items-center';
+        cardBody.innerHTML = name + '(' + address + ')';
+
+        var hiddenTag = document.createElement('input');
+        hiddenTag.type = 'hidden';
+        hiddenTag.name = 'places';
+        hiddenTag.value = day + '/' + order + '/' + name + '/' + address;
+
+        var closeBtn = document.createElement('button');
+        closeBtn.className = 'btn btn-outline-dark';
+        closeBtn.type = 'button';
+        closeBtn.innerHTML = 'X';
+
+        closeBtn.addEventListener('click', function () {
+            card.remove();
+            updateOrder(day);
+        })
+
+        card.appendChild(cardBody);
+        card.appendChild(hiddenTag);
+        cardBody.appendChild(closeBtn);
+        container.appendChild(card);
+
+        $('#placeModal' + day).modal('hide');
+        initializeMap(day);
+    }
+
+    function updateOrder(day) {
+        var cards = document.querySelectorAll('.place');
+        var order = 1;
+
+        for (var i = 0; i < cards.length; i++) {
+            var cardDay = cards[i].querySelector('[name="places"]').value.split('/')[0];
+            var cardOrder = cards[i].querySelector('[name="places"]').value.split('/')[1];
+
+            if (cardDay == day) {
+                cards[i].querySelector('[name="places"]').value = day + '/' + order + '/' + cards[i].querySelector('[name="places"]').value.split('/').slice(2).join('/');
+                order++;
+            }
+        }
+    }
+
+    function submitForm(form) {
+        form.title.value = form.title.value.trim();
+
+        if (form.title.value.length == 0) {
+            toastWarning('제목을 입력해 주세요.');
+            form.title.focus();
+            return;
+        }
+
+        form.area.value = form.area.value.trim();
+
+        if (form.area.value.length == 0) {
+            toastWarning('지역을 입력해 주세요.');
+            form.area.focus();
+            return;
+        }
+
+        form.body.value = form.body.value.trim();
+
+        if (form.body.value.length == 0) {
+            toastWarning('내용을 입력해 주세요.');
+            form.body.focus();
+            return;
+        }
+
+        if (document.querySelectorAll(".place").length == 0) {
+            toastWarning('여행 장소를 추가해 주세요.');
+            return;
+        }
+
+        form.submit();
+    }
+    // 마커를 담을 배열입니다
+    var markers = [];
+
+    $(document).ready(function () {
+        $('.modal').on('shown.bs.modal', function () {
+            var day = $(this).attr('id').replace('placeModal', '');
+
+            // 모달이 열릴 때마다 해당 모달의 지도를 초기화
+            initializeMap(day);
+
+            // 모달이 열릴 때마다 지도 크기 조정
+            if (maps[day]) {
+                kakao.maps.event.trigger(maps[day], 'resize');
+                maps[day].setCenter(new kakao.maps.LatLng(37.566826, 126.9786567));
+            }
+
+            $(this).find('input[type="text"]').val('');
+            removeMarkers();
+            var listEl = document.getElementById('placesList' + day);
+            removeAllChildNodes(listEl);
+            var pagination = document.getElementById('pagination' + day);
+            removePagination(pagination);
+        });
+    });
+    var maps = {};
+    function initializeMap(day) {
+        var mapContainer = document.getElementById('map' + day);
+
+        // 이미 해당 맵이 생성되었으면 초기화하고, 아니면 새로 생성
+        if (maps[day]) {
+            maps[day].setCenter(new kakao.maps.LatLng(37.566826, 126.9786567));
+        } else {
+            maps[day] = new kakao.maps.Map(mapContainer, {
+                center: new kakao.maps.LatLng(37.566826, 126.9786567),
+                level: 3
+            });
+        }
+    }
+
+    var ps = new kakao.maps.services.Places();
+    var infowindow = new kakao.maps.InfoWindow({ zIndex: 1 });
+
+    function searchPlaces(day) {
+        var keyword = document.getElementById('keyword' + day).value;
+
+        if (!keyword.replace(/^\s+|\s+$/g, '')) {
+            toastWarning('키워드를 입력해주세요');
+            return false;
+        }
+
+        ps.keywordSearch(keyword, function (data, status, pagination) {
+            if (status === kakao.maps.services.Status.OK) {
+                displayPlaces(data, day);
+                displayPagination(pagination, day);
+            } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+                toastWarning('검색 결과가 존재하지 않습니다.');
+                return;
+            } else if (status === kakao.maps.services.Status.ERROR) {
+                toastWarning('검색 결과 중 오류가 발생했습니다.');
+                return;
+            }
+        });
+    }
+
+    function displayPlaces(places, day) {
+        var listEl = document.getElementById('placesList' + day),
+            bounds = new kakao.maps.LatLngBounds(),
+            listStr = '';
+
+        removeAllChildNodes(listEl);
+        removeMarkers();
+
+        for (var i = 0; i < places.length; i++) {
+            var placePosition = new kakao.maps.LatLng(places[i].y, places[i].x),
+                marker = addMarker(placePosition, i, day),
+                itemEl = getListItem(i, places[i], day);
+
+            bounds.extend(placePosition);
+
+            (function (marker, title) {
+                kakao.maps.event.addListener(marker, 'mouseover', function () {
+                    displayInfowindow(marker, title, day);
+                });
+
+                kakao.maps.event.addListener(marker, 'mouseout', function () {
+                    infowindow.close();
+                });
+
+                itemEl.onmouseover = function () {
+                    displayInfowindow(marker, title, day);
+                };
+
+                itemEl.onmouseout = function () {
+                    infowindow.close();
+                };
+            })(marker, places[i].place_name);
+
+            listEl.appendChild(itemEl);
+        }
+
+        listEl.scrollTop = 0;
+
+        maps[day].setBounds(bounds);
+    }
+
+    function getListItem(index, places, day) {
+        var el = document.createElement('li'),
+            itemStr = '<span class="markerbg marker_' + (index + 1) + '"></span>' +
+                '<div class="info">' +
+                '   <h5>' + places.place_name + '</h5>';
+
+        if (places.road_address_name) {
+            itemStr += '    <span>' + places.road_address_name + '</span>' +
+                '   <span class="jibun gray">' + places.address_name + '</span>';
+        } else {
+            itemStr += '    <span>' + places.address_name + '</span>';
+        }
+
+        itemStr += '  <span class="tel">' + places.phone + '</span>' +
+            '</div>';
+
+        el.innerHTML = itemStr;
+        el.className = 'item';
+        el.addEventListener('click', function () {
+            document.getElementById('name' + day).value = places.place_name;
+            document.getElementById('address' + day).value = places.address_name;
+            var listEl = document.getElementById('placesList' + day);
+            removeAllChildNodes(listEl);
+            var pagination = document.getElementById('pagination' + day);
+            removePagination(pagination);
+        });
+
+        return el;
+    }
+
+    function addMarker(position, idx, day) {
+        // map 변수가 정의되어 있지 않으면 처리 중단
+        if (!maps[day]) {
+            console.error('Map is not defined for day ' + day);
+            return;
+        }
+
+        var imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png',
+            imageSize = new kakao.maps.Size(36, 37),
+            imgOptions = {
+                spriteSize: new kakao.maps.Size(36, 691),
+                spriteOrigin: new kakao.maps.Point(0, (idx * 46) + 10),
+                offset: new kakao.maps.Point(13, 37)
+            },
+            markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imgOptions),
+            marker = new kakao.maps.Marker({
+                position: position,
+                image: markerImage
+            });
+
+        marker.setMap(maps[day]);
+        markers.push(marker);
+
+        return marker;
+    }
+
+    function removeMarkers() {
+        for (var i = 0; i < markers.length; i++) {
+            markers[i].setMap(null);
+        }
+        markers = [];
+    }
+
+    function displayPagination(pagination, day) {
+        var paginationEl = document.getElementById('pagination' + day),
+            fragment = document.createDocumentFragment(),
+            i;
+
+        removeAllChildNodes(paginationEl);
+
+        for (i = 1; i <= pagination.last; i++) {
+            var el = document.createElement('a');
+            el.href = "#";
+            el.innerHTML = i;
+
+            if (i === pagination.current) {
+                el.className = 'on';
+            } else {
+                el.onclick = (function (i) {
+                    return function () {
+                        pagination.gotoPage(i);
+                    }
+                })(i);
+            }
+
+            fragment.appendChild(el);
+        }
+        paginationEl.appendChild(fragment);
+    }
+
+    function displayInfowindow(marker, title, day) {
+        var content = '<div style="padding:5px;z-index:1;">' + title + '</div>';
+
+        infowindow.setContent(content);
+        infowindow.open(maps[day], marker);
+    }
+
+    function removeAllChildNodes(el) {
+        while (el.hasChildNodes()) {
+            el.removeChild(el.lastChild);
+        }
+    }
+
+    function removePagination(pagination) {
+        while (pagination.hasChildNodes()) {
+            pagination.removeChild(pagination.lastChild);
+        }
+    }
+</script>
+</html>

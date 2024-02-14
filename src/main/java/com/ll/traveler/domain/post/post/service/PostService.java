@@ -2,8 +2,8 @@ package com.ll.traveler.domain.post.post.service;
 
 import com.ll.traveler.domain.member.member.entity.Member;
 import com.ll.traveler.domain.post.post.entity.Post;
+import com.ll.traveler.domain.post.post.repository.PostCommentRepository;
 import com.ll.traveler.domain.post.post.repository.PostRepository;
-import com.ll.traveler.global.rsData.RsData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,17 +11,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class PostService {
     private final PostRepository postRepository;
+    private final PostCommentRepository postCommentRepository;
 
     public Page<Post> search(String kw, String criteria, Pageable pageable) {
         switch (criteria) {
             case "area":
                 return postRepository.findByAreaContaining(kw, pageable);
+            case "subarea":
+                return postRepository.findByDistrictContaining(kw, pageable);
             case "category":
                 return postRepository.findByCategoriesContentContaining(kw, pageable);
             case "author":
@@ -32,22 +36,49 @@ public class PostService {
     }
 
     @Transactional
-    public RsData<Post> write(Member author, String title, String body, String area) {
+    public Post write(Member author, String title, String body, String area, String district) {
         Post post = Post.builder()
                 .modifyDate(LocalDateTime.now())
                 .author(author)
                 .title(title)
                 .body(body)
                 .area(area)
+                .district(district)
                 .build();
 
-        postRepository.save(post);
+        return postRepository.save(post);
+    }
 
-        return RsData.of("200", "%d번 게시글이 작성되었습니다.".formatted(post.getId()), post);
+
+    @Transactional
+    public void like(Member actor, Post post) {
+        post.addLike(actor);
+    }
+
+    public Optional<Post> findById(Long postId) {
+        return postRepository.findById(postId);
+    }
+
+    public boolean canModify(Member actor, Post post) {
+        return actor.equals(post.getAuthor());
     }
 
     @Transactional
-    public void like(Member member, Post post) {
-        post.addLike(member);
+    public void modify(Post post, String title, String body, String area, String district) {
+        post.setTitle(title);
+        post.setBody(body);
+        post.setArea(area);
+        post.setDistrict(district);
+    }
+
+    public boolean canDelete(Member actor, Post post) {
+        if (actor.isAdmin()) return true;
+
+        return actor.equals(post.getAuthor());
+    }
+
+    @Transactional
+    public void delete(Post post) {
+        postRepository.delete(post);
     }
 }

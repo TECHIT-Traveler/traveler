@@ -1,5 +1,6 @@
 package com.ll.traveler.global.jpa;
 
+import com.ll.traveler.standard.util.Ut;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -34,4 +35,7 @@ public class BaseEntity {
     @LastModifiedDate
     @Setter
     private LocalDateTime modifyDate;
+    public String getModelName() {
+        return Ut.str.lcfirst(this.getClass().getSimpleName());
+    }
 }

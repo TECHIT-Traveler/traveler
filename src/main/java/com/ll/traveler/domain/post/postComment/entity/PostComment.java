@@ -3,25 +3,32 @@ package com.ll.traveler.domain.post.postComment.entity;
 import com.ll.traveler.domain.member.member.entity.Member;
 import com.ll.traveler.domain.post.post.entity.Post;
 import com.ll.traveler.global.jpa.BaseEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDateTime;
+
 import static lombok.AccessLevel.PROTECTED;
+import static lombok.AccessLevel.PUBLIC;
 
 @Entity
 @SuperBuilder
 @AllArgsConstructor(access = PROTECTED)
-@NoArgsConstructor(access = PROTECTED)
+@NoArgsConstructor(access = PUBLIC)
 @Getter
 @Setter
 @ToString(callSuper = true)
 public class PostComment extends BaseEntity {
-    private String body;
-
-    @ManyToOne
-    private Post post;
-
     @ManyToOne
     private Member author;
+    @ManyToOne
+    private Post post;
+    @Column(columnDefinition = "TEXT")
+    @NotBlank
+    private String body;
+    private LocalDateTime modifyDate;
 }
