@@ -4,6 +4,7 @@ import com.ll.traveler.global.rsData.RsData;
 import lombok.Getter;
 
 public class GlobalException extends RuntimeException {
+
     @Getter
     private RsData<?> rsData;
 

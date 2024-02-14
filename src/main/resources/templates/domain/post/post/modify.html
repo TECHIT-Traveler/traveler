@@ -1,0 +1,576 @@
+<html layout:decorate="~{layout}">
+
+<head>
+    <title>글 수정</title>
+    <style>
+        .title-section {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        .button-center {
+            text-align: center;
+        }
+    </style>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/marked/3.0.4/marked.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/3.0.4/marked.min.js"></script>
+    <script>
+        window.onload = function() {
+            var selectedArea = document.getElementById('area').value;
+            showDistricts(selectedArea);
+        };
+    </script>
+</head>
+
+
+<body>
+<div layout:fragment="content" class="container">
+
+    <th:block th:replace="global/fragments/toastUiEditorLib :: toastUiEditorLib"></th:block>
+
+    <div class="title-section">
+        <h1>글 수정</h1>
+    </div>
+
+    <script>
+        function submitModifyForm(form) {
+            form.title.value = form.title.value.trim();
+
+            if (form.title.value.length == 0) {
+                toastWarning('제목을 입력해주세요.');
+                form.title.focus();
+                return;
+            }
+
+            const editor = $(form).find(".toast-ui-editor").data("data-toast-editor");
+
+            const markdown = editor.getMarkdown().trim();
+
+            form.body.value = markdown;
+
+            if (form.body.value.length == 0) {
+                toastWarning("내용을 입력해주세요");
+                editor.focus();
+                return;
+            }
+
+            form.area.value = form.area.value.trim();
+
+            if (form.area.value.length == 0) {
+                toastWarning('지역을 입력해주세요.');
+                form.area.focus();
+                return;
+            }
+
+            const selects = form.querySelectorAll("select[name='district']");
+
+            // 가져온 각 select 엘리먼트에 대한 반복문을 실행합니다.
+            selects.forEach((select) => {
+                // select 엘리먼트의 style 속성을 가져와서 display 속성 값이 "none" 인지 확인합니다.
+                if (window.getComputedStyle(select.parentElement).display === "none") {
+                    // 만약 display 속성 값이 "none" 이면 select 엘리먼트를 비활성화(disabled) 처리합니다.
+                    select.disabled = true;
+                }
+            });
+
+            form.submit();
+        }
+    </script>
+
+    <form th:action method="POST" onsubmit="submitModifyForm(this); return false;" class="needs-validation">
+        <input type="hidden" name="_method" value="PUT">
+        <input type="hidden" name="body">
+
+        <div class="form-group">
+            <label for="title">제목</label>
+            <input type="text" name="title" id="title" th:value="${post.title}" class="form-control" required>
+        </div>
+
+        <div>
+            <label>내용</label>
+            <div
+                    class="toast-ui-editor"
+                    height="calc(100vh - 400px)"
+                    placeholder="내용"
+            >
+               <script type="text/x-template" th:text="${post.body}"></script>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="area">지역</label>
+            <select name="area" id="area" class="form-control" required onchange="showDistricts(this.value)">
+                <option value="">-- 선택 --</option>
+                <option value="서울" th:selected="${post.area == '서울'}">서울</option>
+                <option value="부산" th:selected="${post.area == '부산'}">부산</option>
+                <option value="대구" th:selected="${post.area == '대구'}">대구</option>
+                <option value="인천" th:selected="${post.area == '인천'}">인천</option>
+                <option value="광주" th:selected="${post.area == '광주'}">광주</option>
+                <option value="대전" th:selected="${post.area == '대전'}">대전</option>
+                <option value="울산" th:selected="${post.area == '울산'}">울산</option>
+                <option value="세종" th:selected="${post.area == '세종'}">세종</option>
+                <option value="경기" th:selected="${post.area == '경기'}">경기</option>
+                <option value="강원" th:selected="${post.area == '강원'}">강원</option>
+                <option value="충북" th:selected="${post.area == '충북'}">충북</option>
+                <option value="충남" th:selected="${post.area == '충남'}">충남</option>
+                <option value="전북" th:selected="${post.area == '전북'}">전북</option>
+                <option value="전남" th:selected="${post.area == '전남'}">전남</option>
+                <option value="경북" th:selected="${post.area == '경북'}">경북</option>
+                <option value="경남" th:selected="${post.area == '경남'}">경남</option>
+                <option value="제주" th:selected="${post.area == '제주'}">제주</option>
+            </select>
+        </div>
+
+        <!-- 서울 -->
+        <div class="form-group" id="seoul-districts" style="display:none;">
+            <label for="seoul-district">구/군</label>
+            <select name="district" id="seoul-district" class="form-control">
+                <option value="">-- 선택 --</option>
+                <option value="강남구" th:selected="${post.district == '강남구'}">강남구</option>
+                <option value="강동구" th:selected="${post.district == '강동구'}">강동구</option>
+                <option value="강북구" th:selected="${post.district == '강북구'}">강북구</option>
+                <option value="강서구" th:selected="${post.district == '강서구'}">강서구</option>
+                <option value="관악구" th:selected="${post.district == '관악구'}">관악구</option>
+                <option value="광진구" th:selected="${post.district == '광진구'}">광진구</option>
+                <option value="구로구" th:selected="${post.district == '구로구'}">구로구</option>
+                <option value="금천구" th:selected="${post.district == '금천구'}">금천구</option>
+                <option value="노원구" th:selected="${post.district == '노원구'}">노원구</option>
+                <option value="도봉구" th:selected="${post.district == '도봉구'}">도봉구</option>
+                <option value="동대문구" th:selected="${post.district == '동대문구'}">동대문구</option>
+                <option value="동작구" th:selected="${post.district == '동작구'}">동작구</option>
+                <option value="마포구" th:selected="${post.district == '마포구'}">마포구</option>
+                <option value="서대문구" th:selected="${post.district == '서대문구'}">서대문구</option>
+                <option value="서초구" th:selected="${post.district == '서초구'}">서초구</option>
+                <option value="성동구" th:selected="${post.district == '성동구'}">성동구</option>
+                <option value="성북구" th:selected="${post.district == '성북구'}">성북구</option>
+                <option value="송파구" th:selected="${post.district == '송파구'}">송파구</option>
+                <option value="양천구" th:selected="${post.district == '양천구'}">양천구</option>
+                <option value="영등포구" th:selected="${post.district == '영등포구'}">영등포구</option>
+                <option value="용산구" th:selected="${post.district == '용산구'}">용산구</option>
+                <option value="은평구" th:selected="${post.district == '은평구'}">은평구</option>
+                <option value="종로구" th:selected="${post.district == '종로구'}">종로구</option>
+                <option value="중구" th:selected="${post.district == '중구'}">중구</option>
+                <option value="중랑구" th:selected="${post.district == '중랑구'}">중랑구</option>
+            </select>
+        </div>
+
+        <!-- 부산 -->
+        <div class="form-group" id="busan-districts" style="display:none;">
+            <label for="busan-district">구/군</label>
+            <select name="district" id="busan-district" class="form-control">
+                <option value="">-- 선택 --</option>
+                <option value="중구" th:selected="${post.district == '중구'}">중구</option>
+                <option value="서구" th:selected="${post.district == '서구'}">서구</option>
+                <option value="동구" th:selected="${post.district == '동구'}">동구</option>
+                <option value="영도구" th:selected="${post.district == '영도구'}">영도구</option>
+                <option value="부산진구" th:selected="${post.district == '부산진구'}">부산진구</option>
+                <option value="동래구" th:selected="${post.district == '동래구'}">동래구</option>
+                <option value="남구" th:selected="${post.district == '남구'}">남구</option>
+                <option value="북구" th:selected="${post.district == '북구'}">북구</option>
+                <option value="해운대구" th:selected="${post.district == '해운대구'}">해운대구</option>
+                <option value="사하구" th:selected="${post.district == '사하구'}">사하구</option>
+                <option value="금정구" th:selected="${post.district == '금정구'}">금정구</option>
+                <option value="강서구" th:selected="${post.district == '강서구'}">강서구</option>
+                <option value="연제구" th:selected="${post.district == '연제구'}">연제구</option>
+                <option value="수영구" th:selected="${post.district == '수영구'}">수영구</option>
+                <option value="사상구" th:selected="${post.district == '사상구'}">사상구</option>
+                <option value="기장군" th:selected="${post.district == '기장군'}">기장군</option>
+            </select>
+        </div>
+
+        <!-- 대구 -->
+        <div class="form-group" id="daegu-districts" style="display:none;">
+            <label for="daegu-district">구/군</label>
+            <select name="district" id="daegu-district" class="form-control">
+                <option value="">-- 선택 --</option>
+                <option value="중구" th:selected="${post.district == '중구'}">중구</option>
+                <option value="동구" th:selected="${post.district == '동구'}">동구</option>
+                <option value="서구" th:selected="${post.district == '서구'}">서구</option>
+                <option value="남구" th:selected="${post.district == '남구'}">남구</option>
+                <option value="북구" th:selected="${post.district == '북구'}">북구</option>
+                <option value="수성구" th:selected="${post.district == '수성구'}">수성구</option>
+                <option value="달서구" th:selected="${post.district == '달서구'}">달서구</option>
+                <option value="달성군" th:selected="${post.district == '달성군'}">달성군</option>
+            </select>
+        </div>
+
+        <!-- 세종 -->
+        <div class="form-group" id="sejong-districts" style="display:none;visibility: hidden">
+            <label for="sejong-district">구/군</label>
+            <select name="district" id="sejong-district" class="form-control">
+                <option value="세종" th:selected="${post.district == '세종'}">세종</option>
+            </select>
+        </div>
+
+        <!-- 인천 -->
+        <div class="form-group" id="incheon-districts" style="display:none;">
+            <label for="incheon-district">구/군</label>
+            <select name="district" id="incheon-district" class="form-control">
+                <option value="">-- 선택 --</option>
+                <option value="중구" th:selected="${post.district == '중구'}">중구</option>
+                <option value="동구" th:selected="${post.district == '동구'}">동구</option>
+                <option value="남동구" th:selected="${post.district == '남동구'}">남동구</option>
+                <option value="연수구" th:selected="${post.district == '연수구'}">연수구</option>
+                <option value="부평구" th:selected="${post.district == '부평구'}">부평구</option>
+                <option value="서구" th:selected="${post.district == '서구'}">서구</option>
+                <option value="계양구" th:selected="${post.district == '계양구'}">계양구</option>
+                <option value="미추홀구" th:selected="${post.district == '미추홀구'}">미추홀구</option>
+                <option value="강화군" th:selected="${post.district == '강화군'}">강화군</option>
+                <option value="옹진군" th:selected="${post.district == '옹진군'}">옹진군</option>
+            </select>
+        </div>
+
+        <!-- 광주 -->
+        <div class="form-group" id="gwangju-districts" style="display:none;">
+            <label for="gwangju-district">구/군</label>
+            <select name="district" id="gwangju-district" class="form-control">
+                <option value="">-- 선택 --</option>
+                <option value="동구" th:selected="${post.district == '동구'}">동구</option>
+                <option value="서구" th:selected="${post.district == '서구'}">서구</option>
+                <option value="남구" th:selected="${post.district == '남구'}">남구</option>
+                <option value="북구" th:selected="${post.district == '북구'}">북구</option>
+                <option value="광산구" th:selected="${post.district == '광산구'}">광산구</option>
+            </select>
+        </div>
+
+        <!-- 대전 -->
+        <div class="form-group" id="daejeon-districts" style="display:none;">
+            <label for="daejeon-district">구/군</label>
+            <select name="district" id="daejeon-district" class="form-control">
+                <option value="">-- 선택 --</option>
+                <option value="동구" th:selected="${post.district == '동구'}">동구</option>
+                <option value="중구" th:selected="${post.district == '중구'}">중구</option>
+                <option value="서구" th:selected="${post.district == '서구'}">서구</option>
+                <option value="유성구" th:selected="${post.district == '유성구'}">유성구</option>
+                <option value="대덕구" th:selected="${post.district == '대덕구'}">대덕구</option>
+            </select>
+        </div>
+
+        <!-- 경기도 -->
+        <div class="form-group" id="ulsan-districts" style="display:none;">
+            <label for="ulsan-district">구/군</label>
+            <select name="district" id="ulsan-district" class="form-control">
+                <option value="">-- 선택 --</option>
+                <option value="중구" th:selected="${post.district == '중구'}">중구</option>
+                <option value="남구" th:selected="${post.district == '남구'}">남구</option>
+                <option value="동구" th:selected="${post.district == '동구'}">동구</option>
+                <option value="북구" th:selected="${post.district == '북구'}">북구</option>
+                <option value="울주군" th:selected="${post.district == '울주군'}">울주군</option>
+            </select>
+        </div>
+
+        <div class="form-group" id="gyeonggi-districts" style="display:none;">
+            <label for="gyeonggi-district">구/군</label>
+            <select name="district" id="gyeonggi-district" class="form-control">
+                <option value="">-- 선택 --</option>
+                <option value="수원시" th:selected="${post.district == '수원시'}">수원시</option>
+                <option value="용인시" th:selected="${post.district == '용인시'}">용인시</option>
+                <option value="성남시" th:selected="${post.district == '성남시'}">성남시</option>
+                <option value="고양시" th:selected="${post.district == '고양시'}">고양시</option>
+                <option value="안산시" th:selected="${post.district == '안산시'}">안산시</option>
+                <option value="안양시" th:selected="${post.district == '안양시'}">안양시</option>
+                <option value="부천시" th:selected="${post.district == '부천시'}">부천시</option>
+                <option value="남양주시" th:selected="${post.district == '남양주시'}">남양주시</option>
+                <option value="의정부시" th:selected="${post.district == '의정부시'}">의정부시</option>
+                <option value="화성시" th:selected="${post.district == '화성시'}">화성시</option>
+                <option value="광명시" th:selected="${post.district == '광명시'}">광명시</option>
+                <option value="오산시" th:selected="${post.district == '오산시'}">오산시</option>
+                <option value="군포시" th:selected="${post.district == '군포시'}">군포시</option>
+                <option value="안성시" th:selected="${post.district == '안성시'}">안성시</option>
+                <option value="파주시" th:selected="${post.district == '파주시'}">파주시</option>
+                <option value="구리시" th:selected="${post.district == '구리시'}">구리시</option>
+                <option value="김포시" th:selected="${post.district == '김포시'}">김포시</option>
+                <option value="시흥시" th:selected="${post.district == '시흥시'}">시흥시</option>
+                <option value="양주시" th:selected="${post.district == '양주시'}">양주시</option>
+                <option value="하남시" th:selected="${post.district == '하남시'}">하남시</option>
+                <option value="이천시" th:selected="${post.district == '이천시'}">이천시</option>
+                <option value="평택시" th:selected="${post.district == '평택시'}">평택시</option>
+                <option value="동두천시" th:selected="${post.district == '동두천시'}">동두천시</option>
+                <option value="여주시" th:selected="${post.district == '여주시'}">여주시</option>
+                <option value="포천시" th:selected="${post.district == '포천시'}">포천시</option>
+                <option value="광주시" th:selected="${post.district == '광주시'}">광주시</option>
+                <option value="가평군" th:selected="${post.district == '가평군'}">가평군</option>
+                <option value="양평군" th:selected="${post.district == '양평군'}">양평군</option>
+                <option value="연천군" th:selected="${post.district == '연천군'}">연천군</option>
+                <option value="과천시" th:selected="${post.district == '과천시'}">과천시</option>
+            </select>
+        </div>
+
+        <!-- 강원도 -->
+        <div class="form-group" id="gangwon-districts" style="display:none;">
+            <label for="gangwon-district"></label>
+            <select name="district" id="gangwon-district" class="form-control">
+                <option value="">-- 선택 --</option>
+                <option value="춘천시" th:selected="${post.district == '춘천시'}">춘천시</option>
+                <option value="원주시" th:selected="${post.district == '원주시'}">원주시</option>
+                <option value="강릉시" th:selected="${post.district == '강릉시'}">강릉시</option>
+                <option value="속초시" th:selected="${post.district == '속초시'}">속초시</option>
+                <option value="동해시" th:selected="${post.district == '동해시'}">동해시</option>
+                <option value="태백시" th:selected="${post.district == '태백시'}">태백시</option>
+                <option value="삼척시" th:selected="${post.district == '삼척시'}">삼척시</option>
+                <option value="홍천군" th:selected="${post.district == '홍천군'}">홍천군</option>
+                <option value="화천군" th:selected="${post.district == '화천군'}">화천군</option>
+                <option value="양구군" th:selected="${post.district == '양구군'}">양구군</option>
+                <option value="인제군" th:selected="${post.district == '인제군'}">인제군</option>
+                <option value="고성군" th:selected="${post.district == '고성군'}">고성군</option>
+                <option value="양양군" th:selected="${post.district == '양양군'}">양양군</option>
+                <option value="정선군" th:selected="${post.district == '정선군'}">정선군</option>
+                <option value="평창군" th:selected="${post.district == '평창군'}">평창군</option>
+                <option value="영월군" th:selected="${post.district == '영월군'}">영월군</option>
+                <option value="횡성군" th:selected="${post.district == '횡성군'}">횡성군</option>
+            </select>
+        </div>
+
+        <!-- 충청북도 -->
+        <div class="form-group" id="chungbuk-districts" style="display:none;">
+            <label for="chungbuk-district"></label>
+            <select name="district" id="chungbuk-district" class="form-control">
+                <option value="">-- 선택 --</option>
+                <option value="청주시" th:selected="${post.district == '청주시'}">청주시</option>
+                <option value="충주시" th:selected="${post.district == '충주시'}">충주시</option>
+                <option value="제천시" th:selected="${post.district == '제천시'}">제천시</option>
+                <option value="괴산군" th:selected="${post.district == '괴산군'}">괴산군</option>
+                <option value="단양군" th:selected="${post.district == '단양군'}">단양군</option>
+                <option value="보은군" th:selected="${post.district == '보은군'}">보은군</option>
+                <option value="옥천군" th:selected="${post.district == '옥천군'}">옥천군</option>
+                <option value="영동군" th:selected="${post.district == '영동군'}">영동군</option>
+                <option value="진천군" th:selected="${post.district == '진천군'}">진천군</option>
+                <option value="음성군" th:selected="${post.district == '음성군'}">음성군</option>
+            </select>
+        </div>
+
+        <!-- 충청남도 -->
+        <div class="form-group" id="chungnam-districts" style="display:none;">
+            <label for="chungnam-district"></label>
+            <select name="district" id="chungnam-district" class="form-control">
+                <option value="">-- 선택 --</option>
+                <option value="천안시" th:selected="${post.district == '천안시'}">천안시</option>
+                <option value="아산시" th:selected="${post.district == '아산시'}">아산시</option>
+                <option value="서산시" th:selected="${post.district == '서산시'}">서산시</option>
+                <option value="당진시" th:selected="${post.district == '당진시'}">당진시</option>
+                <option value="공주시" th:selected="${post.district == '공주시'}">공주시</option>
+                <option value="보령시" th:selected="${post.district == '보령시'}">보령시</option>
+                <option value="논산시" th:selected="${post.district == '논산시'}">논산시</option>
+                <option value="금산군" th:selected="${post.district == '금산군'}">금산군</option>
+                <option value="부여군" th:selected="${post.district == '부여군'}">부여군</option>
+                <option value="서천군" th:selected="${post.district == '서천군'}">서천군</option>
+                <option value="홍성군" th:selected="${post.district == '홍성군'}">홍성군</option>
+                <option value="예산군" th:selected="${post.district == '예산군'}">예산군</option>
+                <option value="태안군" th:selected="${post.district == '태안군'}">태안군</option>
+                <option value="청양군" th:selected="${post.district == '청양군'}">청양군</option>
+                <option value="장성군" th:selected="${post.district == '장성군'}">장성군</option>
+            </select>
+        </div>
+
+        <!-- 경상북도 -->
+        <div class="form-group" id="gyeongbuk-districts" style="display:none;">
+            <label for="gyeongbuk-district"></label>
+            <select name="district" id="gyeongbuk-district" class="form-control">
+                <option value="">-- 선택 --</option>
+                <option value="포항시" th:selected="${post.district == '포항시'}">포항시</option>
+                <option value="경주시" th:selected="${post.district == '경주시'}">경주시</option>
+                <option value="김천시" th:selected="${post.district == '김천시'}">김천시</option>
+                <option value="안동시" th:selected="${post.district == '안동시'}">안동시</option>
+                <option value="경산시" th:selected="${post.district == '경산시'}">경산시</option>
+                <option value="영주시" th:selected="${post.district == '영주시'}">영주시</option>
+                <option value="상주시" th:selected="${post.district == '상주시'}">상주시</option>
+                <option value="문경시" th:selected="${post.district == '문경시'}">문경시</option>
+                <option value="구미시" th:selected="${post.district == '구미시'}">구미시</option>
+                <option value="영천시" th:selected="${post.district == '영천시'}">영천시</option>
+                <option value="군위군" th:selected="${post.district == '군위군'}">군위군</option>
+                <option value="의성군" th:selected="${post.district == '의성군'}">의성군</option>
+                <option value="청도군" th:selected="${post.district == '청도군'}">청도군</option>
+                <option value="영양군" th:selected="${post.district == '영양군'}">영양군</option>
+                <option value="칠곡군" th:selected="${post.district == '칠곡군'}">칠곡군</option>
+                <option value="성주군" th:selected="${post.district == '성주군'}">성주군</option>
+            </select>
+        </div>
+
+        <div class="form-group" id="gyeongnam-districts" style="display:none;">
+            <label for="gyeongnam-district"></label>
+            <select name="district" id="gyeongnam-district" class="form-control">
+                <option value="">-- 선택 --</option>
+                <option value="창원시" th:selected="${post.district == '창원시'}">창원시</option>
+                <option value="진주시" th:selected="${post.district == '진주시'}">진주시</option>
+                <option value="통영시" th:selected="${post.district == '통영시'}">통영시</option>
+                <option value="거제시" th:selected="${post.district == '거제시'}">거제시</option>
+                <option value="양산시" th:selected="${post.district == '양산시'}">양산시</option>
+                <option value="김해시" th:selected="${post.district == '김해시'}">김해시</option>
+                <option value="밀양시" th:selected="${post.district == '밀양시'}">밀양시</option>
+                <option value="함안군" th:selected="${post.district == '함안군'}">함안군</option>
+                <option value="창녕군" th:selected="${post.district == '창녕군'}">창녕군</option>
+                <option value="고성군" th:selected="${post.district == '고성군'}">고성군</option>
+                <option value="남해군" th:selected="${post.district == '남해군'}">남해군</option>
+                <option value="하동군" th:selected="${post.district == '하동군'}">하동군</option>
+                <option value="산청군" th:selected="${post.district == '산청군'}">산청군</option>
+                <option value="함양군" th:selected="${post.district == '함양군'}">함양군</option>
+                <option value="거창군" th:selected="${post.district == '거창군'}">거창군</option>
+                <option value="합천군" th:selected="${post.district == '합천군'}">합천군</option>
+            </select>
+        </div>
+
+        <div class="form-group" id="jeonbuk-districts" style="display:none;">
+            <label for="jeonbuk-district"></label>
+            <select name="district" id="jeonbuk-district" class="form-control">
+                <option value="">-- 선택 --</option>
+                <option value="전주시" th:selected="${post.district == '전주시'}">전주시</option>
+                <option value="익산시" th:selected="${post.district == '익산시'}">익산시</option>
+                <option value="군산시" th:selected="${post.district == '군산시'}">군산시</option>
+                <option value="남원시" th:selected="${post.district == '남원시'}">남원시</option>
+                <option value="김제시" th:selected="${post.district == '김제시'}">김제시</option>
+                <option value="부안군" th:selected="${post.district == '부안군'}">부안군</option>
+                <option value="순창군" th:selected="${post.district == '순창군'}">순창군</option>
+                <option value="고창군" th:selected="${post.district == '고창군'}">고창군</option>
+                <option value="임실군" th:selected="${post.district == '임실군'}">임실군</option>
+                <option value="완주군" th:selected="${post.district == '완주군'}">완주군</option>
+                <option value="진안군" th:selected="${post.district == '진안군'}">진안군</option>
+                <option value="무주군" th:selected="${post.district == '무주군'}">무주군</option>
+                <option value="장수군" th:selected="${post.district == '장수군'}">장수군</option>
+            </select>
+        </div>
+
+        <div class="form-group" id="jeonnam-districts" style="display:none;">
+            <label for="jeonnam-district"></label>
+            <select name="district" id="jeonnam-district" class="form-control">
+                <option value="">-- 선택 --</option>
+                <option value="광주시" th:selected="${post.district == '광주시'}">광주시</option>
+                <option value="여수시" th:selected="${post.district == '여수시'}">여수시</option>
+                <option value="순천시" th:selected="${post.district == '순천시'}">순천시</option>
+                <option value="목포시" th:selected="${post.district == '목포시'}">목포시</option>
+                <option value="나주시" th:selected="${post.district == '나주시'}">나주시</option>
+                <option value="강진군" th:selected="${post.district == '강진군'}">강진군</option>
+                <option value="고흥군" th:selected="${post.district == '고흥군'}">고흥군</option>
+                <option value="보성군" th:selected="${post.district == '보성군'}">보성군</option>
+                <option value="화순군" th:selected="${post.district == '화순군'}">화순군</option>
+                <option value="장흥군" th:selected="${post.district == '장흥군'}">장흥군</option>
+                <option value="진도군" th:selected="${post.district == '진도군'}">진도군</option>
+                <option value="완도군" th:selected="${post.district == '완도군'}">완도군</option>
+                <option value="해남군" th:selected="${post.district == '해남군'}">해남군</option>
+                <option value="영암군" th:selected="${post.district == '영암군'}">영암군</option>
+                <option value="무안군" th:selected="${post.district == '무안군'}">무안군</option>
+                <option value="함평군" th:selected="${post.district == '함평군'}">함평군</option>
+                <option value="영광군" th:selected="${post.district == '영광군'}">영광군</option>
+                <option value="신안군" th:selected="${post.district == '신안군'}">신안군</option>
+            </select>
+        </div>
+
+        <div class="form-group" id="jeju-districts" style="display:none;">
+            <label for="jeju-district"></label>
+            <select name="district" id="jeju-district" class="form-control">
+                <option value="">-- 선택 --</option>
+                <option value="제주시" th:selected="${post.district == '제주시'}">제주시</option>
+                <option value="서귀포시" th:selected="${post.district == '서귀포시'}">서귀포시</option>
+            </select>
+        </div>
+
+        <script>
+
+            function showDistricts(area) {
+                var seoulDistricts = document.getElementById('seoul-districts');
+                var busanDistricts = document.getElementById('busan-districts');
+                var incheonDistricts = document.getElementById('incheon-districts');
+                var daeguDistricts = document.getElementById('daegu-districts');
+                var gwangjuDistricts = document.getElementById('gwangju-districts');
+                var daejeonDistricts = document.getElementById('daejeon-districts');
+                var ulsanDistricts = document.getElementById('ulsan-districts');
+                var gyeonggiDistricts = document.getElementById('gyeonggi-districts');
+                var gangwonDistricts = document.getElementById('gangwon-districts');
+                var chungbukDistricts = document.getElementById('chungbuk-districts');
+                var chungnamDistricts = document.getElementById('chungnam-districts');
+                var gyeongbukDistricts = document.getElementById('gyeongbuk-districts');
+                var gyeongnamDistricts = document.getElementById('gyeongnam-districts');
+                var jeonbukDistricts = document.getElementById('jeonbuk-districts');
+                var jeonnamDistricts = document.getElementById('jeonnam-districts');
+                var jejuDistricts = document.getElementById('jeju-districts');
+                var sejongDistricts = document.getElementById('sejong-districts')
+
+                // 모든 "구" select 요소를 기본적으로 숨깁니다.
+                seoulDistricts.style.display = 'none';
+                busanDistricts.style.display = 'none';
+                incheonDistricts.style.display = 'none';
+                daeguDistricts.style.display = 'none';
+                gwangjuDistricts.style.display = 'none';
+                daejeonDistricts.style.display = 'none';
+                ulsanDistricts.style.display = 'none';
+                gyeonggiDistricts.style.display = 'none';
+                gangwonDistricts.style.display = 'none';
+                chungbukDistricts.style.display = 'none';
+                chungnamDistricts.style.display = 'none';
+                gyeongbukDistricts.style.display = 'none';
+                gyeongnamDistricts.style.display = 'none';
+                jeonbukDistricts.style.display = 'none';
+                jeonnamDistricts.style.display = 'none';
+                jejuDistricts.style.display = 'none';
+                sejongDistricts.style.display = 'none';
+
+                switch (area) {
+                    case '서울':
+                        seoulDistricts.style.display = 'block';
+                        break;
+                    case '부산':
+                        busanDistricts.style.display = 'block';
+                        break;
+                    case '인천':
+                        incheonDistricts.style.display = 'block';
+                        break;
+                    case '대구':
+                        daeguDistricts.style.display = 'block';
+                        break;
+                    case '광주':
+                        gwangjuDistricts.style.display = 'block';
+                        break;
+                    case '대전':
+                        daejeonDistricts.style.display = 'block';
+                        break;
+                    case '울산':
+                        ulsanDistricts.style.display = 'block';
+                        break;
+                    case '경기':
+                        gyeonggiDistricts.style.display = 'block';
+                        break;
+                    case '강원':
+                        gangwonDistricts.style.display = 'block';
+                        break;
+                    case '충북':
+                        chungbukDistricts.style.display = 'block';
+                        break;
+                    case '충남':
+                        chungnamDistricts.style.display = 'block';
+                        break;
+                    case '경북':
+                        gyeongbukDistricts.style.display = 'block';
+                        break;
+                    case '경남':
+                        gyeongnamDistricts.style.display = 'block';
+                        break;
+                    case '전북':
+                        jeonbukDistricts.style.display = 'block';
+                        break;
+                    case '전남':
+                        jeonnamDistricts.style.display = 'block';
+                        break;
+                    case '제주':
+                        jejuDistricts.style.display = 'block';
+                        break;
+                    case '세종':
+                        sejongDistricts.style.display = 'block';
+                        break;
+
+                    default:
+
+                }
+            }
+        </script>
+
+        <div class="form-group button-center">
+            <button type="submit" class="btn btn-primary">수정완료</button>
+        </div>
+
+    </form>
+</div>
+
+</body>
+
+</html>
