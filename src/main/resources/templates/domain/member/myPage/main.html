@@ -17,6 +17,8 @@
         <br>
         <a th:href="@{/my-page/{id}/update(id=${member.id})}">회원 정보 수정</a>
         <a th:href="@{/password}">비밀번호 변경</a> <!-- 비밀번호 변경 페이지로의 링크 -->
+        <a th:href="@{|/my-page/${member.id}/my-travel|}">나의 여행</a>
+        <a th:href="@{|/my-page/${member.id}/my-post|}">나의 여행 정보 공유 글</a>
     </div>
 </div>
 </div>
