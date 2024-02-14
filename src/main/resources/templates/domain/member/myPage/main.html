@@ -1,23 +1,64 @@
-<html layout:decorate="~{global/usrLayout}">
 
+<html layout:decorate="~{layout}">
 <head>
-    <title>마이페이지</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .table > thead > tr > th,
+        .table > thead > tr > td,
+        .table > tbody > tr > th,
+        .table > tbody > tr > td,
+        .table > tfoot > tr > th,
+        .table > tfoot > tr > td {
+            padding: 0.3em;
+        }
+    </style>
 </head>
-
 <body>
-<div layout:fragment="content">
-    <h1>마이페이지</h1>
-    <h2>아이디</h2>
-    <a th:text="${member.getUsername()}"></a>
-    <h2>이메일</h2>
-    <a th:text="${member.getEmail()}"></a>
-    <h2>닉네임</h2>
-    <a th:text="${member.getNickname()}"></a>
-    <h2>가입 날짜</h2>
-    <a th:text="${#temporals.format(member.getCreateDate(), 'yyyy-MM-dd')}"></a>
-    <br>
-    <a th:href="@{/my-page/{id}/update(id=${member.getId()})}">회원 정보 수정</a>
+<div class="container mt-5" layout:fragment="content">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <div class="col-md-4">
+                        <img class="img-thumbnail rounded-circle mb-5" th:src="${@rq.profileImgUrl}"
+                             style="width: 150px; height: 150px;">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table">
+                                <tbody>
+                                <tr>
+                                    <th class="w-30">아이디</th>
+                                    <td th:text="${member.getUsername()}"></td>
+                                </tr>
+                                <tr>
+                                    <th>닉네임</th>
+                                    <td th:text="${member.getNickname()}"></td>
+                                </tr>
+                                <tr>
+                                    <th>이메일</th>
+                                    <td th:text="${member.getEmail()}"></td>
+                                </tr>
+                                <tr>
+                                    <th>가입일</th>
+                                    <td th:text="${#temporals.format(member.getCreateDate(), 'yyyy-MM-dd')}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <a class="link mr-5" th:href="@{/my-page/{id}/update(id=${member.getId()})}">회원정보 수정</a>
+                            <a class="link mr-5" href="#">비밀번호 변경</a>
+                            <a class="link warning mr-5" href="#">회원 탈퇴</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
-
 </html>
+

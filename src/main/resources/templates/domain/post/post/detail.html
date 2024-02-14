@@ -1,49 +1,80 @@
 <html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">
 
-<head>
-    <title th:text="|글 ${post.id}번|"></title>
-</head>
+    <!-- 댓글 -->
+    <h2 class="border-bottom py-2" th:text="${post.title}"></h2>
+        <span th:text="${post.area}" ></span>
+        <span th:if="${post.area != '세종'}" th:text="${post.district}"></span>
+    <div class="card my-3">
+        <div class="card-body">
+            <div class="card-text" style="white-space: pre-line;" th:text="${post.body}"></div>
+            <div class="d-flex justify-content-end">
+                <div class="badge bg-light text-dark p-2 text-start">
+                    <div th:text="${#temporals.format(post.createDate, 'yyyy-MM-dd HH:mm')}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<body>
+    <!-- 댓글의 갯수 표시 -->
+    <h5 class="border-bottom my-3 py-2" th:text="|${#lists.size(post.comments)}개의 댓글이 있습니다.|"></h5>
 
-<div layout:fragment="content">
-    <div>
-        <button onclick="window.location.href='/post/list';">목록으로</button>
-        <button class="button" th:if="${@postService.canModify(@rq.member, post)}" th:onclick="'window.location.href = \'/post/' + ${post.id} + '/modify\''">글 수정</button>
+    <!-- 댓글 반복 시작 -->
+    <div class="card my-3" th:each="comment : ${post.comments}">
+        <div class="card-body">
+            <div class="card-text" style="white-space: pre-line;" th:text="${comment.body}"></div>
+            <div class="d-flex justify-content-end">
+                <div class="badge bg-light text-dark p-2 text-start">
+                    <div th:text="${#temporals.format(comment.createDate, 'yyyy-MM-dd HH:mm')}"></div>
+                </div>
+            </div>
+            <!-- 댓글 수정 및 삭제 링크 -->
+            <div class="my-3 d-flex justify-content-end" sec:authorize="isAuthenticated()"
+                 th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.username}">
+                <a th:if="${@postCommentService.canModifyComment(@rq.member, comment)}"
+                   th:href="|/post/${post.id}/comment/${comment.id}/modify|"
+                   class="btn btn-warning btn-sm mr-2">
+                    수정
+                </a>
+                <a th:if="${@postCommentService.canDeleteComment(@rq.member, comment)}"
+                   th:href="|/post/${post.id}/comment/${comment.id}/delete|" method="GET"
+                   onclick="return confirm('정말로 삭제하시겠습니까?');"
+                   class="btn btn-danger btn-sm">
+                    삭제
+                </a>
+            </div>
+        </div>
+    </div>
 
-        <form style="display: contents"
-              th:if="${@postService.canDelete(@rq.member, post)}"
-              th:action="|/post/${post.id}/delete|"
-              method="POST"
-        >
-            <input type="hidden" name="_method" value="DELETE">
-            <button onclick="return confirm('정말로 삭제하시겠습니까?');">글 삭제</button>
+    <!-- 로그인 폼 -->
+    <div th:unless="${#authorization.expression('isAuthenticated()')}">
+        <p>댓글을 작성하려면 로그인 해주세요.</p>
+    </div>
+
+    <!-- 로그인한 사용자만 댓글 작성 폼을 표시합니다. -->
+    <div th:if="${#authorization.expression('isAuthenticated()')}">
+        <form th:action="@{|/post/${post.id}/comment/create|}" method="post" class="my-3"
+              onsubmit="submitCommentForm(this); return false;">
+            <textarea name="body" id="body" rows="10" class="form-control"></textarea>
+            <input type="submit" value="댓글 등록" class="btn btn-primary my-2">
         </form>
     </div>
 
-    <h1>글 내용</h1>
+    <script>
+        function submitCommentForm(form) {
+            form.body.value = form.body.value.trim();
 
-    <div>
-        <h3>제목</h3>
-        <div th:text="${post.title}"></div>
-    </div>
+            if (form.body.value.length == 0) {
+                alert('내용을 입력해주세요.');
+                form.body.focus();
+                return;
+            }
 
-    <div>
-        <h3>내용</h3>
-        <div style="white-space: pre-wrap;" th:text="${post.body}"></div>
-    </div>
-
-    <div>
-        <h3>지역</h3>
-        <span th:text="${post.area}"></span>
-        <span th:if="${post.area != '세종'}" th:text="${post.district}"></span>
-    </div>
-
-    <div>
-        <button class="button">좋아요</button>
-    </div>
+            form.submit();
+        }
+    </script>
 
 </div>
 
-</body>
+
 </html>

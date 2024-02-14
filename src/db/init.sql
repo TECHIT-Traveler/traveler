@@ -1,1 +1,3 @@
+DROP DATABASE IF EXISTS traveler;
+CREATE DATABASE traveler;
 USE traveler;

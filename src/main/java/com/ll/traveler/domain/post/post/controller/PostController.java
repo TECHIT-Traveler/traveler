@@ -64,8 +64,9 @@ public class PostController {
 
     //디테일 페이지
     @GetMapping("detail/{id}")
-    public String showPost(@PathVariable long id) {
-        rq.setAttribute("post", postService.findById(id).get());
+    public String showPost(@PathVariable long id, Model model) {
+//        rq.setAttribute("post", postService.findById(id).get());
+        model.addAttribute("post", postService.findById(id).get());
 
         return "domain/post/post/detail";
     }

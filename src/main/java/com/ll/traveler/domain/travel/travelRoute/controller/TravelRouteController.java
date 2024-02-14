@@ -12,12 +12,18 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.*;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -71,13 +77,13 @@ public class TravelRouteController {
         @NotBlank
         private String body;
         @NotEmpty
-
         private List<String> places;
+        private MultipartFile coverImg;
     }
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/write")
     public String write(@Valid WriteForm form) {
-        TravelRoute travelRoute = travelRouteService.write(rq.getMember(), form.getTitle(), form.getBody(), form.getArea(), form.getStartDate(), form.getEndDate()).getData();
+        TravelRoute travelRoute = travelRouteService.write(rq.getMember(), form.getTitle(), form.getBody(), form.getArea(), form.getStartDate(), form.getEndDate(), form.getCoverImg()).getData();
 
         List<String> places = form.getPlaces();
         for(String place : places) {
@@ -128,6 +134,7 @@ public class TravelRouteController {
         private String body;
         @NotEmpty
         private List<String> places;
+        MultipartFile coverImg;
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -139,7 +146,7 @@ public class TravelRouteController {
             throw new GlobalException("403-1", "권한이 없습니다.");
         }
 
-        travelRouteService.modify(travelRoute, form.getTitle(), form.getBody(), form.getArea(), form.getStartDate(), form.getEndDate());
+        travelRouteService.modify(travelRoute, form.getTitle(), form.getBody(), form.getArea(), form.getStartDate(), form.getEndDate(), form.getCoverImg());
         travelRouteService.deleteAllPlace(travelRoute);
         for(String place : form.getPlaces()) {
             String[] placeInfo = place.split("/");
@@ -206,5 +213,24 @@ public class TravelRouteController {
         travelRouteService.cancelLike(rq.getMember(), travelRoute);
 
         return "redirect:/travel/%d".formatted(id);
+    }
+
+    @GetMapping("/list")
+    public String list(
+            Model model,
+            @RequestParam(defaultValue = "") String kw,
+            @RequestParam(defaultValue = "title") String criteria,
+            @RequestParam(defaultValue = "1") int page
+    ) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("id"));
+        Pageable pageable = PageRequest.of(page - 1, 8, Sort.by(sorts));
+
+        Page<TravelRoute> paging = travelRouteService.search(kw, criteria, pageable);
+        model.addAttribute("paging", paging);
+        model.addAttribute("page", page);
+        model.addAttribute("kw", kw);
+        model.addAttribute("criteria", criteria);
+        return "domain/travel/travelRoute/list";
     }
 }

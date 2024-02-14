@@ -1,29 +1,64 @@
-<html layout:decorate="~{global/usrLayout}">
 
+<html layout:decorate="~{layout}">
 <head>
-    <title>마이페이지</title>
-</head>
-
-<body>
-<div layout:fragment="content">
-
-    <script>
-        function submitLoginForm(form) {
-            form.submit();
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .table > thead > tr > th,
+        .table > thead > tr > td,
+        .table > tbody > tr > th,
+        .table > tbody > tr > td,
+        .table > tfoot > tr > th,
+        .table > tfoot > tr > td {
+            padding: 0.3em;
         }
-    </script>
-
-    <form method="post" th:action onsubmit="submitLoginForm(this)">
-        <h2>아이디</h2>
-        <input type="text" name="username" id="username" readonly th:value="${member.getUsername()}">
-        <h2>이메일</h2>
-        <input type="text" name="email" id="email" th:value="${member.getEmail()}">
-        <h2>닉네임</h2>
-        <input type="text" name="nickName" id="nickName" th:value="${member.getNickname()}">
-
-        <button type="submit">수정하기</button>
-    </form>
+    </style>
+</head>
+<script>
+    function submitLoginForm(form) {
+        form.submit();
+    }
+</script>
+<body>
+<div class="container mt-5" layout:fragment="content">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <div class="col-md-4">
+                        <img class="img-thumbnail rounded-circle mb-5" th:src="${@rq.profileImgUrl}"
+                             style="width: 150px; height: 150px;">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table">
+                                <form method="post" th:action onsubmit="submitLoginForm(this)">
+                                <tr>
+                                    <th class="w-30">아이디</th>
+                                    <td><input type="text" name="username" id="username" readonly th:value="${member.getUsername()}"></td>
+                                </tr>
+                                <tr>
+                                    <th>닉네임</th>
+                                    <td><input type="text" name="nickName" id="nickName" th:value="${member.getNickname()}"></td>
+                                </tr>
+                                <tr>
+                                    <th>이메일</th>
+                                    <td><input type="text" name="email" id="email" th:value="${member.getEmail()}"></td>
+                                </tr>
+                                <tr>
+                                    <th>가입일</th>
+                                    <td th:text="${#temporals.format(member.getCreateDate(), 'yyyy-MM-dd')}"></td>
+                                </tr>
+                                <tr>
+                                    <td class="row"><button class="btn btn-primary mt-3" type="submit">수정하기</button></td>
+                                </tr>
+                                </form>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
-
 </html>
