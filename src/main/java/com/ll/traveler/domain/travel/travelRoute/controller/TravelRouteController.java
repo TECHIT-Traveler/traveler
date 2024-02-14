@@ -1,6 +1,5 @@
 package com.ll.traveler.domain.travel.travelRoute.controller;
 
-import com.ll.traveler.domain.post.post.entity.Post;
 import com.ll.traveler.domain.travel.travelPlace.entity.TravelPlace;
 import com.ll.traveler.domain.travel.travelRoute.entity.TravelRoute;
 import com.ll.traveler.domain.travel.travelRoute.service.TravelRouteService;
