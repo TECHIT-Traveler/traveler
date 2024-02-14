@@ -48,6 +48,7 @@ public class PostController {
         return "domain/post/post/list";
     }
 
+    //글작성 폼
     @Getter
     @Setter
     public static class WriteForm {
@@ -61,6 +62,7 @@ public class PostController {
         private String district;
     }
 
+    //디테일 페이지
     @GetMapping("detail/{id}")
     public String showPost(@PathVariable long id) {
         rq.setAttribute("post", postService.findById(id).get());
@@ -68,12 +70,14 @@ public class PostController {
         return "domain/post/post/detail";
     }
 
+    //글작성 GET
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/write")
     public String showWrite() {
         return "domain/post/post/write";
     }
 
+    //글작성 POST
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/write")
     public String write(@Valid WriteForm form) {
@@ -82,6 +86,7 @@ public class PostController {
         return rq.redirect("/post/detail/" + post.getId(), post.getId() + "번 글이 작성되었습니다.");
     }
 
+    //글수정 GET
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}/modify")
     public String showModify(@PathVariable long id, Model model) {
@@ -94,6 +99,7 @@ public class PostController {
         return "domain/post/post/modify";
     }
 
+    //수정폼
     @Getter
     @Setter
     public static class ModifyForm {
@@ -107,6 +113,7 @@ public class PostController {
         private String district;
     }
 
+    //글수정 PUT
     @PreAuthorize("isAuthenticated()")
     @PutMapping("/{id}/modify")
     public String modify(@PathVariable long id ,@Valid ModifyForm form) {
@@ -119,6 +126,7 @@ public class PostController {
         return rq.redirect("/post/detail/" + post.getId(), post.getId() + "번 글이 수정되었습니다.");
     }
 
+    //글삭제
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/{id}/delete")
     public String delete(@PathVariable long id) {

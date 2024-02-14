@@ -18,6 +18,7 @@ import java.util.Optional;
 public class PostService {
     private final PostRepository postRepository;
 
+    //서치
     public Page<Post> search(String kw, String criteria, Pageable pageable) {
         switch (criteria) {
             case "area":
@@ -33,6 +34,7 @@ public class PostService {
         }
     }
 
+    //글쓰기 틀
     @Transactional
     public Post write(Member author, String title, String body, String area, String district) {
         Post post = Post.builder()
@@ -61,6 +63,7 @@ public class PostService {
         return  actor.equals(post.getAuthor());
     }
 
+    //수정 틀
     @Transactional
     public void modify(Post post, String title, String body, String area, String district) {
         post.setTitle(title);
