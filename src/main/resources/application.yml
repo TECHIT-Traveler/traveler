@@ -13,12 +13,11 @@ spring:
     hiddenmethod:
       filter:
         enabled: true
-  datasource:
-
-    url: jdbc:mysql://127.0.0.1:3306/traveler
-    username: root
-    password: lldj123414
-    driver-class-name: com.mysql.cj.jdbc.Driver
+#  datasource:
+#    url: jdbc:mysql://127.0.0.1:3306/traveler
+#    username: root
+#    password: lldj123414
+#    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: update
