@@ -1,7 +1,9 @@
 package com.ll.traveler.domain.member.member.entity;
 
 import com.ll.traveler.global.jpa.BaseEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Transient;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,10 +26,11 @@ public class Member extends BaseEntity {
     private String providerTypeCode;
     @Column(unique = true)
     private String username;
-    private String password;
+    @Column(unique = true)
     private String email;
+    private String password;
     private String nickname;
-
+    private String verificationCode;
     @Transient
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();

@@ -1,55 +1,51 @@
 package com.ll.traveler.domain.member.member.controller;
 
+import com.ll.traveler.domain.member.mail.service.MailService;
+import com.ll.traveler.domain.member.member.MemberDto;
 import com.ll.traveler.domain.member.member.entity.Member;
 import com.ll.traveler.domain.member.member.service.MemberService;
 import com.ll.traveler.global.rq.Rq;
 import com.ll.traveler.global.rsData.RsData;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
 
+@Slf4j
 @Controller
 @RequestMapping("/member")
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
+    private final MailService mailService;
     private final Rq rq;
 
     @PreAuthorize("isAnonymous()")
     @GetMapping("/join")
-    public String showJoin() {
+    public String showJoin(MemberDto memberDto) {
         return "domain/member/member/join";
     }
 
-    @Setter
-    @Getter
-    public static class JoinForm {
-        @NotBlank
-        private String username;
-        @NotBlank
-        private String password;
-        @NotBlank
-        private String email;
-        @NotBlank
-        private String nickname;
-        private MultipartFile profileImg;
-    }
 
     @PreAuthorize("isAnonymous()")
     @PostMapping("/join")
-    public String join(@Valid JoinForm joinForm) {
-        RsData<Member> joinRs = memberService.join(joinForm.getUsername(), joinForm.getPassword(), joinForm.getEmail(), joinForm.getNickname(), joinForm.getProfileImg());
+    public String join(@Valid MemberDto memberDto, Errors errors, Model model) {
+        if (errors.hasErrors()) {
+            model.addAttribute("memberDto", memberDto);
 
+            Map<String, String> validatorResult = memberService.validateHandling(errors);
+            for (String key : validatorResult.keySet()) {
+                model.addAttribute(key, validatorResult.get(key));
+            }
+            return "/member/join";
+        }
+        RsData<Member> joinRs = memberService.join(memberDto);
         return rq.redirectOrBack(joinRs, "/member/login");
     }
 
@@ -58,15 +54,20 @@ public class MemberController {
         return "domain/member/member/login";
     }
 
-    @RequestMapping( "/findLoginId")
+
+    @RequestMapping("/findLoginId")
     String showFindLoginId() {
         return "domain/member/member/findLoginId";
     }
-    @RequestMapping( "/dofindLoginId")
+
+    @RequestMapping("/dofindLoginId")
     @ResponseBody
     String doFindLoginId(@RequestParam Map<String, Object> param) {
         Map<String, Object> findLoginIdRs = memberService.findLoginId(param);
 
-        return (String)findLoginIdRs.get("msg");
+        return (String) findLoginIdRs.get("msg");
     }
 }
+
+
+

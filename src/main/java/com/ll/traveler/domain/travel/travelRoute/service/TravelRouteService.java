@@ -8,7 +8,7 @@ import com.ll.traveler.domain.travel.travelRoute.entity.TravelRoute;
 import com.ll.traveler.domain.travel.travelRoute.repository.TravelRouteRepository;
 import com.ll.traveler.global.app.AppConfig;
 import com.ll.traveler.global.rsData.RsData;
-import com.ll.traveler.standard.utill.Ut;
+import com.ll.traveler.standard.util.Ut;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
