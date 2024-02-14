@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -142,5 +143,9 @@ public class TravelRouteService {
                         travelRoute.getModelName(), travelRoute.getId(), "common", "coverImg", 1
                 )
                 .map(GenFile::getUrl);
+    }
+
+    public List<TravelRoute> findByAuthorId(Long id) {
+        return travelRouteRepository.findByAuthorId(id);
     }
 }

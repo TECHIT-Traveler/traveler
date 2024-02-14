@@ -11,10 +11,7 @@
                     <a class="nav-link" href="/travel/list">여행계획</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/post/list">여행정보</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">커뮤니티</a>
+                    <a class="nav-link" href="/post/list">여행정보 공유</a>
                 </li>
             </ul>
             <!-- 오른쪽 정렬을 위한 div -->
@@ -22,12 +19,12 @@
                 <li class="nav-item active">
                     <a th:if="${@rq.admin}" href="/adm">관리자 홈</a>
                 </li>
-                <li class="nav-item">
-                    <a th:if="${@rq.login}" th:href="@{/my-page/{id}(id=${@rq.member.id})}">마이페이지</a>
-                </li>
                 <li class="nav-item active mr-5" th:if="${@rq.login}">
                     <img class="img-thumbnail rounded-circle" style="width: 30px; height: 30px;" th:src="${@rq.profileImgUrl}">
                     <span th:text="${@rq.member.nickname}"></span>님 환영합니다.
+                </li>
+                <li class="nav-item active mr-3">
+                    <a th:if="${@rq.login}" th:href="@{/my-page/{id}(id=${@rq.member.id})}">마이페이지</a>
                 </li>
                 <li class="nav-item active">
                     <a th:if="${@rq.login}" href="/member/logout">로그아웃</a>
