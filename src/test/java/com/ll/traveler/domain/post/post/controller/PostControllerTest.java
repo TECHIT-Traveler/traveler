@@ -1,7 +1,11 @@
 package com.ll.traveler.domain.post.post.controller;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.springframework.boot.test.context.SpringBootTest;
 
+@SpringBootTest
 class PostControllerTest {
 
+    void test1() {
+
+    }
 }
