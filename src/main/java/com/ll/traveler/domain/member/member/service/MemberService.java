@@ -10,12 +10,14 @@ import com.ll.traveler.global.rsData.RsData;
 import com.ll.traveler.standard.utill.Ut;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.groovy.util.Maps;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -95,5 +97,16 @@ public class MemberService {
                         member.getModelName(), member.getId(), "common", "profileImg", 1
                 )
                 .map(GenFile::getUrl);
+    }
+
+    public Map<String, Object> findLoginId(Map<String, Object> param) {
+        String username = (String) param.get("username");
+        String email = (String) param.get("email");
+
+        Member member = memberRepository.findByUsernameAndEmail(username, email);
+        if (member == null) {
+           return Maps.of("resultCode", "F-1", "msg", "일지하는 회원이 없습니다.");
+        }
+        return Maps.of("resultCode", "S-1", "msg", "당신의 로그인 아이디는 " +member.getUsername() +"입니다");
     }
 }
