@@ -2,6 +2,7 @@ package com.ll.traveler.domain.post.post.service;
 
 import com.ll.traveler.domain.member.member.entity.Member;
 import com.ll.traveler.domain.post.post.entity.Post;
+import com.ll.traveler.domain.post.post.repository.PostCommentRepository;
 import com.ll.traveler.domain.post.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -17,12 +18,13 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PostService {
     private final PostRepository postRepository;
+    private final PostCommentRepository postCommentRepository;
 
     public Page<Post> search(String kw, String criteria, Pageable pageable) {
         switch (criteria) {
             case "area":
                 return postRepository.findByAreaContaining(kw, pageable);
-            case "subarea" :
+            case "subarea":
                 return postRepository.findByDistrictContaining(kw, pageable);
             case "category":
                 return postRepository.findByCategoriesContentContaining(kw, pageable);
@@ -49,8 +51,8 @@ public class PostService {
 
 
     @Transactional
-    public void like(Member member, Post post) {
-        post.addLike(member);
+    public void like(Member actor, Post post) {
+        post.addLike(actor);
     }
 
     public Optional<Post> findById(Long postId) {
@@ -58,7 +60,7 @@ public class PostService {
     }
 
     public boolean canModify(Member actor, Post post) {
-        return  actor.equals(post.getAuthor());
+        return actor.equals(post.getAuthor());
     }
 
     @Transactional
@@ -70,7 +72,7 @@ public class PostService {
     }
 
     public boolean canDelete(Member actor, Post post) {
-        if ( actor.isAdmin() ) return true;
+        if (actor.isAdmin()) return true;
 
         return actor.equals(post.getAuthor());
     }
