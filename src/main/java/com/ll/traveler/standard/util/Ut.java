@@ -1,4 +1,4 @@
-package com.ll.traveler.standard.utill;
+package com.ll.traveler.standard.util;
 
 import com.ll.traveler.global.app.AppConfig;
 import org.apache.catalina.util.URLEncoder;

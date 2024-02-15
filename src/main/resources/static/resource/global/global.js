@@ -38,19 +38,19 @@ function toastMsg(isNotice, msg) {
     else toastWarning(msg);
 }
 
-function toastNotice(msg) {
-    const [pureMsg, needToShow] = parseMsg(msg);
-
-    if (needToShow) {
-        toastr["success"](pureMsg, "알림");
-    }
-}
 
 function toastWarning(msg) {
     const [pureMsg, needToShow] = parseMsg(msg);
 
     if (needToShow) {
         toastr["warning"](pureMsg, "경고");
+    }
+}
+function toastNotice(msg) {
+    const [pureMsg, needToShow] = parseMsg(msg);
+
+    if (needToShow) {
+        toastr["success"](pureMsg, "알림");
     }
 }
 
