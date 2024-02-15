@@ -53,20 +53,6 @@ public class MemberController {
     public String showLogin() {
         return "domain/member/member/login";
     }
-
-
-    @RequestMapping("/findLoginId")
-    String showFindLoginId() {
-        return "domain/member/member/findLoginId";
-    }
-
-    @RequestMapping("/dofindLoginId")
-    @ResponseBody
-    String doFindLoginId(@RequestParam Map<String, Object> param) {
-        Map<String, Object> findLoginIdRs = memberService.findLoginId(param);
-
-        return (String) findLoginIdRs.get("msg");
-    }
 }
 
 
