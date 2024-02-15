@@ -4,7 +4,7 @@ import com.ll.traveler.domain.base.genFile.entity.GenFile;
 import com.ll.traveler.domain.base.genFile.service.GenFileService;
 import com.ll.traveler.global.rq.Rq;
 import com.ll.traveler.global.rsData.RsData;
-import com.ll.traveler.standard.utill.Ut;
+import com.ll.traveler.standard.util.Ut;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
