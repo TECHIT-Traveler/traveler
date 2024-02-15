@@ -1,6 +1,6 @@
 package com.ll.traveler.global.jpa;
 
-import com.ll.traveler.standard.utill.Ut;
+import com.ll.traveler.standard.util.Ut;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
