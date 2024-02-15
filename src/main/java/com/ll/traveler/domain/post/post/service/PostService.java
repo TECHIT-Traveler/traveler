@@ -1,5 +1,7 @@
 package com.ll.traveler.domain.post.post.service;
 
+import com.ll.traveler.domain.base.genFile.entity.GenFile;
+import com.ll.traveler.domain.base.genFile.service.GenFileService;
 import com.ll.traveler.domain.member.member.entity.Member;
 import com.ll.traveler.domain.post.post.entity.Post;
 import com.ll.traveler.domain.post.post.repository.PostCommentRepository;
@@ -20,6 +22,7 @@ import java.util.Optional;
 public class PostService {
     private final PostRepository postRepository;
     private final PostCommentRepository postCommentRepository;
+    private final GenFileService genFileService;
 
     //서치
     public Page<Post> search(String kw, String criteria, Pageable pageable) {
@@ -75,15 +78,27 @@ public class PostService {
         post.setDistrict(district);
     }
 
+    // 삭제
     public boolean canDelete(Member actor, Post post) {
         if (actor.isAdmin()) return true;
 
         return actor.equals(post.getAuthor());
     }
 
+    // 삭제
+//    @Transactional
+//    public void delete(Post post) {
+//        postRepository.delete(post);
+//    }
+
+    private List<GenFile> findGenFiles(Post post) {
+        return genFileService.findByRelId(post.getModelName(), post.getId());
+    }
+
     @Transactional
     public void delete(Post post) {
         postRepository.delete(post);
+        findGenFiles(post).forEach(genFileService::remove);
     }
 
     public List<Post> findByAuthorId(Long id) {

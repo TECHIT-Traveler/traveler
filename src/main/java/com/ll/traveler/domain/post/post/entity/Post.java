@@ -24,7 +24,7 @@ import static lombok.AccessLevel.PROTECTED;
 @ToString(callSuper = true)
 public class Post extends BaseEntity {
     private String title;
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "LONGTEXT")
     private String body;
     private String area;
     private String district;
