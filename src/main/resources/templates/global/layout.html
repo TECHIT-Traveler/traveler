@@ -12,17 +12,22 @@
     <link rel="stylesheet" href="/resource/global/global.css">
     <script src="/resource/global/global.js"></script>
 
-    <meta name="_csrf" th:content="${_csrf.token}"/>
-    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+<!--    <meta name="_csrf" th:content="${_csrf.token}"/>-->
+<!--    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>-->
 
     <script>
         const urlParams = getUrlParams(location.href);
     </script>
 </head>
 <body>
+
 <div th:if="${@rq.login}">
     <span th:text="${@rq.member.nickname}"></span>님 환영합니다.
 </div>
+
+<link href="https://cdn.jsdelivr.net/npm/daisyui@4.5.0/dist/full.min.css" rel="stylesheet" type="text/css" />
+<script src="https://cdn.tailwindcss.com"></script>
+
 <th:block layout:fragment="header"></th:block>
 
 <th:block layout:fragment="content"></th:block>

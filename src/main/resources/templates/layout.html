@@ -23,6 +23,9 @@
     <script src="/resource/global/global.js"></script>
 
     <!-- CSS 스타일 -->
+
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 <body>
 <!-- Navigation-->
