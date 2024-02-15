@@ -57,6 +57,7 @@ public class MyPageController {
         return rq.redirectOrBack(memberRs, "/my-page/" + id);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}/my-travel")
     public String myTravel(@PathVariable("id") long id, Model model) {
         List<TravelRoute> travels = travelRouteService.findByAuthorId(id);
@@ -64,7 +65,8 @@ public class MyPageController {
 
         return "domain/member/myPage/myTravel";
     }
-
+    
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}/my-post")
     public String myPost(@PathVariable("id") long id, Model model) {
         List<Post> posts = postService.findByAuthorId(id);
