@@ -62,7 +62,7 @@ public class MyPageController {
         List<TravelRoute> travels = travelRouteService.findByAuthorId(id);
         model.addAttribute("travels", travels);
 
-        return "/domain/member/myPage/myTravel";
+        return "domain/member/myPage/myTravel";
     }
 
     @GetMapping("/{id}/my-post")
@@ -70,6 +70,6 @@ public class MyPageController {
         List<Post> posts = postService.findByAuthorId(id);
         model.addAttribute("posts", posts);
 
-        return "/domain/member/myPage/myPost";
+        return "domain/member/myPage/myPost";
     }
 }
