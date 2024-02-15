@@ -9,7 +9,6 @@ import com.ll.traveler.global.app.AppConfig;
 import com.ll.traveler.global.rsData.RsData;
 import com.ll.traveler.standard.util.Ut;
 import lombok.RequiredArgsConstructor;
-import org.apache.groovy.util.Maps;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,15 +68,11 @@ public class MemberService {
 
 
     @Transactional
-    public RsData<Member> join(String providerTypeCode, String username, String nickname, String email, String filePath) {
-        return join(providerTypeCode, username, "", email, nickname, filePath);
-    }
+    public RsData<Member> join(String providerTypeCode, String username, String nickname, String email, String profileImgUrl) {
 
-    @Transactional
-    public RsData<Member> join(String username, String password, String email, String nickname, MultipartFile profileImg) {
-        String profileImgFilePath = Ut.file.toFile(profileImg, AppConfig.getTempDirPath());
+        String profileImgFilePath = Ut.str.hasLength(profileImgUrl) ? Ut.file.downloadFileByHttp(profileImgUrl, AppConfig.getTempDirPath()) : "";
 
-        return join("MEMBER", username, password, email, nickname, profileImgFilePath);
+        return join(providerTypeCode, username, "", email, nickname, profileImgFilePath);
     }
 
     @Transactional
@@ -116,9 +111,9 @@ public class MemberService {
 
         if (opMember.isPresent()) return RsData.of("200", "이미 존재합니다.", opMember.get());
 
-        String filePath = Ut.str.hasLength(profileImgUrl) ? Ut.file.downloadFileByHttp(profileImgUrl, AppConfig.getTempDirPath()) : "";
+        String profileImgFilePath = Ut.str.hasLength(profileImgUrl) ? Ut.file.downloadFileByHttp(profileImgUrl, AppConfig.getTempDirPath()) : "";
 
-        return join(providerTypeCode, username, nickname, email, filePath);
+        return join(providerTypeCode, username, nickname, email, profileImgFilePath);
     }
 
     public String getProfileImgUrl(Member member) {
@@ -132,16 +127,5 @@ public class MemberService {
                         member.getModelName(), member.getId(), "common", "profileImg", 1
                 )
                 .map(GenFile::getUrl);
-    }
-
-    public Map<String, Object> findLoginId(Map<String, Object> param) {
-        String username = (String) param.get("username");
-        String email = (String) param.get("email");
-
-        Member member = memberRepository.findByUsernameAndEmail(username, email);
-        if (member == null) {
-            return Maps.of("resultCode", "F-1", "msg", "일지하는 회원이 없습니다.");
-        }
-        return Maps.of("resultCode", "S-1", "msg", "당신의 로그인 아이디는 " + member.getUsername() + "입니다");
     }
 }
