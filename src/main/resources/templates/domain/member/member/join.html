@@ -29,6 +29,34 @@
                 form.password.focus();
                 return;
             }
+            var upperCasePattern = /[A-Z]/;
+            var lowerCasePattern = /[a-z]/;
+            var digitPattern = /\d/;
+            var specialCharPattern = /[@$!%*?&]/;
+            var lengthPattern = /^.{8,20}$/;
+
+            if (!upperCasePattern.test(form.password.value)) {
+                toastWarning('비밀번호에 영문 대문자가 최소한 한 개 이상 포함되어야 합니다.');
+                form.password.focus();
+                return;
+            } else if (!lowerCasePattern.test(form.password.value)) {
+                toastWarning('비밀번호에 영문 소문자가 최소한 한 개 이상 포함되어야 합니다.');
+                form.password.focus();
+                return;
+            } else if (!digitPattern.test(form.password.value)) {
+                toastWarning('비밀번호에 숫자가 최소한 한 개 이상 포함되어야 합니다.');
+                form.password.focus();
+                return;
+            } else if (!specialCharPattern.test(form.password.value)) {
+                toastWarning('비밀번호에 특수 기호가 최소한 한 개 이상 포함되어야 합니다.');
+                form.password.focus();
+                return;
+            } else if (!lengthPattern.test(form.password.value)) {
+                toastWarning('비밀번호는 8자에서 20자 사이어야 합니다.');
+                form.password.focus();
+                return;
+            }
+
 
             form.passwordConfirm.value = form.passwordConfirm.value.trim();
 
@@ -80,6 +108,7 @@
                 }
             });
         });
+
 
         // 이메일 형식이 올바른지 확인하는 함수
         function isValidEmail(email) {
@@ -164,6 +193,26 @@
                 }
             });
         });
+
+
+
+        // isClicked 버튼을 클릭했을 때 실행되는 함수
+        function onSendButtonClick() {
+            // isClicked 변수를 true로 설정
+            isClicked = true;
+
+            // 인증번호를 보내는 함수 호출
+            sendNumber();
+
+            // 버튼 비활성화
+            $("#sendBtn").prop("disabled", true);
+        }
+
+
+
+
+
+
 
     </script>
 

@@ -43,7 +43,7 @@ public class MemberController {
             for (String key : validatorResult.keySet()) {
                 model.addAttribute(key, validatorResult.get(key));
             }
-            return "/member/join";
+            return "domain/member/member/login";
         }
         RsData<Member> joinRs = memberService.join(memberDto);
         return rq.redirectOrBack(joinRs, "/member/login");
