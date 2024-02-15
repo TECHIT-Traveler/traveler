@@ -93,5 +93,5 @@ custom:
     dirPath: c:/temp/tv
   site:
     name: Traveler
-    baseUrl: "http://localhost:${server.port}"
+    baseUrl: "http://caano.site"
   tempDirPath: c:/temp/traveler_dev/temp
