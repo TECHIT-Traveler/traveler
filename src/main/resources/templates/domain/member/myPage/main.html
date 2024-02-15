@@ -34,7 +34,7 @@
                                     <td th:text="${member.getUsername()}"></td>
                                 </tr>
                                 <tr>
-                                    <th>닉네임</th>
+                                    <th>이름</th>
                                     <td th:text="${member.getNickname()}"></td>
                                 </tr>
                                 <tr>
@@ -51,6 +51,7 @@
                     </div>
                     <div class="row mt-5">
                         <div class="col-md-12">
+
                             <h4>내가 작성한 댓글</h4>
                             <table class="table">
                                 <thead>
@@ -72,11 +73,19 @@
                                 </tr>
                                 </tbody>
                             </table>
+
+                            <a class="link mr-5" th:href="@{/my-page/{id}/update(id=${member.getId()})}">회원정보 수정</a>
+                            <a class="link mr-5" href="#">비밀번호 변경</a>
+                            <a class="link warning mr-5" href="#">회원 탈퇴</a>
+                            <a class="link mr-5" th:href="@{|/my-page/${member.id}/my-travel|}">나의 여행</a>
+                            <a class="link mr-5" th:href="@{|/my-page/${member.id}/my-post|}">나의 여행정보 공유</a>
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 </div>
 </body>

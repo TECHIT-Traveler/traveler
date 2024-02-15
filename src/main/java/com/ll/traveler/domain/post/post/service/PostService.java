@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,6 +21,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final PostCommentRepository postCommentRepository;
 
+    //서치
     public Page<Post> search(String kw, String criteria, Pageable pageable) {
         switch (criteria) {
             case "area":
@@ -35,6 +37,7 @@ public class PostService {
         }
     }
 
+    //글쓰기 틀
     @Transactional
     public Post write(Member author, String title, String body, String area, String district) {
         Post post = Post.builder()
@@ -63,6 +66,7 @@ public class PostService {
         return actor.equals(post.getAuthor());
     }
 
+    //수정 틀
     @Transactional
     public void modify(Post post, String title, String body, String area, String district) {
         post.setTitle(title);
@@ -80,5 +84,9 @@ public class PostService {
     @Transactional
     public void delete(Post post) {
         postRepository.delete(post);
+    }
+
+    public List<Post> findByAuthorId(Long id) {
+        return postRepository.findByAuthorId(id);
     }
 }

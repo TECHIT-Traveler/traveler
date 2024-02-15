@@ -25,8 +25,11 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests(authorizeRequests ->
-                        authorizeRequests.requestMatchers("/**")
-                                .permitAll()
+                        authorizeRequests
+                                .requestMatchers("/**")
+                                    .permitAll()
+                                .anyRequest()
+                                    .permitAll()
                 )
                 .headers(
                         headers ->
@@ -38,7 +41,9 @@ public class SecurityConfig {
                 .csrf(
                         csrf ->
                                 csrf.ignoringRequestMatchers(
-                                        "/h2-console/**"
+                                        "/h2-console/**",
+                                        "/sign-in/emailCheck",
+                                        "/mail"
                                 )
                 )
                 .formLogin(

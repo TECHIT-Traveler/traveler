@@ -5,7 +5,7 @@ import com.ll.traveler.domain.base.genFile.repository.GenFileRepository;
 import com.ll.traveler.domain.member.member.entity.Member;
 import com.ll.traveler.global.app.AppConfig;
 import com.ll.traveler.global.jpa.BaseEntity;
-import com.ll.traveler.standard.utill.Ut;
+import com.ll.traveler.standard.util.Ut;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

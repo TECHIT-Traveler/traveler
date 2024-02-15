@@ -39,5 +39,7 @@ out/
 ### Custom ###
 traveler_dev.mv.db
 traveler_dev.trace.db
-application-secret.yml
+src/main/resources/application-secret.yml
 .DS_Store
+src/main/resources/application-local.yml
+
