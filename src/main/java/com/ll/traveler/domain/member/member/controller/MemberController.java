@@ -43,7 +43,7 @@ public class MemberController {
             for (String key : validatorResult.keySet()) {
                 model.addAttribute(key, validatorResult.get(key));
             }
-            return "/member/join";
+            return "domain/member/member/login";
         }
         RsData<Member> joinRs = memberService.join(memberDto);
         return rq.redirectOrBack(joinRs, "/member/login");
@@ -52,20 +52,6 @@ public class MemberController {
     @GetMapping("/login")
     public String showLogin() {
         return "domain/member/member/login";
-    }
-
-
-    @RequestMapping("/findLoginId")
-    String showFindLoginId() {
-        return "domain/member/member/findLoginId";
-    }
-
-    @RequestMapping("/dofindLoginId")
-    @ResponseBody
-    String doFindLoginId(@RequestParam Map<String, Object> param) {
-        Map<String, Object> findLoginIdRs = memberService.findLoginId(param);
-
-        return (String) findLoginIdRs.get("msg");
     }
 }
 

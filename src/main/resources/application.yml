@@ -15,7 +15,7 @@ spring:
         enabled: true
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://172.17.0.2:3306/traveler
+    url: jdbc:mysql://127.0.0.1:3306/traveler
     username: root
     password: lldj123414
   jpa:
@@ -93,5 +93,5 @@ custom:
     dirPath: c:/temp/tv
   site:
     name: Traveler
-    baseUrl: "http://localhost:${server.port}"
+    baseUrl: "http://caano.site"
   tempDirPath: c:/temp/traveler_dev/temp

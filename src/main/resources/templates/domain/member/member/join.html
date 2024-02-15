@@ -195,6 +195,7 @@
         });
 
 
+
         // isClicked 버튼을 클릭했을 때 실행되는 함수
         function onSendButtonClick() {
             // isClicked 변수를 true로 설정
@@ -208,64 +209,61 @@
         }
 
 
+
+
+
+
+
     </script>
 
-    <div className="container mt-5">
-        <div className="d-flex align-items-center justify-content-center">
-            <div className="col-md-6">
-                <h3 className="mb-4">
-                    <i className="fa-solid fa-arrow-right-to-bracket"></i>
+    <div class="container mt-5">
+        <div class="d-flex align-items-center justify-content-center">
+            <div class="col-md-6">
+                <h3 class="mb-4">
+                    <i class="fa-solid fa-arrow-right-to-bracket"></i>
                     회원가입
                 </h3>
 
-                <form th:action method="POST" encType="multipart/form-data"
-                      onSubmit="submitJoinForm(this); return false;" className="flex flex-col gap-6">
-                    <div className="form-group">
-                        <label htmlFor="username">아이디</label>
-                        <input type="text" className="form-control" id="username" name="username"
-                               placeholder="아이디를 입력해주세요">
+                <form th:action method="POST" enctype="multipart/form-data" onsubmit="submitJoinForm(this); return false;" class="flex flex-col gap-6">
+                    <div class="form-group">
+                        <label for="username">아이디</label>
+                        <input type="text" class="form-control" id="username" name="username" placeholder="아이디를 입력해주세요">
                     </div>
-                    <div className="form-group">
-                        <label htmlFor="password">비밀번호</label>
-                        <input type="password" className="form-control" id="password" name="password"
-                               placeholder="비밀번호">
+                    <div class="form-group">
+                        <label for="password">비밀번호</label>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="비밀번호">
                         <span style="color: #f21707;">비밀번호는 영문 대,소문자와 숫자, 특수기호가 적어도 1개 이상씩 포함된 8자 ~ 20자의 비밀번호여야 합니다."</span>
                     </div>
-                    <div className="form-group">
-                        <label htmlFor="password">비밀번호 확인</label>
-                        <input type="password" className="form-control" id="passwordConfirm" name="passwordConfirm"
-                               placeholder="비밀번호를 입력해주세요">
+                    <div class="form-group">
+                        <label for="password">비밀번호 확인</label>
+                        <input type="password" class="form-control" id="passwordConfirm" name="passwordConfirm" placeholder="비밀번호를 입력해주세요">
                     </div>
-                    <div className="form-group">
-                        <label htmlFor="email">이메일</label>
+                    <div class="form-group">
+                        <label for="email">이메일</label>
                         <div id="mail_input" name="mail_input">
-                            <input type="text" className="form-control" name="email" id="email"
-                                   placeholder="이메일을 입력해주세요">
-                            <button className="btn btn-primary btn-block mt-3" type="button" id="sendBtn" name="sendBtn"
-                                    onClick="onSendButtonClick()">인증번호 보내기
+                            <input type="text" class="form-control" name="email" id="email" placeholder="이메일을 입력해주세요">
+                            <button class="btn btn-primary btn-block mt-3" type="button" id="sendBtn" name="sendBtn" onclick="onSendButtonClick()">인증번호 보내기
                             </button>
                         </div>
                     </div>
                     <div>
                         <div id="mail_number" name="mail_number" style="display: none">
                             <input type="text" name="verificationCode" id="number" placeholder="인증번호를 입력해주세요">
-                            <button className="btn btn-primary btn-block" type="button" name="confirmBtn"
-                                    id="confirmBtn" onClick="confirmNumber()">이메일 인증
+                            <button class="btn btn-primary btn-block" type="button" name="confirmBtn" id="confirmBtn" onclick="confirmNumber()">이메일 인증
                             </button>
                         </div>
                         <input type="text" id="Confirm" name="Confirm" style="display: none" value="">
                     </div>
-                    <div className="form-group">
-                        <label htmlFor="nickname">닉네임</label>
-                        <input type="text" className="form-control" id="nickname" name="nickname"
-                               placeholder="닉네임을 입력해주세요">
+                    <div class="form-group">
+                        <label for="nickname">닉네임</label>
+                        <input type="text" class="form-control" id="nickname" name="nickname" placeholder="닉네임을 입력해주세요">
                     </div>
-                    <div className="form-group">
-                        <label htmlFor="image">프로필 이미지</label>
+                    <div class="form-group">
+                        <label for="image">프로필 이미지</label>
                         <input type="file" name="profileImg" id="image" accept="image/jpeg, image/png, image/gif">
                     </div>
-                    <button type="submit" className="btn btn-primary btn-block">
-                        <i className="fa-regular fa-user"></i>
+                    <button type="submit" class="btn btn-primary btn-block">
+                        <i class="fa-regular fa-user"></i>
                         <span>회원가입</span>
                     </button>
                 </form>

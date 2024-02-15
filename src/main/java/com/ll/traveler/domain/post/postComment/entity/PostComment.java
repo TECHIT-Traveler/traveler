@@ -12,6 +12,7 @@ import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
+
 import static lombok.AccessLevel.PROTECTED;
 import static lombok.AccessLevel.PUBLIC;
 
@@ -31,4 +32,5 @@ public class PostComment extends BaseEntity {
     @NotBlank
     private String body;
     private LocalDateTime modifyDate;
+
 }
