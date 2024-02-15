@@ -40,7 +40,7 @@ spring:
             client-name: Kakao
             authorization-grant-type: authorization_code
             redirect-uri: '${custom.site.baseUrl}/{action}/oauth2/code/{registrationId}'
-          naver:d
+          naver:
             clientId: NEED_TO_INPUT_ON_SECRET
             client-secret: NEED_TO_INPUT_ON_SECRET
             scope:
@@ -85,5 +85,5 @@ custom:
     dirPath: c:/temp/tv
   site:
     name: Traveler
-    baseUrl: "http://localhost:${server.port}"
+    baseUrl: "http://caano.site"
   tempDirPath: c:/temp/traveler_dev/temp
