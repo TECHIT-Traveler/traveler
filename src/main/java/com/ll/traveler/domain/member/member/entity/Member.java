@@ -8,6 +8,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,6 +32,8 @@ public class Member extends BaseEntity {
     private String password;
     private String nickname;
     private String verificationCode;
+
+
     @Transient
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
