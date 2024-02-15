@@ -122,6 +122,10 @@ public class Rq {
         return memberService.getProfileImgUrl(getMember());
     }
 
+    public String getReferer() {
+        return request.getHeader("referer");
+    }
+
     public Member getMemberOrThrow(Long id) {
         return memberRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다. 회원 ID: " + id));
