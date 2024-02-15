@@ -188,7 +188,7 @@ public class TravelRouteController {
 
         travelRouteService.delete(travelRoute);
 
-        return "redirect:/";
+        return "redirect:/travel/list";
     }
 
     @PreAuthorize("isAuthenticated()")
