@@ -3,6 +3,8 @@
 
     <!-- 댓글 -->
     <h2 class="border-bottom py-2" th:text="${post.title}"></h2>
+        <span th:text="${post.area}" ></span>
+        <span th:if="${post.area != '세종'}" th:text="${post.district}"></span>
     <div class="card my-3">
         <div class="card-body">
             <div class="card-text" style="white-space: pre-line;" th:text="${post.body}"></div>
@@ -71,6 +73,8 @@
             form.submit();
         }
     </script>
-    </body>
+
+</div>
+
 
 </html>

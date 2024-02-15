@@ -1,0 +1,11 @@
+POST http://localhost:8090/sign-in/emailCheck
+Content-Type: application/json
+
+
+{
+  "email": "techitback7@gmail.com"
+}
+
+
+
+
