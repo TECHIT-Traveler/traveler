@@ -100,4 +100,8 @@ public class PostService {
         postRepository.delete(post);
         findGenFiles(post).forEach(genFileService::remove);
     }
+
+    public List<Post> findByAuthorId(Long id) {
+        return postRepository.findByAuthorId(id);
+    }
 }

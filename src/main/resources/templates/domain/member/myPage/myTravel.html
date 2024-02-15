@@ -1,0 +1,36 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">
+    <div class="container my-3">
+        <h3 class="display-6" th:text="${@rq.getMember().nickname} + '님의 여행'"></h3>
+        <hr class="my-4">
+        <div class="row mt-2">
+            <div class="col-lg-3" th:each="travel : ${travels}">
+                <div class="card mb-4">
+                    <img th:src="${@travelRouteService.getCoverImgUrl(travel)}"
+                         th:onerror="'this.onerror=null;this.src=\'/images/altImg.PNG\';'" class="card-img-top"
+                         alt="Card image" height="150px" style="border-bottom: 1px solid #ddd;">
+                    <div class="card-body d-flex flex-column" style="height: 130px">
+                        <div class="d-flex flex-wrap" style="justify-content: start;">
+                            <span class="badge badge-light mb-1" th:text="' #' + ${travel.area}"
+                                  style="font-size: 11px; background-color: aliceblue"></span>
+                        </div>
+                        <h6 class="card-title"><a th:href="@{|/travel/${travel.id}|}" th:text="${travel.title}"
+                                                  style="color: black; font-weight: bold;"></a></h6>
+                        <span th:text="${travel.startDate} + ' ~ ' + ${travel.endDate}" style="font-size: 14px"></span>
+                        <p th:text="${#strings.substring(travel.body, 0, #strings.length(travel.body) > 40 ? 40 : #strings.length(travel.body))} + '...'"
+                           style="font-size: 13px" class="mt-1"></p>
+                    </div>
+                    <div class="card-footer text-muted d-flex justify-content-between">
+                        <span>by <b th:text="${travel.author.nickname}"></b></span>
+                        <span>
+                            <i class="fa-solid fa-heart" style="color: #f21707;"></i>
+                            <span th:text="${travel.likes.size}"></span>
+                        </span>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

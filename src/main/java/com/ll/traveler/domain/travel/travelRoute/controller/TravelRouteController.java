@@ -176,7 +176,7 @@ public class TravelRouteController {
         model.addAttribute("travelRoute", travelRoute);
         model.addAttribute("places", places);
 
-        return "/domain/travel/travelRoute/detail";
+        return "domain/travel/travelRoute/detail";
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -188,7 +188,7 @@ public class TravelRouteController {
 
         travelRouteService.delete(travelRoute);
 
-        return "redirect:/";
+        return "redirect:/travel/list";
     }
 
     @PreAuthorize("isAuthenticated()")
