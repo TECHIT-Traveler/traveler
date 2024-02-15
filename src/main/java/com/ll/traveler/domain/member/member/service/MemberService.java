@@ -9,6 +9,7 @@ import com.ll.traveler.global.app.AppConfig;
 import com.ll.traveler.global.rsData.RsData;
 import com.ll.traveler.standard.util.Ut;
 import lombok.RequiredArgsConstructor;
+import org.apache.groovy.util.Maps;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,11 +69,8 @@ public class MemberService {
 
 
     @Transactional
-    public RsData<Member> join(String providerTypeCode, String username, String nickname, String email, String profileImgUrl) {
-
-        String profileImgFilePath = Ut.str.hasLength(profileImgUrl) ? Ut.file.downloadFileByHttp(profileImgUrl, AppConfig.getTempDirPath()) : "";
-
-        return join(providerTypeCode, username, "", email, nickname, profileImgFilePath);
+    public RsData<Member> join(String providerTypeCode, String username, String nickname, String email, String filePath) {
+        return join(providerTypeCode, username, "", email, nickname, filePath);
     }
 
     @Transactional
@@ -111,9 +109,9 @@ public class MemberService {
 
         if (opMember.isPresent()) return RsData.of("200", "이미 존재합니다.", opMember.get());
 
-        String profileImgFilePath = Ut.str.hasLength(profileImgUrl) ? Ut.file.downloadFileByHttp(profileImgUrl, AppConfig.getTempDirPath()) : "";
+        String filePath = Ut.str.hasLength(profileImgUrl) ? Ut.file.downloadFileByHttp(profileImgUrl, AppConfig.getTempDirPath()) : "";
 
-        return join(providerTypeCode, username, nickname, email, profileImgFilePath);
+        return join(providerTypeCode, username, nickname, email, filePath);
     }
 
     public String getProfileImgUrl(Member member) {
@@ -128,4 +126,5 @@ public class MemberService {
                 )
                 .map(GenFile::getUrl);
     }
+
 }

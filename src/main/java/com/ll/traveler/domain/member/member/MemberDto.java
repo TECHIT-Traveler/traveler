@@ -40,5 +40,4 @@ public class MemberDto {
     private String verificationCode;
 
     private MultipartFile profileImg;
-
 }
