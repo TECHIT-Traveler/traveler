@@ -22,7 +22,7 @@
 <img src="https://img.shields.io/badge/Java-orange?style=for-the-badge&logo=Java&logoColor=white"> <img src="https://img.shields.io/badge/Spring Boot-green?style=for-the-badge&logo=Spring Boot&logoColor=white">
 <img src="https://img.shields.io/badge/Gradle-navy?style=for-the-badge&logo=Gradle&logoColor=white">
 <img src="https://img.shields.io/badge/Lombok-red?style=for-the-badge&logo=Lombok&logoColor=white">
-<img src="https://img.shields.io/badge/Spring Date JPA-green?style=for-the-badge&logo=JPA&logoColor=white">
+<img src="https://img.shields.io/badge/Spring Data JPA-green?style=for-the-badge&logo=Spring Data JPA&logoColor=white">
 <img src="https://img.shields.io/badge/MySQL-blue?style=for-the-badge&logo=MySQL&logoColor=white">
 <img src="https://img.shields.io/badge/Spring Security-A5DF00?style=for-the-badge&logo=Spring Security&logoColor=white">
 <img src="https://img.shields.io/badge/OAuth2-0080FF?style=for-the-badge&logo=OAuth&logoColor=white">
