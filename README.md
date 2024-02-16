@@ -61,6 +61,7 @@
 ## 개발 결과물 공유
 
 ---
+https://youtu.be/9cRNw7LEoEg
 
 Github Repository URL: https://github.com/TECHIT-Traveler
 
