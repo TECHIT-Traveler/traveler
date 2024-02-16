@@ -1,4 +1,4 @@
-![header](https://capsule-render.vercel.app/api?type=waving&height=300&color=gradient&text=Travelr%20S2)
+![header](https://capsule-render.vercel.app/api?type=waving&height=300&color=gradient&text=Traveler%20S2)
 
 ## 개발 역할
 
