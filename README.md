@@ -12,7 +12,7 @@
 - 댓글 기능 구현
 - 로그인 했을 때만 댓글을 작성할 수 있게끔 구현 완료
 - 수정 및 삭제
-    
+-    
     ---
     
 
@@ -28,13 +28,15 @@
 ### 윤준혁
 
 - 로그인 유저 마이페이지 구현
+- 마이페이지 닉네임,이메일 수정
+- 마이페이지 클릭시 내가 쓴 댓글 확인
 
 ---
 
 ### 이다혜
 
 - 여행 장소 추가할 때 카카오 맵 api 사용
-- 여행 계획 리스트
+- 여행 계획 작성
     
     ---
     
@@ -61,7 +63,7 @@
 ## 개발 결과물 공유
 
 ---
-
+https://youtu.be/9cRNw7LEoEg
 Github Repository URL: https://github.com/TECHIT-Traveler
 
 To-do-List URL(Discord) : https://discord.com/channels/1133691052247752754/1198901616343007232
