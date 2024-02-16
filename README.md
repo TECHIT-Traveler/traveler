@@ -28,6 +28,8 @@
 ### 윤준혁
 
 - 로그인 유저 마이페이지 구현
+- 마이페이지 닉네임,이메일 수정
+- 마이페이지 내가 쓴 댓글 확인
 
 ---
 
@@ -54,14 +56,13 @@
 - NAVER,GOOGLE,KAKAO 로 ProviderID 구분
 - 로그인시 프로필 이미지 불러오기
 - 메인 페이지 CSS 제작
-- 마이페이지 css 제작
 
 ---
 
 ## 개발 결과물 공유
 
 ---
-
+https://youtu.be/9cRNw7LEoEg
 Github Repository URL: https://github.com/TECHIT-Traveler
 
 To-do-List URL(Discord) : https://discord.com/channels/1133691052247752754/1198901616343007232
