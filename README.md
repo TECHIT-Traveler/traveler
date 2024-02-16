@@ -1,8 +1,10 @@
+![header](https://capsule-render.vercel.app/api?type=waving&height=300&color=gradient&text=Input%20text)
+
 ## 개발 역할
 
 ---
 
-### 김진기(팀장)
+### :dog:김진기(팀장)
 
 - 게시판 상세 페이지 기능 구현
 - 게시글을 들어갔을 때 상세 페이지(작성한 게시글)가 나오도록 기능 구현 완료
@@ -16,7 +18,7 @@
     ---
     
 
-### 김창서
+### :baby_chick:김창서
 
 - 글쓰기 폼 구현
 - 글작성 페이지 마크다운 및 토스트 UI 적용
@@ -25,7 +27,7 @@
 
 ---
 
-### 윤준혁
+### :cat:윤준혁
 
 - 로그인 유저 마이페이지 구현
 - 마이페이지 닉네임,이메일 수정
@@ -33,7 +35,7 @@
 
 ---
 
-### 이다혜
+### :rabbit:이다혜
 
 - 여행 장소 추가할 때 카카오 맵 api 사용
 - 여행 계획 리스트
@@ -41,7 +43,7 @@
     ---
     
 
-### 이재우
+### :wolf:이재우
 
 - 유저 로그인, 회원가입
 - 이메일 인증
@@ -50,7 +52,7 @@
     ---
     
 
-### 조성은
+### :hamster:조성은
 
 - 소셜로그인  (카카오,네이버, 구글) 연동
 - NAVER,GOOGLE,KAKAO 로 ProviderID 구분
@@ -59,10 +61,20 @@
 
 ---
 
+
 ## 개발 결과물 공유
+![ezgif com-video-to-gif-converter](https://github.com/TECHIT-Traveler/traveler/assets/130129061/f0844610-8a47-4986-905e-c7a556a876e4)
+![ezgif com-video-to-gif-converter (1)](https://github.com/TECHIT-Traveler/traveler/assets/130129061/ae2f51d5-a22b-4a37-bea2-f9e2c41445e3)
+
+![ezgif com-video-to-gif-converter (3)](https://github.com/TECHIT-Traveler/traveler/assets/130129061/c3e20120-327b-4543-9b92-037690b294c1)
+![ezgif com-video-to-gif-converter (4)](https://github.com/TECHIT-Traveler/traveler/assets/130129061/395d337c-28a6-4128-a316-959930771261)
+
+![ezgif com-video-to-gif-converter (5)](https://github.com/TECHIT-Traveler/traveler/assets/130129061/645c46cf-66e2-4539-9e96-eef381122a97)
+
+![ezgif com-video-to-gif-converter (6)](https://github.com/TECHIT-Traveler/traveler/assets/130129061/3d2b24a2-bc53-42a1-bbc3-ccb2861cbda9)
 
 ---
-https://youtu.be/9cRNw7LEoEg
+Youtube URL: https://youtu.be/9cRNw7LEoEg
 Github Repository URL: https://github.com/TECHIT-Traveler
 
 To-do-List URL(Discord) : https://discord.com/channels/1133691052247752754/1198901616343007232
