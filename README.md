@@ -1,8 +1,43 @@
 ![header](https://capsule-render.vercel.app/api?type=waving&height=300&color=gradient&text=Traveler%20S2)
+## 프로젝트 소개
+반려동물과 함께 여행을 즐기는 여행객들을 위해 반려동물과 함께 여행 다닐 수 있는 국내 여행지 정보를 공유 하는 웹 커뮤니티 사이트
 
+## 주요 기능
+- 로그인/회원가입
+- 소셜 로그인(kakao, naver, google)
+- 개인이 작성한 글, 댓글 관리
+- 마크다운을 이용한 커뮤니티 글 CRUD
+- 지도 api를 사용한 여행 계획 등록
+
+
+## 기술 스택
+### FRONT-END
+<img src="https://img.shields.io/badge/HTML-FE642E?style=for-the-badge&logo=Html&logoColor=white"> <img src="https://img.shields.io/badge/CSS-2E64FE?style=for-the-badge&logo=CSS&logoColor=white">
+<img src="https://img.shields.io/badge/Bootstrap-8000FF?style=for-the-badge&logo=Bootstrap&logoColor=white">
+<img src="https://img.shields.io/badge/JavaScript-FACC2E?style=for-the-badge&logo=JavaScript&logoColor=white">
+<img src="https://img.shields.io/badge/KAKAO MAP API-yellow?style=for-the-badge&logo=KAKAO&logoColor=white">
+<img src="https://img.shields.io/badge/TOAST UI-08298A?style=for-the-badge&logo=TOAST UI&logoColor=white">
+
+### BACK-END
+<img src="https://img.shields.io/badge/Java-orange?style=for-the-badge&logo=Java&logoColor=white"> <img src="https://img.shields.io/badge/Spring Boot-green?style=for-the-badge&logo=Spring Boot&logoColor=white">
+<img src="https://img.shields.io/badge/Gradle-navy?style=for-the-badge&logo=Gradle&logoColor=white">
+<img src="https://img.shields.io/badge/Lombok-red?style=for-the-badge&logo=Lombok&logoColor=white">
+<img src="https://img.shields.io/badge/Spring Date JPA-green?style=for-the-badge&logo=JPA&logoColor=white">
+<img src="https://img.shields.io/badge/MySQL-blue?style=for-the-badge&logo=MySQL&logoColor=white">
+<img src="https://img.shields.io/badge/Spring Security-A5DF00?style=for-the-badge&logo=Spring Security&logoColor=white">
+<img src="https://img.shields.io/badge/OAuth2-0080FF?style=for-the-badge&logo=OAuth&logoColor=white">
+
+
+### ETC
+<img src="https://img.shields.io/badge/Git-FE642E?style=for-the-badge&logo=Git&logoColor=white"> <img src="https://img.shields.io/badge/GitHub-585858?style=for-the-badge&logo=GitHub&logoColor=white">
+<img src="https://img.shields.io/badge/NGINX-31B404?style=for-the-badge&logo=NGINX&logoColor=white">
+<img src="https://img.shields.io/badge/Jenkins-DF0101?style=for-the-badge&logo=Jenkins&logoColor=white">
+<img src="https://img.shields.io/badge/Docker-2E9AFE?style=for-the-badge&logo=Docker&logoColor=white">
+
+
+  
 ## 개발 역할
 
----
 
 ### :dog:김진기(팀장)
 
@@ -61,7 +96,6 @@
 - 로그인시 프로필 이미지 불러오기
 - 메인 페이지 CSS 제작
 
----
 
 
 ## 개발 결과물 공유
